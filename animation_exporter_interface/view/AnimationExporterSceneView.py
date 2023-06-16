@@ -12,26 +12,12 @@ class ExporterSceneView(base_layouts.Vertical_Layout):
         self.finish_initialization()
 
     def finish_initialization(self):
-        _empty_view = self.build_empty_view()
         self.content_panel = base_layouts.Vertical_Layout()
-        self.content_panel.addWidget(_empty_view, alignment=constants.align_center)
         self.addWidget(self.content_panel)
-        _empty_view = self.populate_item_view({"item": {"Object Type": "type"}})
-
-
-    def build_empty_view(self):
-        _layout = base_layouts.Vertical_Layout()
-
-        _label = base_widgets.Label(f'Nothing to Display. Please Select File')
-
-        _layout.addWidget(_label)
-        return _layout
-
-    def build_item_view(self):
-        _view = model_view_delegate.Table_Item_Selection_View()
-        return _view
+        self.populate_with_empty_view()
 
     def populate_item_view(self, content_dictionary):
+        self.content_panel.clear_layout()
 
         self.item_model = model_view_delegate.Selection_List_Model(items=content_dictionary)
 
@@ -39,5 +25,23 @@ class ExporterSceneView(base_layouts.Vertical_Layout):
         self.item_view.setModel(self.item_model)
 
 
-        self.clear_layout()
         self.content_panel.addWidget(self.item_view)
+
+
+    def populate_with_empty_view(self):
+        self.content_panel.clear_layout()
+        _layout = base_layouts.Vertical_Layout()
+
+        _label = base_widgets.Label(f'Nothing to Display. Please Select File')
+
+        _layout.addWidget(_label)
+        self.content_panel.addWidget(_layout, alignment=constants.align_center)
+
+    def empty_view(self):
+        self.populate_with_empty_view()
+        self.item_view = None
+        self.item_model = None
+
+    def build_item_view(self):
+        _view = model_view_delegate.Table_Item_Selection_View()
+        return _view
