@@ -2,7 +2,7 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.NOTSET)
 from PySide2 import QtCore, QtWidgets, QtGui
-from interface_elements import base_widgets, base_layouts, base_windows, constants
+from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants
 from animation_exporter.animation_exporter_interface.view import AnimationExporterFooter, AnimationExporterHeader, AnimationExporterSceneView
 
 

@@ -4,8 +4,9 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.NOTSET)
 
 from maya import standalone
-import maya.cmds as cmds
-from PySide2 import QtCore
+from maya import cmds
+from PySide2 import QtCore, QtWidgets
+
 
 class Scene_Controller(QtCore.QObject):
     SceneContentDataResponse = QtCore.Signal(object)
@@ -13,7 +14,6 @@ class Scene_Controller(QtCore.QObject):
     def __init__(self):
         standalone.initialize()
         super().__init__()
-
 
     @QtCore.Slot()
     def open_file(self, filepath):
@@ -38,7 +38,10 @@ class Scene_Controller(QtCore.QObject):
 
     def gather_content_data_dictionary(self, objects):
         _content_data = {}
-        for _object in objects:
-            _content_data[_object] = cmds.objectType(_object)
+        for _object_name in objects:
+            _object_data = {}
+            _object_data["Object Name"] = _object_name
+            _object_data["Object Type"] = cmds.objectType(_object_name)
+            _content_data[_object_name] = _object_data
 
         return _content_data

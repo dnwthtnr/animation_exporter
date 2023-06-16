@@ -1,5 +1,5 @@
 from PySide2 import QtCore, QtWidgets, QtGui
-from interface_elements import base_widgets, base_layouts, base_windows, line_edits, model_view_delegate, constants
+from pyqt_interface_elements import base_widgets, base_layouts, base_windows, line_edits, model_view_delegate, constants
 
 
 class ExporterSceneView(base_layouts.Vertical_Layout):

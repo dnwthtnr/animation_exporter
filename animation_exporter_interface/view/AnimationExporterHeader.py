@@ -1,6 +1,6 @@
 
 from PySide2 import QtCore, QtWidgets, QtGui
-from interface_elements import base_widgets, base_layouts, base_windows, line_edits
+from pyqt_interface_elements import base_widgets, base_layouts, base_windows, line_edits
 
 
 class ExporterHeader(base_layouts.Horizontal_Layout):
