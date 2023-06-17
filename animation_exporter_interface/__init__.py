@@ -12,8 +12,10 @@ def build_animation_exporter_window():
     _window._scene_controller = _scene_controller
 
     _window.SceneSelectedContentQuery.connect(_scene_controller.open_file)
+    _window.SceneItemSelectedDataQuery.connect(_scene_controller.emit_item_detailed_view)
 
     _scene_controller.SceneContentDataResponse.connect(_window.populate_scene_contents)
+    _scene_controller.DetailPanelBuilt.connect(_window.add_detail_panel)
 
     _window.finish_initialization()
 

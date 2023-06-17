@@ -8,13 +8,16 @@ from maya import cmds
 from PySide2 import QtCore, QtWidgets
 
 from animation_exporter.utility_resources import settings
+from animation_exporter.animation_exporter_interface.view import ItemDetailedView
 
 
 class Scene_Controller(QtCore.QObject):
     SceneContentDataResponse = QtCore.Signal(object)
 
+    DetailPanelBuilt = QtCore.Signal(object)
+
     def __init__(self):
-        standalone.initialize()
+        # standalone.initialize()
         cmds.file(new=True, force=True)
         super().__init__()
 
@@ -34,37 +37,14 @@ class Scene_Controller(QtCore.QObject):
     @QtCore.Slot()
     def emit_scene_contents(self):
         _top_level_scene_items = self.get_top_level_objects()
-        _object_data_dict = self.gather_content_data_dictionary(_top_level_scene_items)
+        # _object_data_dict = self.gather_content_data_dictionary(_top_level_scene_items)
         logger.info(f'Emitting SceneContentDataResponse with queried items organized in dictionary')
+        _object_data_dict = self.author_scene_hierarchy_dict(objects=_top_level_scene_items)
         logger.debug(f'Dictionary: {_object_data_dict}')
-        _dict = self.author_scene_hierarchy_dict(objects=_top_level_scene_items)
-        print(_dict)
         self.SceneContentDataResponse.emit(_object_data_dict)
 
-    def gather_content_data_dictionary(self, objects):
-        """
-        Organizes a dictionary for the given objects and returns it
-        Parameters
-        ----------
-        objects
-
-        Returns
-        -------
-
-        """
-        _content_data = {}
-        for _object_name in objects:
-            if self.object_has_or_holds_animation(_object_name) is True:
-                _object_data = {}
-                _object_data["Object Name"] = _object_name
-                _object_data["Object Type"] = cmds.objectType(_object_name)
-
-                _animation_dictionary = self.get_object_animation_dictionary(_object_name)
-
-                _object_data["Animation Range"] = self.get_descendant_animation_range(_object_name)
-                _content_data[_object_name] = _object_data
-
-        return _content_data
+    ####################################################
+    # region static
 
     def object_has_or_holds_animation(self, object):
         """
@@ -107,73 +87,21 @@ class Scene_Controller(QtCore.QObject):
 
         return False
 
-    def get_object_animation_dictionary(self, object):
+    def get_top_level_objects(self):
         """
-        Animation dictionary for an object
-        Parameters
-        ----------
-        object
+        Gets all the top level dag objects in the scene
 
         Returns
         -------
 
         """
+        logger.info(f'Getting scene contests')
+        _scene_items = cmds.ls(dagObjects=True)
+        _top_level_scene_items = [_item for _item in _scene_items if cmds.listRelatives(_item, allParents=True) == None]
+        logger.info(f'Scene contents queried and filtered to top level: {_top_level_scene_items}')
+        return _top_level_scene_items
 
-        _object_animation_range_min = 0
-        _object_animation_range_max = 0
-
-        _animatable_attributes = cmds.listAnimatable(object)
-        _object_animation_dict = {}
-        _object_attribute_animation_dict = {}
-        for _attribute in _animatable_attributes:
-            _attribute_animation_dict = self.get_attribute_animation_dictionary(_attribute)
-            if _attribute_animation_dict is not None:
-                _object_attribute_animation_dict[_attribute] = _attribute_animation_dict
-
-                _animation_frames = _attribute_animation_dict["Attribute Animation Times"]
-
-                _attribute_animation_range_max = _animation_frames[-1]
-                _attribute_animation_range_min = _animation_frames[0]
-
-                if _attribute_animation_range_min < _object_animation_range_min:
-                    _object_animation_range_min = _attribute_animation_range_min
-                if _attribute_animation_range_max > _object_animation_range_max:
-                    _object_animation_range_max = _attribute_animation_range_max
-
-                _object_animation_dict[object] = {"Object Name": object, "Object Animation": _object_attribute_animation_dict}
-
-        _object_animation_dict["Animation Range"] = f"{_object_animation_range_min} - {_object_animation_range_max}"
-        return _object_animation_dict
-
-    def get_attribute_animation_dictionary(self, attribute):
-        """
-        Animation dictionary for a single attribute
-        Parameters
-        ----------
-        attribute
-
-        Returns
-        -------
-
-        """
-        _attribute_animation_dict = {}
-        _attribute_keyframe_count = cmds.keyframe(attribute, query=True, keyframeCount=True)
-
-        if _attribute_keyframe_count > 0:
-            # attribute has animation
-            _keyframe_times_list = cmds.keyframe(attribute, query=True, index=(0, _attribute_keyframe_count), timeChange=True)
-            _keyframe_values_list = cmds.keyframe(attribute, query=True, index=(0, _attribute_keyframe_count), valueChange=True)
-
-            _attribute_animation_dict= {
-                "Attribute Name": attribute,
-                "Attribute Animation Times": _keyframe_times_list,
-                "Attribute Animation Values": _keyframe_values_list
-            }
-
-            return _attribute_animation_dict
-
-        return None
-
+    #endregion
     ####################################################
 
     def author_scene_hierarchy_dict(self, objects, parent=None, hierarchy_dictionary=None, hierarchy_depth=0):
@@ -206,6 +134,7 @@ class Scene_Controller(QtCore.QObject):
                 "Object Name": _object,
                 "Parent": parent,
                 "Children": _children,
+                "Type": cmds.objectType(_object),
                 "Absolute Animation Range": self.get_descendant_animation_range(_object)
             }
             _hierarchy_dictionary[_object] = _object_data_dictionary
@@ -220,19 +149,6 @@ class Scene_Controller(QtCore.QObject):
 
         return _hierarchy_dictionary
 
-    def get_top_level_objects(self):
-        """
-        Gets all the top level dag objects in the scene
-
-        Returns
-        -------
-
-        """
-        logger.info(f'Getting scene contests')
-        _scene_items = cmds.ls(dagObjects=True)
-        _top_level_scene_items = [_item for _item in _scene_items if cmds.listRelatives(_item, allParents=True) == None]
-        logger.info(f'Scene contents queried and filtered to top level: {_top_level_scene_items}')
-        return _top_level_scene_items
 
     #############################################
 
@@ -291,8 +207,6 @@ class Scene_Controller(QtCore.QObject):
 
         animation_times_list = []
         if self.is_animated(object) is True:
-            if object == "persp1":
-                print ('hi', self.get_object_animation_times_list(object))
             _object_animation = self.get_object_animation_times_list(object)
             animation_times_list += _object_animation
 
@@ -358,10 +272,48 @@ class Scene_Controller(QtCore.QObject):
     ###############################
 
     def get_descendant_animation_range(self, object):
+        """
+        Gets the start and end point of an object and its descendants animation
+
+        Parameters
+        ----------
+        object : str
+            Object Name
+
+        Returns
+        -------
+
+        """
         _animation_times_list = self.get_descendant_animation_times_list(object)
         if len(_animation_times_list) > 1:
-            print(object, [_animation_times_list[0], _animation_times_list[-1]])
-            print(self.separate_animation_partitions(object))
             return f"{_animation_times_list[0] } -- {_animation_times_list[-1]}"
-        #
-        # return []
+
+
+    ####################################
+    # region Exporting Stuff
+
+    def bake_animation(self, object):
+        cmds.bakeSimulation(object, animation='keysOrObjects', hierarchy='below')
+
+    def export(self):
+        return
+
+    #endregion
+
+    ##########################################
+
+    #region Object stuff
+
+    def emit_item_panel(self, panel):
+        self.DetailPanelBuilt.emit(panel)
+
+    @QtCore.Slot()
+    def emit_item_detailed_view(self, item):
+        _item_view = ItemDetailedView.DetailedViewPanel()
+        if self.object_has_or_holds_animation(item):
+            _partitions = self.separate_animation_partitions(item)
+            _item_view.addSection("Animation Partitions", f'{_partitions}')
+
+            _item_view.addSection("Object Animation Range", "".join(self.get_descendant_animation_range(item)))
+        self.emit_item_panel(_item_view)
+        return
