@@ -44,4 +44,6 @@ class ExporterSceneView(base_layouts.Vertical_Layout):
 
     def build_item_view(self):
         _view = model_view_delegate.Table_Item_Selection_View()
+        _view.horizontalHeader().setStretchLastSection(True)
+        _view.setSelectionBehavior(model_view_delegate.Table_Item_Selection_View.SelectRows)
         return _view

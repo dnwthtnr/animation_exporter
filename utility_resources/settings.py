@@ -1,17 +1,18 @@
 import json
 import os.path
 
+CURRENT_FOLDER = os.path.dirname(__file__)
 
 def read_json(path):
-    with open(path, 'r'):
-        _data = json.load(path)
+    with open(path, 'r') as file:
+        _data = json.load(file)
 
     return _data
 
 
 def write_json(path, data):
-    with open(path, 'r+'):
-        _data = json.load(path)
+    with open(path, 'r+') as file:
+        _data = json.dump(path, data)
 
     return _data
 
@@ -39,7 +40,7 @@ def file_last_modification_date(path):
 
 ###################################################################
 
-setting_resources_json_path = 'setting_resource_values.json'
+setting_resources_json_path = os.path.join(CURRENT_FOLDER, 'setting_resource_values.json')
 
 
 def get_setting_resource_value(name):
@@ -50,13 +51,11 @@ def set_setting_resource_value(name, value):
     set_resource_value(json_path=setting_resources_json_path, name=name, value=value)
 
 
-@property
 def settings_last_read_modification_date():
     _date_last_read = get_setting_resource_value("settings.json::Last_Read_Modification_Date")
     return _date_last_read
 
 
-@setting_resources_json_path.setter
 def set_settings_last_read_modification_date(date):
     set_setting_resource_value(
         setting_resource_name="settings.json::Last_Read_Modification_Date",
@@ -66,7 +65,7 @@ def set_settings_last_read_modification_date(date):
 
 ############################################################
 
-animation_parser_resources_json_path = "animation_parser_resource_values.json"
+animation_parser_resources_json_path = os.path.join(CURRENT_FOLDER, "animation_parser_resource_values.json")
 
 
 def get_animation_parser_resource_value(name):
@@ -77,7 +76,6 @@ def set_animation_parser_resource_value(name, value):
     set_resource_value(json_path=animation_parser_resources_json_path, name=name, value=value)
 
 
-@property
 def animation_frame_gap_threshold():
     """
     The frame gap defining a separation in animations
@@ -91,7 +89,6 @@ def animation_frame_gap_threshold():
     return get_animation_parser_resource_value("Animation_Frame_Gap_Threshold")
 
 
-@animation_frame_gap_threshold.setter
 def set_animation_frame_gap_threshold(frame_gap):
     """
     Sets the frame gap defining a separation in animations

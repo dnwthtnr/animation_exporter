@@ -4,6 +4,7 @@ from animation_exporter.animation_exporter_interface.view import AnimationExport
 from animation_exporter.animation_exporter_interface.controller import scene_controller
 
 
+
 def build_animation_exporter_window():
     _scene_controller = scene_controller.Scene_Controller()
 

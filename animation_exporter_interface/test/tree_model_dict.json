@@ -1,0 +1,2615 @@
+{
+  "0::persp": {
+    "Object Name": "persp",
+    "Parent": null,
+    "Absolute Animation Range": null
+  },
+  "1::perspShape": {
+    "Object Name": "perspShape",
+    "Parent": "persp",
+    "Absolute Animation Range": null
+  },
+  "0::top": {
+    "Object Name": "top",
+    "Parent": null,
+    "Absolute Animation Range": null
+  },
+  "1::topShape": {
+    "Object Name": "topShape",
+    "Parent": "top",
+    "Absolute Animation Range": null
+  },
+  "0::front": {
+    "Object Name": "front",
+    "Parent": null,
+    "Absolute Animation Range": null
+  },
+  "1::frontShape": {
+    "Object Name": "frontShape",
+    "Parent": "front",
+    "Absolute Animation Range": null
+  },
+  "0::side": {
+    "Object Name": "side",
+    "Parent": null,
+    "Absolute Animation Range": null
+  },
+  "1::sideShape": {
+    "Object Name": "sideShape",
+    "Parent": "side",
+    "Absolute Animation Range": null
+  },
+  "0::persp1": {
+    "Object Name": "persp1",
+    "Parent": null,
+    "Absolute Animation Range": "1.0 -- 415.4477049319728"
+  },
+  "1::perspShape1": {
+    "Object Name": "perspShape1",
+    "Parent": "persp1",
+    "Absolute Animation Range": null
+  },
+  "0::naughtydog_test_rig_grp": {
+    "Object Name": "naughtydog_test_rig_grp",
+    "Parent": null,
+    "Absolute Animation Range": "0.8 -- 470.89172482993195"
+  },
+  "1::JNT": {
+    "Object Name": "JNT",
+    "Parent": "naughtydog_test_rig_grp",
+    "Absolute Animation Range": null
+  },
+  "2::bind_grp": {
+    "Object Name": "bind_grp",
+    "Parent": "JNT",
+    "Absolute Animation Range": null
+  },
+  "3::anim_scale_grp": {
+    "Object Name": "anim_scale_grp",
+    "Parent": "bind_grp",
+    "Absolute Animation Range": null
+  },
+  "4::root_bind": {
+    "Object Name": "root_bind",
+    "Parent": "anim_scale_grp",
+    "Absolute Animation Range": null
+  },
+  "5::spinea_bind": {
+    "Object Name": "spinea_bind",
+    "Parent": "root_bind",
+    "Absolute Animation Range": null
+  },
+  "6::spineb_bind": {
+    "Object Name": "spineb_bind",
+    "Parent": "spinea_bind",
+    "Absolute Animation Range": null
+  },
+  "7::spinec_bind": {
+    "Object Name": "spinec_bind",
+    "Parent": "spineb_bind",
+    "Absolute Animation Range": null
+  },
+  "8::spined_bind": {
+    "Object Name": "spined_bind",
+    "Parent": "spinec_bind",
+    "Absolute Animation Range": null
+  },
+  "9::neck_bind": {
+    "Object Name": "neck_bind",
+    "Parent": "spined_bind",
+    "Absolute Animation Range": null
+  },
+  "10::heada_bind": {
+    "Object Name": "heada_bind",
+    "Parent": "neck_bind",
+    "Absolute Animation Range": null
+  },
+  "11::headb_bind": {
+    "Object Name": "headb_bind",
+    "Parent": "heada_bind",
+    "Absolute Animation Range": null
+  },
+  "12::head_end_bind": {
+    "Object Name": "head_end_bind",
+    "Parent": "headb_bind",
+    "Absolute Animation Range": null
+  },
+  "10::neck_bind_parentConstraint1": {
+    "Object Name": "neck_bind_parentConstraint1",
+    "Parent": "neck_bind",
+    "Absolute Animation Range": null
+  },
+  "9::r_clavicle_bind": {
+    "Object Name": "r_clavicle_bind",
+    "Parent": "spined_bind",
+    "Absolute Animation Range": null
+  },
+  "10::r_shoulder_bind": {
+    "Object Name": "r_shoulder_bind",
+    "Parent": "r_clavicle_bind",
+    "Absolute Animation Range": null
+  },
+  "11::r_elbow_bind": {
+    "Object Name": "r_elbow_bind",
+    "Parent": "r_shoulder_bind",
+    "Absolute Animation Range": null
+  },
+  "12::r_wrist_bind": {
+    "Object Name": "r_wrist_bind",
+    "Parent": "r_elbow_bind",
+    "Absolute Animation Range": null
+  },
+  "13::r_middle_meta_bind": {
+    "Object Name": "r_middle_meta_bind",
+    "Parent": "r_wrist_bind",
+    "Absolute Animation Range": null
+  },
+  "9::l_pectoral_bind": {
+    "Object Name": "l_pectoral_bind",
+    "Parent": "spined_bind",
+    "Absolute Animation Range": null
+  },
+  "10::l_pectoral_tip_bind": {
+    "Object Name": "l_pectoral_tip_bind",
+    "Parent": "l_pectoral_bind",
+    "Absolute Animation Range": null
+  },
+  "10::l_pectoral_bind_parentConstraint1": {
+    "Object Name": "l_pectoral_bind_parentConstraint1",
+    "Parent": "l_pectoral_bind",
+    "Absolute Animation Range": null
+  },
+  "9::chest_corrective_bind": {
+    "Object Name": "chest_corrective_bind",
+    "Parent": "spined_bind",
+    "Absolute Animation Range": null
+  },
+  "10::chest_corrective_bind_parentConstraint1": {
+    "Object Name": "chest_corrective_bind_parentConstraint1",
+    "Parent": "chest_corrective_bind",
+    "Absolute Animation Range": null
+  },
+  "9::l_clavicle_bind": {
+    "Object Name": "l_clavicle_bind",
+    "Parent": "spined_bind",
+    "Absolute Animation Range": null
+  },
+  "10::l_shoulder_bind": {
+    "Object Name": "l_shoulder_bind",
+    "Parent": "l_clavicle_bind",
+    "Absolute Animation Range": null
+  },
+  "11::l_shoulder_twist_bind": {
+    "Object Name": "l_shoulder_twist_bind",
+    "Parent": "l_shoulder_bind",
+    "Absolute Animation Range": null
+  },
+  "12::l_elbow_bind": {
+    "Object Name": "l_elbow_bind",
+    "Parent": "l_shoulder_twist_bind",
+    "Absolute Animation Range": null
+  },
+  "13::l_elbow_twist_bind": {
+    "Object Name": "l_elbow_twist_bind",
+    "Parent": "l_elbow_bind",
+    "Absolute Animation Range": null
+  },
+  "14::l_elbow_twist_bind_parentConstraint1": {
+    "Object Name": "l_elbow_twist_bind_parentConstraint1",
+    "Parent": "l_elbow_twist_bind",
+    "Absolute Animation Range": null
+  },
+  "14::l_wrist_pivot_bind": {
+    "Object Name": "l_wrist_pivot_bind",
+    "Parent": "l_elbow_twist_bind",
+    "Absolute Animation Range": null
+  },
+  "15::l_wrist_bind": {
+    "Object Name": "l_wrist_bind",
+    "Parent": "l_wrist_pivot_bind",
+    "Absolute Animation Range": null
+  },
+  "16::l_middle_meta_bind": {
+    "Object Name": "l_middle_meta_bind",
+    "Parent": "l_wrist_bind",
+    "Absolute Animation Range": null
+  },
+  "16::l_wrist_bind_parentConstraint1": {
+    "Object Name": "l_wrist_bind_parentConstraint1",
+    "Parent": "l_wrist_bind",
+    "Absolute Animation Range": null
+  },
+  "16::l_wrist_top_corrector_bind": {
+    "Object Name": "l_wrist_top_corrector_bind",
+    "Parent": "l_wrist_bind",
+    "Absolute Animation Range": null
+  },
+  "17::l_wrist_top_corrector_bind_parentConstraint1": {
+    "Object Name": "l_wrist_top_corrector_bind_parentConstraint1",
+    "Parent": "l_wrist_top_corrector_bind",
+    "Absolute Animation Range": null
+  },
+  "16::l_wrist_bottom_corrector_bind": {
+    "Object Name": "l_wrist_bottom_corrector_bind",
+    "Parent": "l_wrist_bind",
+    "Absolute Animation Range": null
+  },
+  "17::l_wrist_bottom_corrector_bind_parentConstraint1": {
+    "Object Name": "l_wrist_bottom_corrector_bind_parentConstraint1",
+    "Parent": "l_wrist_bottom_corrector_bind",
+    "Absolute Animation Range": null
+  },
+  "13::l_elbow_bind_parentConstraint1": {
+    "Object Name": "l_elbow_bind_parentConstraint1",
+    "Parent": "l_elbow_bind",
+    "Absolute Animation Range": null
+  },
+  "12::l_shoulder_twist_bind_parentConstraint1": {
+    "Object Name": "l_shoulder_twist_bind_parentConstraint1",
+    "Parent": "l_shoulder_twist_bind",
+    "Absolute Animation Range": null
+  },
+  "11::l_shoulder_bind_parentConstraint1": {
+    "Object Name": "l_shoulder_bind_parentConstraint1",
+    "Parent": "l_shoulder_bind",
+    "Absolute Animation Range": null
+  },
+  "11::shoulder_deformer_1_03_jnt": {
+    "Object Name": "shoulder_deformer_1_03_jnt",
+    "Parent": "l_shoulder_bind",
+    "Absolute Animation Range": null
+  },
+  "12::shoulder_deformer_1_03_jnt_parentConstraint1": {
+    "Object Name": "shoulder_deformer_1_03_jnt_parentConstraint1",
+    "Parent": "shoulder_deformer_1_03_jnt",
+    "Absolute Animation Range": null
+  },
+  "11::shoulder_deformer_1_02_jnt": {
+    "Object Name": "shoulder_deformer_1_02_jnt",
+    "Parent": "l_shoulder_bind",
+    "Absolute Animation Range": null
+  },
+  "12::shoulder_deformer_1_02_jnt_parentConstraint1": {
+    "Object Name": "shoulder_deformer_1_02_jnt_parentConstraint1",
+    "Parent": "shoulder_deformer_1_02_jnt",
+    "Absolute Animation Range": null
+  },
+  "11::shoulder_deformer_1_01_jnt": {
+    "Object Name": "shoulder_deformer_1_01_jnt",
+    "Parent": "l_shoulder_bind",
+    "Absolute Animation Range": null
+  },
+  "12::shoulder_deformer_1_01_jnt_parentConstraint1": {
+    "Object Name": "shoulder_deformer_1_01_jnt_parentConstraint1",
+    "Parent": "shoulder_deformer_1_01_jnt",
+    "Absolute Animation Range": null
+  },
+  "11::shoulder_deformer_2_03_jnt": {
+    "Object Name": "shoulder_deformer_2_03_jnt",
+    "Parent": "l_shoulder_bind",
+    "Absolute Animation Range": null
+  },
+  "12::shoulder_deformer_2_03_jnt_parentConstraint1": {
+    "Object Name": "shoulder_deformer_2_03_jnt_parentConstraint1",
+    "Parent": "shoulder_deformer_2_03_jnt",
+    "Absolute Animation Range": null
+  },
+  "11::shoulder_deformer_2_02_jnt": {
+    "Object Name": "shoulder_deformer_2_02_jnt",
+    "Parent": "l_shoulder_bind",
+    "Absolute Animation Range": null
+  },
+  "12::shoulder_deformer_2_02_jnt_parentConstraint1": {
+    "Object Name": "shoulder_deformer_2_02_jnt_parentConstraint1",
+    "Parent": "shoulder_deformer_2_02_jnt",
+    "Absolute Animation Range": null
+  },
+  "11::shoulder_deformer_2_01_jnt": {
+    "Object Name": "shoulder_deformer_2_01_jnt",
+    "Parent": "l_shoulder_bind",
+    "Absolute Animation Range": null
+  },
+  "12::shoulder_deformer_2_01_jnt_parentConstraint1": {
+    "Object Name": "shoulder_deformer_2_01_jnt_parentConstraint1",
+    "Parent": "shoulder_deformer_2_01_jnt",
+    "Absolute Animation Range": null
+  },
+  "11::shoulder_deformer_3_03_jnt": {
+    "Object Name": "shoulder_deformer_3_03_jnt",
+    "Parent": "l_shoulder_bind",
+    "Absolute Animation Range": null
+  },
+  "12::shoulder_deformer_3_03_jnt_parentConstraint1": {
+    "Object Name": "shoulder_deformer_3_03_jnt_parentConstraint1",
+    "Parent": "shoulder_deformer_3_03_jnt",
+    "Absolute Animation Range": null
+  },
+  "11::shoulder_deformer_3_02_jnt": {
+    "Object Name": "shoulder_deformer_3_02_jnt",
+    "Parent": "l_shoulder_bind",
+    "Absolute Animation Range": null
+  },
+  "12::shoulder_deformer_3_02_jnt_parentConstraint1": {
+    "Object Name": "shoulder_deformer_3_02_jnt_parentConstraint1",
+    "Parent": "shoulder_deformer_3_02_jnt",
+    "Absolute Animation Range": null
+  },
+  "11::shoulder_deformer_3_01_jnt": {
+    "Object Name": "shoulder_deformer_3_01_jnt",
+    "Parent": "l_shoulder_bind",
+    "Absolute Animation Range": null
+  },
+  "12::shoulder_deformer_3_01_jnt_parentConstraint1": {
+    "Object Name": "shoulder_deformer_3_01_jnt_parentConstraint1",
+    "Parent": "shoulder_deformer_3_01_jnt",
+    "Absolute Animation Range": null
+  },
+  "10::l_clavicle_bind_parentConstraint1": {
+    "Object Name": "l_clavicle_bind_parentConstraint1",
+    "Parent": "l_clavicle_bind",
+    "Absolute Animation Range": null
+  },
+  "10::trap_deformer_1_01_jnt": {
+    "Object Name": "trap_deformer_1_01_jnt",
+    "Parent": "l_clavicle_bind",
+    "Absolute Animation Range": null
+  },
+  "11::trap_deformer_1_01_jnt_parentConstraint1": {
+    "Object Name": "trap_deformer_1_01_jnt_parentConstraint1",
+    "Parent": "trap_deformer_1_01_jnt",
+    "Absolute Animation Range": null
+  },
+  "10::trap_deformer_1_02_jnt": {
+    "Object Name": "trap_deformer_1_02_jnt",
+    "Parent": "l_clavicle_bind",
+    "Absolute Animation Range": null
+  },
+  "11::trap_deformer_1_02_jnt_parentConstraint1": {
+    "Object Name": "trap_deformer_1_02_jnt_parentConstraint1",
+    "Parent": "trap_deformer_1_02_jnt",
+    "Absolute Animation Range": null
+  },
+  "10::trap_deformer_1_03_jnt": {
+    "Object Name": "trap_deformer_1_03_jnt",
+    "Parent": "l_clavicle_bind",
+    "Absolute Animation Range": null
+  },
+  "11::trap_deformer_1_03_jnt_parentConstraint1": {
+    "Object Name": "trap_deformer_1_03_jnt_parentConstraint1",
+    "Parent": "trap_deformer_1_03_jnt",
+    "Absolute Animation Range": null
+  },
+  "10::trap_deformer_2_01_jnt": {
+    "Object Name": "trap_deformer_2_01_jnt",
+    "Parent": "l_clavicle_bind",
+    "Absolute Animation Range": null
+  },
+  "11::trap_deformer_2_01_jnt_parentConstraint1": {
+    "Object Name": "trap_deformer_2_01_jnt_parentConstraint1",
+    "Parent": "trap_deformer_2_01_jnt",
+    "Absolute Animation Range": null
+  },
+  "10::trap_deformer_2_02_jnt": {
+    "Object Name": "trap_deformer_2_02_jnt",
+    "Parent": "l_clavicle_bind",
+    "Absolute Animation Range": null
+  },
+  "11::trap_deformer_2_02_jnt_parentConstraint1": {
+    "Object Name": "trap_deformer_2_02_jnt_parentConstraint1",
+    "Parent": "trap_deformer_2_02_jnt",
+    "Absolute Animation Range": null
+  },
+  "10::trap_deformer_2_03_jnt": {
+    "Object Name": "trap_deformer_2_03_jnt",
+    "Parent": "l_clavicle_bind",
+    "Absolute Animation Range": null
+  },
+  "11::trap_deformer_2_03_jnt_parentConstraint1": {
+    "Object Name": "trap_deformer_2_03_jnt_parentConstraint1",
+    "Parent": "trap_deformer_2_03_jnt",
+    "Absolute Animation Range": null
+  },
+  "10::trap_deformer_3_01_jnt": {
+    "Object Name": "trap_deformer_3_01_jnt",
+    "Parent": "l_clavicle_bind",
+    "Absolute Animation Range": null
+  },
+  "11::trap_deformer_3_01_jnt_parentConstraint1": {
+    "Object Name": "trap_deformer_3_01_jnt_parentConstraint1",
+    "Parent": "trap_deformer_3_01_jnt",
+    "Absolute Animation Range": null
+  },
+  "10::trap_deformer_3_02_jnt": {
+    "Object Name": "trap_deformer_3_02_jnt",
+    "Parent": "l_clavicle_bind",
+    "Absolute Animation Range": null
+  },
+  "11::trap_deformer_3_02_jnt_parentConstraint1": {
+    "Object Name": "trap_deformer_3_02_jnt_parentConstraint1",
+    "Parent": "trap_deformer_3_02_jnt",
+    "Absolute Animation Range": null
+  },
+  "10::trap_deformer_3_03_jnt": {
+    "Object Name": "trap_deformer_3_03_jnt",
+    "Parent": "l_clavicle_bind",
+    "Absolute Animation Range": null
+  },
+  "11::trap_deformer_3_03_jnt_parentConstraint1": {
+    "Object Name": "trap_deformer_3_03_jnt_parentConstraint1",
+    "Parent": "trap_deformer_3_03_jnt",
+    "Absolute Animation Range": null
+  },
+  "10::l_scapula_bind": {
+    "Object Name": "l_scapula_bind",
+    "Parent": "l_clavicle_bind",
+    "Absolute Animation Range": null
+  },
+  "11::l_scapula_bind_parentConstraint1": {
+    "Object Name": "l_scapula_bind_parentConstraint1",
+    "Parent": "l_scapula_bind",
+    "Absolute Animation Range": null
+  },
+  "9::spined_bind_parentConstraint1": {
+    "Object Name": "spined_bind_parentConstraint1",
+    "Parent": "spined_bind",
+    "Absolute Animation Range": null
+  },
+  "9::l_spine_deformer_top_01_01_jnt": {
+    "Object Name": "l_spine_deformer_top_01_01_jnt",
+    "Parent": "spined_bind",
+    "Absolute Animation Range": null
+  },
+  "10::l_spine_deformer_top_01_01_jnt_parentConstraint1": {
+    "Object Name": "l_spine_deformer_top_01_01_jnt_parentConstraint1",
+    "Parent": "l_spine_deformer_top_01_01_jnt",
+    "Absolute Animation Range": null
+  },
+  "10::l_spine_deformer_top_01_02_jnt": {
+    "Object Name": "l_spine_deformer_top_01_02_jnt",
+    "Parent": "l_spine_deformer_top_01_01_jnt",
+    "Absolute Animation Range": null
+  },
+  "11::l_spine_deformer_top_01_02_jnt_parentConstraint1": {
+    "Object Name": "l_spine_deformer_top_01_02_jnt_parentConstraint1",
+    "Parent": "l_spine_deformer_top_01_02_jnt",
+    "Absolute Animation Range": null
+  },
+  "11::l_spine_deformer_bottom_01_01_jnt": {
+    "Object Name": "l_spine_deformer_bottom_01_01_jnt",
+    "Parent": "l_spine_deformer_top_01_02_jnt",
+    "Absolute Animation Range": null
+  },
+  "12::l_spine_deformer_bottom_01_01_jnt_parentConstraint1": {
+    "Object Name": "l_spine_deformer_bottom_01_01_jnt_parentConstraint1",
+    "Parent": "l_spine_deformer_bottom_01_01_jnt",
+    "Absolute Animation Range": null
+  },
+  "12::l_spine_deformer_bottom_01_02_jnt": {
+    "Object Name": "l_spine_deformer_bottom_01_02_jnt",
+    "Parent": "l_spine_deformer_bottom_01_01_jnt",
+    "Absolute Animation Range": null
+  },
+  "13::l_spine_deformer_bottom_01_02_jnt_parentConstraint1": {
+    "Object Name": "l_spine_deformer_bottom_01_02_jnt_parentConstraint1",
+    "Parent": "l_spine_deformer_bottom_01_02_jnt",
+    "Absolute Animation Range": null
+  },
+  "13::l_spine_deformer_bottom_01_03_jnt": {
+    "Object Name": "l_spine_deformer_bottom_01_03_jnt",
+    "Parent": "l_spine_deformer_bottom_01_02_jnt",
+    "Absolute Animation Range": null
+  },
+  "14::l_spine_deformer_bottom_01_03_jnt_parentConstraint1": {
+    "Object Name": "l_spine_deformer_bottom_01_03_jnt_parentConstraint1",
+    "Parent": "l_spine_deformer_bottom_01_03_jnt",
+    "Absolute Animation Range": null
+  },
+  "9::l_spine_deformer_top_02_01_jnt": {
+    "Object Name": "l_spine_deformer_top_02_01_jnt",
+    "Parent": "spined_bind",
+    "Absolute Animation Range": null
+  },
+  "10::l_spine_deformer_top_02_01_jnt_parentConstraint1": {
+    "Object Name": "l_spine_deformer_top_02_01_jnt_parentConstraint1",
+    "Parent": "l_spine_deformer_top_02_01_jnt",
+    "Absolute Animation Range": null
+  },
+  "10::l_spine_deformer_top_02_02_jnt": {
+    "Object Name": "l_spine_deformer_top_02_02_jnt",
+    "Parent": "l_spine_deformer_top_02_01_jnt",
+    "Absolute Animation Range": null
+  },
+  "11::l_spine_deformer_top_02_02_jnt_parentConstraint1": {
+    "Object Name": "l_spine_deformer_top_02_02_jnt_parentConstraint1",
+    "Parent": "l_spine_deformer_top_02_02_jnt",
+    "Absolute Animation Range": null
+  },
+  "11::l_spine_deformer_bottom_02_01_jnt": {
+    "Object Name": "l_spine_deformer_bottom_02_01_jnt",
+    "Parent": "l_spine_deformer_top_02_02_jnt",
+    "Absolute Animation Range": null
+  },
+  "12::l_spine_deformer_bottom_02_01_jnt_parentConstraint1": {
+    "Object Name": "l_spine_deformer_bottom_02_01_jnt_parentConstraint1",
+    "Parent": "l_spine_deformer_bottom_02_01_jnt",
+    "Absolute Animation Range": null
+  },
+  "12::l_spine_deformer_bottom_02_02_jnt": {
+    "Object Name": "l_spine_deformer_bottom_02_02_jnt",
+    "Parent": "l_spine_deformer_bottom_02_01_jnt",
+    "Absolute Animation Range": null
+  },
+  "13::l_spine_deformer_bottom_02_02_jnt_parentConstraint1": {
+    "Object Name": "l_spine_deformer_bottom_02_02_jnt_parentConstraint1",
+    "Parent": "l_spine_deformer_bottom_02_02_jnt",
+    "Absolute Animation Range": null
+  },
+  "13::l_spine_deformer_bottom_02_03_jnt": {
+    "Object Name": "l_spine_deformer_bottom_02_03_jnt",
+    "Parent": "l_spine_deformer_bottom_02_02_jnt",
+    "Absolute Animation Range": null
+  },
+  "14::l_spine_deformer_bottom_02_03_jnt_parentConstraint1": {
+    "Object Name": "l_spine_deformer_bottom_02_03_jnt_parentConstraint1",
+    "Parent": "l_spine_deformer_bottom_02_03_jnt",
+    "Absolute Animation Range": null
+  },
+  "8::spinec_corrective_bind": {
+    "Object Name": "spinec_corrective_bind",
+    "Parent": "spinec_bind",
+    "Absolute Animation Range": null
+  },
+  "9::spinec_corrective_bind_parentConstraint1": {
+    "Object Name": "spinec_corrective_bind_parentConstraint1",
+    "Parent": "spinec_corrective_bind",
+    "Absolute Animation Range": null
+  },
+  "8::spinec_bind_parentConstraint1": {
+    "Object Name": "spinec_bind_parentConstraint1",
+    "Parent": "spinec_bind",
+    "Absolute Animation Range": null
+  },
+  "6::spinea_bind_parentConstraint1": {
+    "Object Name": "spinea_bind_parentConstraint1",
+    "Parent": "spinea_bind",
+    "Absolute Animation Range": null
+  },
+  "5::root_bind_parentConstraint1": {
+    "Object Name": "root_bind_parentConstraint1",
+    "Parent": "root_bind",
+    "Absolute Animation Range": null
+  },
+  "1::GEO": {
+    "Object Name": "GEO",
+    "Parent": "naughtydog_test_rig_grp",
+    "Absolute Animation Range": null
+  },
+  "2::base_male_body": {
+    "Object Name": "base_male_body",
+    "Parent": "GEO",
+    "Absolute Animation Range": null
+  },
+  "3::base_male_bodyShape": {
+    "Object Name": "base_male_bodyShape",
+    "Parent": "base_male_body",
+    "Absolute Animation Range": null
+  },
+  "3::base_male_bodyShapeOrig": {
+    "Object Name": "base_male_bodyShapeOrig",
+    "Parent": "base_male_body",
+    "Absolute Animation Range": null
+  },
+  "3::base_male_bodyShapeOrig1": {
+    "Object Name": "base_male_bodyShapeOrig1",
+    "Parent": "base_male_body",
+    "Absolute Animation Range": null
+  },
+  "1::CTRL": {
+    "Object Name": "CTRL",
+    "Parent": "naughtydog_test_rig_grp",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "2::move_ctrl_offset_GRP": {
+    "Object Name": "move_ctrl_offset_GRP",
+    "Parent": "CTRL",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "3::move_ctrl": {
+    "Object Name": "move_ctrl",
+    "Parent": "move_ctrl_offset_GRP",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "4::move_ctrlShape": {
+    "Object Name": "move_ctrlShape",
+    "Parent": "move_ctrl",
+    "Absolute Animation Range": null
+  },
+  "4::spinea_ctrl_offset_GRP": {
+    "Object Name": "spinea_ctrl_offset_GRP",
+    "Parent": "move_ctrl",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "5::spinea_ctrl": {
+    "Object Name": "spinea_ctrl",
+    "Parent": "spinea_ctrl_offset_GRP",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "6::spinea_ctrlShape": {
+    "Object Name": "spinea_ctrlShape",
+    "Parent": "spinea_ctrl",
+    "Absolute Animation Range": null
+  },
+  "6::spineb_ctrl_offset_GRP": {
+    "Object Name": "spineb_ctrl_offset_GRP",
+    "Parent": "spinea_ctrl",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "7::spineb_ctrl": {
+    "Object Name": "spineb_ctrl",
+    "Parent": "spineb_ctrl_offset_GRP",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "8::spineb_ctrlShape": {
+    "Object Name": "spineb_ctrlShape",
+    "Parent": "spineb_ctrl",
+    "Absolute Animation Range": null
+  },
+  "8::spinec_ctrl_offset_GRP": {
+    "Object Name": "spinec_ctrl_offset_GRP",
+    "Parent": "spineb_ctrl",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "9::spinec_ctrl": {
+    "Object Name": "spinec_ctrl",
+    "Parent": "spinec_ctrl_offset_GRP",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "10::spinec_ctrlShape": {
+    "Object Name": "spinec_ctrlShape",
+    "Parent": "spinec_ctrl",
+    "Absolute Animation Range": null
+  },
+  "10::spined_ctrl_offset_GRP": {
+    "Object Name": "spined_ctrl_offset_GRP",
+    "Parent": "spinec_ctrl",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "11::spined_ctrl": {
+    "Object Name": "spined_ctrl",
+    "Parent": "spined_ctrl_offset_GRP",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "12::spined_ctrlShape": {
+    "Object Name": "spined_ctrlShape",
+    "Parent": "spined_ctrl",
+    "Absolute Animation Range": null
+  },
+  "12::l_clavicle_ctrl_transComp_GRP": {
+    "Object Name": "l_clavicle_ctrl_transComp_GRP",
+    "Parent": "spined_ctrl",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "13::l_clavicle_ctrl_offset_GRP": {
+    "Object Name": "l_clavicle_ctrl_offset_GRP",
+    "Parent": "l_clavicle_ctrl_transComp_GRP",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "14::l_clavicle_ctrl": {
+    "Object Name": "l_clavicle_ctrl",
+    "Parent": "l_clavicle_ctrl_offset_GRP",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "15::l_clavicle_ctrlShape": {
+    "Object Name": "l_clavicle_ctrlShape",
+    "Parent": "l_clavicle_ctrl",
+    "Absolute Animation Range": null
+  },
+  "15::l_shoulder_fk_ctrl_transComp_GRP": {
+    "Object Name": "l_shoulder_fk_ctrl_transComp_GRP",
+    "Parent": "l_clavicle_ctrl",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "16::l_shoulder_fk_ctrl": {
+    "Object Name": "l_shoulder_fk_ctrl",
+    "Parent": "l_shoulder_fk_ctrl_transComp_GRP",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "17::l_shoulder_fk_ctrlShape": {
+    "Object Name": "l_shoulder_fk_ctrlShape",
+    "Parent": "l_shoulder_fk_ctrl",
+    "Absolute Animation Range": null
+  },
+  "17::l_elbow_fk_ctrl_transComp_GRP": {
+    "Object Name": "l_elbow_fk_ctrl_transComp_GRP",
+    "Parent": "l_shoulder_fk_ctrl",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "18::l_elbow_fk_ctrl": {
+    "Object Name": "l_elbow_fk_ctrl",
+    "Parent": "l_elbow_fk_ctrl_transComp_GRP",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "19::l_elbow_fk_ctrlShape": {
+    "Object Name": "l_elbow_fk_ctrlShape",
+    "Parent": "l_elbow_fk_ctrl",
+    "Absolute Animation Range": null
+  },
+  "19::l_wrist_fk_ctrl_transComp_GRP": {
+    "Object Name": "l_wrist_fk_ctrl_transComp_GRP",
+    "Parent": "l_elbow_fk_ctrl",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "20::l_wrist_fk_ctrl": {
+    "Object Name": "l_wrist_fk_ctrl",
+    "Parent": "l_wrist_fk_ctrl_transComp_GRP",
+    "Absolute Animation Range": "1.0 -- 470.89172482993195"
+  },
+  "21::l_wrist_fk_ctrlShape": {
+    "Object Name": "l_wrist_fk_ctrlShape",
+    "Parent": "l_wrist_fk_ctrl",
+    "Absolute Animation Range": null
+  },
+  "15::corrective_deformers_ctrl_grp": {
+    "Object Name": "corrective_deformers_ctrl_grp",
+    "Parent": "l_clavicle_ctrl",
+    "Absolute Animation Range": null
+  },
+  "16::trap_corrective_deformers_ctrl_grp": {
+    "Object Name": "trap_corrective_deformers_ctrl_grp",
+    "Parent": "corrective_deformers_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "17::trap_corrective_deformers_1_ctrl_grp": {
+    "Object Name": "trap_corrective_deformers_1_ctrl_grp",
+    "Parent": "trap_corrective_deformers_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "18::l_trap_deformer_1_01_ctrl_transComp_GRP": {
+    "Object Name": "l_trap_deformer_1_01_ctrl_transComp_GRP",
+    "Parent": "trap_corrective_deformers_1_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "19::l_trap_deformer_1_01_ctrl_offset_GRP": {
+    "Object Name": "l_trap_deformer_1_01_ctrl_offset_GRP",
+    "Parent": "l_trap_deformer_1_01_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "20::l_trap_deformer_1_01_ctrl": {
+    "Object Name": "l_trap_deformer_1_01_ctrl",
+    "Parent": "l_trap_deformer_1_01_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "21::l_trap_deformer_1_01_ctrlShape": {
+    "Object Name": "l_trap_deformer_1_01_ctrlShape",
+    "Parent": "l_trap_deformer_1_01_ctrl",
+    "Absolute Animation Range": null
+  },
+  "20::l_trap_deformer_1_01_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_trap_deformer_1_01_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_trap_deformer_1_01_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "18::l_trap_deformer_1_02_ctrl_transComp_GRP": {
+    "Object Name": "l_trap_deformer_1_02_ctrl_transComp_GRP",
+    "Parent": "trap_corrective_deformers_1_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "19::l_trap_deformer_1_02_ctrl_offset_GRP": {
+    "Object Name": "l_trap_deformer_1_02_ctrl_offset_GRP",
+    "Parent": "l_trap_deformer_1_02_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "20::l_trap_deformer_1_02_ctrl": {
+    "Object Name": "l_trap_deformer_1_02_ctrl",
+    "Parent": "l_trap_deformer_1_02_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "21::l_trap_deformer_1_02_ctrlShape": {
+    "Object Name": "l_trap_deformer_1_02_ctrlShape",
+    "Parent": "l_trap_deformer_1_02_ctrl",
+    "Absolute Animation Range": null
+  },
+  "20::l_trap_deformer_1_02_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_trap_deformer_1_02_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_trap_deformer_1_02_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "18::l_trap_deformer_1_03_ctrl_transComp_GRP": {
+    "Object Name": "l_trap_deformer_1_03_ctrl_transComp_GRP",
+    "Parent": "trap_corrective_deformers_1_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "19::l_trap_deformer_1_03_ctrl_offset_GRP": {
+    "Object Name": "l_trap_deformer_1_03_ctrl_offset_GRP",
+    "Parent": "l_trap_deformer_1_03_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "20::l_trap_deformer_1_03_ctrl": {
+    "Object Name": "l_trap_deformer_1_03_ctrl",
+    "Parent": "l_trap_deformer_1_03_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "21::l_trap_deformer_1_03_ctrlShape": {
+    "Object Name": "l_trap_deformer_1_03_ctrlShape",
+    "Parent": "l_trap_deformer_1_03_ctrl",
+    "Absolute Animation Range": null
+  },
+  "20::l_trap_deformer_1_03_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_trap_deformer_1_03_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_trap_deformer_1_03_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "17::trap_corrective_deformers_2_ctrl_grp": {
+    "Object Name": "trap_corrective_deformers_2_ctrl_grp",
+    "Parent": "trap_corrective_deformers_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "18::l_trap_deformer_2_03_ctrl_transComp_GRP": {
+    "Object Name": "l_trap_deformer_2_03_ctrl_transComp_GRP",
+    "Parent": "trap_corrective_deformers_2_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "19::l_trap_deformer_2_03_ctrl_offset_GRP": {
+    "Object Name": "l_trap_deformer_2_03_ctrl_offset_GRP",
+    "Parent": "l_trap_deformer_2_03_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "20::l_trap_deformer_2_03_ctrl": {
+    "Object Name": "l_trap_deformer_2_03_ctrl",
+    "Parent": "l_trap_deformer_2_03_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "21::l_trap_deformer_2_03_ctrlShape": {
+    "Object Name": "l_trap_deformer_2_03_ctrlShape",
+    "Parent": "l_trap_deformer_2_03_ctrl",
+    "Absolute Animation Range": null
+  },
+  "20::l_trap_deformer_2_03_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_trap_deformer_2_03_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_trap_deformer_2_03_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "18::l_trap_deformer_2_02_ctrl_transComp_GRP": {
+    "Object Name": "l_trap_deformer_2_02_ctrl_transComp_GRP",
+    "Parent": "trap_corrective_deformers_2_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "19::l_trap_deformer_2_02_ctrl_offset_GRP": {
+    "Object Name": "l_trap_deformer_2_02_ctrl_offset_GRP",
+    "Parent": "l_trap_deformer_2_02_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "20::l_trap_deformer_2_02_ctrl": {
+    "Object Name": "l_trap_deformer_2_02_ctrl",
+    "Parent": "l_trap_deformer_2_02_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "21::l_trap_deformer_2_02_ctrlShape": {
+    "Object Name": "l_trap_deformer_2_02_ctrlShape",
+    "Parent": "l_trap_deformer_2_02_ctrl",
+    "Absolute Animation Range": null
+  },
+  "20::l_trap_deformer_2_02_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_trap_deformer_2_02_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_trap_deformer_2_02_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "18::l_trap_deformer_2_01_ctrl_transComp_GRP": {
+    "Object Name": "l_trap_deformer_2_01_ctrl_transComp_GRP",
+    "Parent": "trap_corrective_deformers_2_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "19::l_trap_deformer_2_01_ctrl_offset_GRP": {
+    "Object Name": "l_trap_deformer_2_01_ctrl_offset_GRP",
+    "Parent": "l_trap_deformer_2_01_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "20::l_trap_deformer_2_01_ctrl": {
+    "Object Name": "l_trap_deformer_2_01_ctrl",
+    "Parent": "l_trap_deformer_2_01_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "21::l_trap_deformer_2_01_ctrlShape": {
+    "Object Name": "l_trap_deformer_2_01_ctrlShape",
+    "Parent": "l_trap_deformer_2_01_ctrl",
+    "Absolute Animation Range": null
+  },
+  "20::l_trap_deformer_2_01_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_trap_deformer_2_01_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_trap_deformer_2_01_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "17::trap_corrective_deformers_3_ctrl_grp": {
+    "Object Name": "trap_corrective_deformers_3_ctrl_grp",
+    "Parent": "trap_corrective_deformers_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "18::l_trap_deformer_3_03_ctrl_transComp_GRP": {
+    "Object Name": "l_trap_deformer_3_03_ctrl_transComp_GRP",
+    "Parent": "trap_corrective_deformers_3_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "19::l_trap_deformer_3_03_ctrl_offset_GRP": {
+    "Object Name": "l_trap_deformer_3_03_ctrl_offset_GRP",
+    "Parent": "l_trap_deformer_3_03_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "20::l_trap_deformer_3_03_ctrl": {
+    "Object Name": "l_trap_deformer_3_03_ctrl",
+    "Parent": "l_trap_deformer_3_03_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "21::l_trap_deformer_3_03_ctrlShape": {
+    "Object Name": "l_trap_deformer_3_03_ctrlShape",
+    "Parent": "l_trap_deformer_3_03_ctrl",
+    "Absolute Animation Range": null
+  },
+  "20::l_trap_deformer_3_03_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_trap_deformer_3_03_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_trap_deformer_3_03_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "18::l_trap_deformer_3_02_ctrl_transComp_GRP": {
+    "Object Name": "l_trap_deformer_3_02_ctrl_transComp_GRP",
+    "Parent": "trap_corrective_deformers_3_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "19::l_trap_deformer_3_02_ctrl_offset_GRP": {
+    "Object Name": "l_trap_deformer_3_02_ctrl_offset_GRP",
+    "Parent": "l_trap_deformer_3_02_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "20::l_trap_deformer_3_02_ctrl": {
+    "Object Name": "l_trap_deformer_3_02_ctrl",
+    "Parent": "l_trap_deformer_3_02_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "21::l_trap_deformer_3_02_ctrlShape": {
+    "Object Name": "l_trap_deformer_3_02_ctrlShape",
+    "Parent": "l_trap_deformer_3_02_ctrl",
+    "Absolute Animation Range": null
+  },
+  "20::l_trap_deformer_3_02_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_trap_deformer_3_02_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_trap_deformer_3_02_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "18::l_trap_deformer_3_01_ctrl_transComp_GRP": {
+    "Object Name": "l_trap_deformer_3_01_ctrl_transComp_GRP",
+    "Parent": "trap_corrective_deformers_3_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "19::l_trap_deformer_3_01_ctrl_offset_GRP": {
+    "Object Name": "l_trap_deformer_3_01_ctrl_offset_GRP",
+    "Parent": "l_trap_deformer_3_01_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "20::l_trap_deformer_3_01_ctrl": {
+    "Object Name": "l_trap_deformer_3_01_ctrl",
+    "Parent": "l_trap_deformer_3_01_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "21::l_trap_deformer_3_01_ctrlShape": {
+    "Object Name": "l_trap_deformer_3_01_ctrlShape",
+    "Parent": "l_trap_deformer_3_01_ctrl",
+    "Absolute Animation Range": null
+  },
+  "20::l_trap_deformer_3_01_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_trap_deformer_3_01_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_trap_deformer_3_01_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "16::shoulder_corrective_deformers_ctrl_grp": {
+    "Object Name": "shoulder_corrective_deformers_ctrl_grp",
+    "Parent": "corrective_deformers_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "17::shoulder_corrective_deformers_1_ctrl_grp": {
+    "Object Name": "shoulder_corrective_deformers_1_ctrl_grp",
+    "Parent": "shoulder_corrective_deformers_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "18::l_shoulder_deformer_1_01_ctrl_transComp_GRP": {
+    "Object Name": "l_shoulder_deformer_1_01_ctrl_transComp_GRP",
+    "Parent": "shoulder_corrective_deformers_1_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "19::l_shoulder_deformer_1_01_ctrl_offset_GRP": {
+    "Object Name": "l_shoulder_deformer_1_01_ctrl_offset_GRP",
+    "Parent": "l_shoulder_deformer_1_01_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "20::l_shoulder_deformer_1_01_ctrl": {
+    "Object Name": "l_shoulder_deformer_1_01_ctrl",
+    "Parent": "l_shoulder_deformer_1_01_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "21::l_shoulder_deformer_1_01_ctrlShape": {
+    "Object Name": "l_shoulder_deformer_1_01_ctrlShape",
+    "Parent": "l_shoulder_deformer_1_01_ctrl",
+    "Absolute Animation Range": null
+  },
+  "20::l_shoulder_deformer_1_01_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_shoulder_deformer_1_01_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_shoulder_deformer_1_01_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "18::l_shoulder_deformer_1_02_ctrl_transComp_GRP": {
+    "Object Name": "l_shoulder_deformer_1_02_ctrl_transComp_GRP",
+    "Parent": "shoulder_corrective_deformers_1_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "19::l_shoulder_deformer_1_02_ctrl_offset_GRP": {
+    "Object Name": "l_shoulder_deformer_1_02_ctrl_offset_GRP",
+    "Parent": "l_shoulder_deformer_1_02_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "20::l_shoulder_deformer_1_02_ctrl": {
+    "Object Name": "l_shoulder_deformer_1_02_ctrl",
+    "Parent": "l_shoulder_deformer_1_02_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "21::l_shoulder_deformer_1_02_ctrlShape": {
+    "Object Name": "l_shoulder_deformer_1_02_ctrlShape",
+    "Parent": "l_shoulder_deformer_1_02_ctrl",
+    "Absolute Animation Range": null
+  },
+  "20::l_shoulder_deformer_1_02_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_shoulder_deformer_1_02_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_shoulder_deformer_1_02_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "18::l_shoulder_deformer_1_03_ctrl_transComp_GRP": {
+    "Object Name": "l_shoulder_deformer_1_03_ctrl_transComp_GRP",
+    "Parent": "shoulder_corrective_deformers_1_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "19::l_shoulder_deformer_1_03_ctrl_offset_GRP": {
+    "Object Name": "l_shoulder_deformer_1_03_ctrl_offset_GRP",
+    "Parent": "l_shoulder_deformer_1_03_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "20::l_shoulder_deformer_1_03_ctrl": {
+    "Object Name": "l_shoulder_deformer_1_03_ctrl",
+    "Parent": "l_shoulder_deformer_1_03_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "21::l_shoulder_deformer_1_03_ctrlShape": {
+    "Object Name": "l_shoulder_deformer_1_03_ctrlShape",
+    "Parent": "l_shoulder_deformer_1_03_ctrl",
+    "Absolute Animation Range": null
+  },
+  "20::l_shoulder_deformer_1_03_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_shoulder_deformer_1_03_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_shoulder_deformer_1_03_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "17::shoulder_corrective_deformers_2_ctrl_grp": {
+    "Object Name": "shoulder_corrective_deformers_2_ctrl_grp",
+    "Parent": "shoulder_corrective_deformers_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "18::l_shoulder_deformer_2_01_ctrl_transComp_GRP": {
+    "Object Name": "l_shoulder_deformer_2_01_ctrl_transComp_GRP",
+    "Parent": "shoulder_corrective_deformers_2_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "19::l_shoulder_deformer_2_01_ctrl_offset_GRP": {
+    "Object Name": "l_shoulder_deformer_2_01_ctrl_offset_GRP",
+    "Parent": "l_shoulder_deformer_2_01_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "20::l_shoulder_deformer_2_01_ctrl": {
+    "Object Name": "l_shoulder_deformer_2_01_ctrl",
+    "Parent": "l_shoulder_deformer_2_01_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "21::l_shoulder_deformer_2_01_ctrlShape": {
+    "Object Name": "l_shoulder_deformer_2_01_ctrlShape",
+    "Parent": "l_shoulder_deformer_2_01_ctrl",
+    "Absolute Animation Range": null
+  },
+  "20::l_shoulder_deformer_2_01_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_shoulder_deformer_2_01_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_shoulder_deformer_2_01_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "18::l_shoulder_deformer_2_02_ctrl_transComp_GRP": {
+    "Object Name": "l_shoulder_deformer_2_02_ctrl_transComp_GRP",
+    "Parent": "shoulder_corrective_deformers_2_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "19::l_shoulder_deformer_2_02_ctrl_offset_GRP": {
+    "Object Name": "l_shoulder_deformer_2_02_ctrl_offset_GRP",
+    "Parent": "l_shoulder_deformer_2_02_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "20::l_shoulder_deformer_2_02_ctrl": {
+    "Object Name": "l_shoulder_deformer_2_02_ctrl",
+    "Parent": "l_shoulder_deformer_2_02_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "21::l_shoulder_deformer_2_02_ctrlShape": {
+    "Object Name": "l_shoulder_deformer_2_02_ctrlShape",
+    "Parent": "l_shoulder_deformer_2_02_ctrl",
+    "Absolute Animation Range": null
+  },
+  "20::l_shoulder_deformer_2_02_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_shoulder_deformer_2_02_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_shoulder_deformer_2_02_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "18::l_shoulder_deformer_2_03_ctrl_transComp_GRP": {
+    "Object Name": "l_shoulder_deformer_2_03_ctrl_transComp_GRP",
+    "Parent": "shoulder_corrective_deformers_2_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "19::l_shoulder_deformer_2_03_ctrl_offset_GRP": {
+    "Object Name": "l_shoulder_deformer_2_03_ctrl_offset_GRP",
+    "Parent": "l_shoulder_deformer_2_03_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "20::l_shoulder_deformer_2_03_ctrl": {
+    "Object Name": "l_shoulder_deformer_2_03_ctrl",
+    "Parent": "l_shoulder_deformer_2_03_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "21::l_shoulder_deformer_2_03_ctrlShape": {
+    "Object Name": "l_shoulder_deformer_2_03_ctrlShape",
+    "Parent": "l_shoulder_deformer_2_03_ctrl",
+    "Absolute Animation Range": null
+  },
+  "20::l_shoulder_deformer_2_03_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_shoulder_deformer_2_03_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_shoulder_deformer_2_03_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "17::shoulder_corrective_deformers_3_ctrl_grp": {
+    "Object Name": "shoulder_corrective_deformers_3_ctrl_grp",
+    "Parent": "shoulder_corrective_deformers_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "18::l_shoulder_deformer_3_01_ctrl_transComp_GRP": {
+    "Object Name": "l_shoulder_deformer_3_01_ctrl_transComp_GRP",
+    "Parent": "shoulder_corrective_deformers_3_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "19::l_shoulder_deformer_3_01_ctrl_offset_GRP": {
+    "Object Name": "l_shoulder_deformer_3_01_ctrl_offset_GRP",
+    "Parent": "l_shoulder_deformer_3_01_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "20::l_shoulder_deformer_3_01_ctrl": {
+    "Object Name": "l_shoulder_deformer_3_01_ctrl",
+    "Parent": "l_shoulder_deformer_3_01_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "21::l_shoulder_deformer_3_01_ctrlShape": {
+    "Object Name": "l_shoulder_deformer_3_01_ctrlShape",
+    "Parent": "l_shoulder_deformer_3_01_ctrl",
+    "Absolute Animation Range": null
+  },
+  "20::l_shoulder_deformer_3_01_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_shoulder_deformer_3_01_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_shoulder_deformer_3_01_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "18::l_shoulder_deformer_3_02_ctrl_transComp_GRP": {
+    "Object Name": "l_shoulder_deformer_3_02_ctrl_transComp_GRP",
+    "Parent": "shoulder_corrective_deformers_3_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "19::l_shoulder_deformer_3_02_ctrl_offset_GRP": {
+    "Object Name": "l_shoulder_deformer_3_02_ctrl_offset_GRP",
+    "Parent": "l_shoulder_deformer_3_02_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "20::l_shoulder_deformer_3_02_ctrl": {
+    "Object Name": "l_shoulder_deformer_3_02_ctrl",
+    "Parent": "l_shoulder_deformer_3_02_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "21::l_shoulder_deformer_3_02_ctrlShape": {
+    "Object Name": "l_shoulder_deformer_3_02_ctrlShape",
+    "Parent": "l_shoulder_deformer_3_02_ctrl",
+    "Absolute Animation Range": null
+  },
+  "20::l_shoulder_deformer_3_02_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_shoulder_deformer_3_02_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_shoulder_deformer_3_02_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "18::l_shoulder_deformer_3_03_ctrl_transComp_GRP": {
+    "Object Name": "l_shoulder_deformer_3_03_ctrl_transComp_GRP",
+    "Parent": "shoulder_corrective_deformers_3_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "19::l_shoulder_deformer_3_03_ctrl_offset_GRP": {
+    "Object Name": "l_shoulder_deformer_3_03_ctrl_offset_GRP",
+    "Parent": "l_shoulder_deformer_3_03_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "20::l_shoulder_deformer_3_03_ctrl": {
+    "Object Name": "l_shoulder_deformer_3_03_ctrl",
+    "Parent": "l_shoulder_deformer_3_03_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "21::l_shoulder_deformer_3_03_ctrlShape": {
+    "Object Name": "l_shoulder_deformer_3_03_ctrlShape",
+    "Parent": "l_shoulder_deformer_3_03_ctrl",
+    "Absolute Animation Range": null
+  },
+  "20::l_shoulder_deformer_3_03_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_shoulder_deformer_3_03_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_shoulder_deformer_3_03_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "15::l_wrist_deformer_ctrl_grp": {
+    "Object Name": "l_wrist_deformer_ctrl_grp",
+    "Parent": "l_clavicle_ctrl",
+    "Absolute Animation Range": null
+  },
+  "16::l_wrist_deformer_bottom_ctrl_transComp_GRP": {
+    "Object Name": "l_wrist_deformer_bottom_ctrl_transComp_GRP",
+    "Parent": "l_wrist_deformer_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "17::l_wrist_deformer_bottom_ctrl_offset_GRP": {
+    "Object Name": "l_wrist_deformer_bottom_ctrl_offset_GRP",
+    "Parent": "l_wrist_deformer_bottom_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "18::l_wrist_deformer_bottom_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_wrist_deformer_bottom_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_wrist_deformer_bottom_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "18::l_wrist_deformer_bottom_ctrl_offset_GRP1": {
+    "Object Name": "l_wrist_deformer_bottom_ctrl_offset_GRP1",
+    "Parent": "l_wrist_deformer_bottom_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "19::l_wrist_deformer_bottom_ctrl": {
+    "Object Name": "l_wrist_deformer_bottom_ctrl",
+    "Parent": "l_wrist_deformer_bottom_ctrl_offset_GRP1",
+    "Absolute Animation Range": null
+  },
+  "20::l_wrist_deformer_bottom_ctrlShape": {
+    "Object Name": "l_wrist_deformer_bottom_ctrlShape",
+    "Parent": "l_wrist_deformer_bottom_ctrl",
+    "Absolute Animation Range": null
+  },
+  "16::l_wrist_deformer_top_ctrl_transComp_GRP": {
+    "Object Name": "l_wrist_deformer_top_ctrl_transComp_GRP",
+    "Parent": "l_wrist_deformer_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "17::l_wrist_deformer_top_ctrl_offset_GRP": {
+    "Object Name": "l_wrist_deformer_top_ctrl_offset_GRP",
+    "Parent": "l_wrist_deformer_top_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "18::l_wrist_deformer_top_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_wrist_deformer_top_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_wrist_deformer_top_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "18::l_wrist_deformer_top_ctrl_offset_GRP1": {
+    "Object Name": "l_wrist_deformer_top_ctrl_offset_GRP1",
+    "Parent": "l_wrist_deformer_top_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "19::l_wrist_deformer_top_ctrl": {
+    "Object Name": "l_wrist_deformer_top_ctrl",
+    "Parent": "l_wrist_deformer_top_ctrl_offset_GRP1",
+    "Absolute Animation Range": null
+  },
+  "20::l_wrist_deformer_top_ctrlShape": {
+    "Object Name": "l_wrist_deformer_top_ctrlShape",
+    "Parent": "l_wrist_deformer_top_ctrl",
+    "Absolute Animation Range": null
+  },
+  "16::l_wrist_deformer_ctrl_grp_parentConstraint1": {
+    "Object Name": "l_wrist_deformer_ctrl_grp_parentConstraint1",
+    "Parent": "l_wrist_deformer_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "15::l_scapula_ctrl_transComp_GRP": {
+    "Object Name": "l_scapula_ctrl_transComp_GRP",
+    "Parent": "l_clavicle_ctrl",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "16::l_scapula_ctrl_offset_GRP": {
+    "Object Name": "l_scapula_ctrl_offset_GRP",
+    "Parent": "l_scapula_ctrl_transComp_GRP",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "17::l_scapula_ctrl": {
+    "Object Name": "l_scapula_ctrl",
+    "Parent": "l_scapula_ctrl_offset_GRP",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "18::l_scapula_ctrlShape": {
+    "Object Name": "l_scapula_ctrlShape",
+    "Parent": "l_scapula_ctrl",
+    "Absolute Animation Range": null
+  },
+  "18::l_scapula_ctrlShape3": {
+    "Object Name": "l_scapula_ctrlShape3",
+    "Parent": "l_scapula_ctrl",
+    "Absolute Animation Range": null
+  },
+  "18::l_scapula_ctrlShape4": {
+    "Object Name": "l_scapula_ctrlShape4",
+    "Parent": "l_scapula_ctrl",
+    "Absolute Animation Range": null
+  },
+  "12::neck_ctrl_offset_GRP": {
+    "Object Name": "neck_ctrl_offset_GRP",
+    "Parent": "spined_ctrl",
+    "Absolute Animation Range": "1.0 -- 288.9216081632653"
+  },
+  "13::neck_ctrl": {
+    "Object Name": "neck_ctrl",
+    "Parent": "neck_ctrl_offset_GRP",
+    "Absolute Animation Range": "1.0 -- 288.9216081632653"
+  },
+  "14::neck_ctrlShape": {
+    "Object Name": "neck_ctrlShape",
+    "Parent": "neck_ctrl",
+    "Absolute Animation Range": null
+  },
+  "12::l_pectoral_ctrl_transComp_GRP": {
+    "Object Name": "l_pectoral_ctrl_transComp_GRP",
+    "Parent": "spined_ctrl",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "13::l_pectoral_ctrl": {
+    "Object Name": "l_pectoral_ctrl",
+    "Parent": "l_pectoral_ctrl_transComp_GRP",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "14::l_pectoral_ctrlShape": {
+    "Object Name": "l_pectoral_ctrlShape",
+    "Parent": "l_pectoral_ctrl",
+    "Absolute Animation Range": null
+  },
+  "14::l_pectoral_ctrlShape1": {
+    "Object Name": "l_pectoral_ctrlShape1",
+    "Parent": "l_pectoral_ctrl",
+    "Absolute Animation Range": null
+  },
+  "14::l_pectoral_ctrlShape2": {
+    "Object Name": "l_pectoral_ctrlShape2",
+    "Parent": "l_pectoral_ctrl",
+    "Absolute Animation Range": null
+  },
+  "12::spine_deformer_top_ctrl_transComp_GRP": {
+    "Object Name": "spine_deformer_top_ctrl_transComp_GRP",
+    "Parent": "spined_ctrl",
+    "Absolute Animation Range": null
+  },
+  "13::spine_deformer_top_ctrl_offset_GRP": {
+    "Object Name": "spine_deformer_top_ctrl_offset_GRP",
+    "Parent": "spine_deformer_top_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "14::spine_deformer_top_ctrl": {
+    "Object Name": "spine_deformer_top_ctrl",
+    "Parent": "spine_deformer_top_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "15::spine_deformer_top_ctrlShape": {
+    "Object Name": "spine_deformer_top_ctrlShape",
+    "Parent": "spine_deformer_top_ctrl",
+    "Absolute Animation Range": null
+  },
+  "14::spine_deformer_top_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "spine_deformer_top_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "spine_deformer_top_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "12::l_spine_deformer_ctrl_grp": {
+    "Object Name": "l_spine_deformer_ctrl_grp",
+    "Parent": "spined_ctrl",
+    "Absolute Animation Range": null
+  },
+  "13::l_spine_deformer_1_01_ctrl_transComp_GRP": {
+    "Object Name": "l_spine_deformer_1_01_ctrl_transComp_GRP",
+    "Parent": "l_spine_deformer_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "14::l_spine_deformer_1_01_ctrl_offset_GRP": {
+    "Object Name": "l_spine_deformer_1_01_ctrl_offset_GRP",
+    "Parent": "l_spine_deformer_1_01_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_1_01_ctrl": {
+    "Object Name": "l_spine_deformer_1_01_ctrl",
+    "Parent": "l_spine_deformer_1_01_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "16::l_spine_deformer_1_01_ctrlShape": {
+    "Object Name": "l_spine_deformer_1_01_ctrlShape",
+    "Parent": "l_spine_deformer_1_01_ctrl",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_1_01_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_spine_deformer_1_01_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_spine_deformer_1_01_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "13::l_spine_deformer_1_02_ctrl_transComp_GRP": {
+    "Object Name": "l_spine_deformer_1_02_ctrl_transComp_GRP",
+    "Parent": "l_spine_deformer_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "14::l_spine_deformer_1_02_ctrl_offset_GRP": {
+    "Object Name": "l_spine_deformer_1_02_ctrl_offset_GRP",
+    "Parent": "l_spine_deformer_1_02_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_1_02_ctrl": {
+    "Object Name": "l_spine_deformer_1_02_ctrl",
+    "Parent": "l_spine_deformer_1_02_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "16::l_spine_deformer_1_02_ctrlShape": {
+    "Object Name": "l_spine_deformer_1_02_ctrlShape",
+    "Parent": "l_spine_deformer_1_02_ctrl",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_1_02_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_spine_deformer_1_02_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_spine_deformer_1_02_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "13::l_spine_deformer_1_03_ctrl_transComp_GRP": {
+    "Object Name": "l_spine_deformer_1_03_ctrl_transComp_GRP",
+    "Parent": "l_spine_deformer_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "14::l_spine_deformer_1_03_ctrl_offset_GRP": {
+    "Object Name": "l_spine_deformer_1_03_ctrl_offset_GRP",
+    "Parent": "l_spine_deformer_1_03_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_1_03_ctrl": {
+    "Object Name": "l_spine_deformer_1_03_ctrl",
+    "Parent": "l_spine_deformer_1_03_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "16::l_spine_deformer_1_03_ctrlShape": {
+    "Object Name": "l_spine_deformer_1_03_ctrlShape",
+    "Parent": "l_spine_deformer_1_03_ctrl",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_1_03_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_spine_deformer_1_03_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_spine_deformer_1_03_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "13::l_spine_deformer_1_04_ctrl_transComp_GRP": {
+    "Object Name": "l_spine_deformer_1_04_ctrl_transComp_GRP",
+    "Parent": "l_spine_deformer_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "14::l_spine_deformer_1_04_ctrl_offset_GRP": {
+    "Object Name": "l_spine_deformer_1_04_ctrl_offset_GRP",
+    "Parent": "l_spine_deformer_1_04_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_1_04_ctrl": {
+    "Object Name": "l_spine_deformer_1_04_ctrl",
+    "Parent": "l_spine_deformer_1_04_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "16::l_spine_deformer_1_04_ctrlShape": {
+    "Object Name": "l_spine_deformer_1_04_ctrlShape",
+    "Parent": "l_spine_deformer_1_04_ctrl",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_1_04_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_spine_deformer_1_04_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_spine_deformer_1_04_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "13::l_spine_deformer_1_05_ctrl_transComp_GRP": {
+    "Object Name": "l_spine_deformer_1_05_ctrl_transComp_GRP",
+    "Parent": "l_spine_deformer_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "14::l_spine_deformer_1_05_ctrl_offset_GRP": {
+    "Object Name": "l_spine_deformer_1_05_ctrl_offset_GRP",
+    "Parent": "l_spine_deformer_1_05_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_1_05_ctrl": {
+    "Object Name": "l_spine_deformer_1_05_ctrl",
+    "Parent": "l_spine_deformer_1_05_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "16::l_spine_deformer_1_05_ctrlShape": {
+    "Object Name": "l_spine_deformer_1_05_ctrlShape",
+    "Parent": "l_spine_deformer_1_05_ctrl",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_1_05_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_spine_deformer_1_05_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_spine_deformer_1_05_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "13::l_spine_deformer_2_01_ctrl_transComp_GRP": {
+    "Object Name": "l_spine_deformer_2_01_ctrl_transComp_GRP",
+    "Parent": "l_spine_deformer_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "14::l_spine_deformer_2_01_ctrl_offset_GRP": {
+    "Object Name": "l_spine_deformer_2_01_ctrl_offset_GRP",
+    "Parent": "l_spine_deformer_2_01_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_2_01_ctrl": {
+    "Object Name": "l_spine_deformer_2_01_ctrl",
+    "Parent": "l_spine_deformer_2_01_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "16::l_spine_deformer_2_01_ctrlShape": {
+    "Object Name": "l_spine_deformer_2_01_ctrlShape",
+    "Parent": "l_spine_deformer_2_01_ctrl",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_2_01_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_spine_deformer_2_01_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_spine_deformer_2_01_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "13::l_spine_deformer_2_02_ctrl_transComp_GRP": {
+    "Object Name": "l_spine_deformer_2_02_ctrl_transComp_GRP",
+    "Parent": "l_spine_deformer_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "14::l_spine_deformer_2_02_ctrl_offset_GRP": {
+    "Object Name": "l_spine_deformer_2_02_ctrl_offset_GRP",
+    "Parent": "l_spine_deformer_2_02_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_2_02_ctrl": {
+    "Object Name": "l_spine_deformer_2_02_ctrl",
+    "Parent": "l_spine_deformer_2_02_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "16::l_spine_deformer_2_02_ctrlShape": {
+    "Object Name": "l_spine_deformer_2_02_ctrlShape",
+    "Parent": "l_spine_deformer_2_02_ctrl",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_2_02_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_spine_deformer_2_02_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_spine_deformer_2_02_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "13::l_spine_deformer_2_03_ctrl_transComp_GRP": {
+    "Object Name": "l_spine_deformer_2_03_ctrl_transComp_GRP",
+    "Parent": "l_spine_deformer_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "14::l_spine_deformer_2_03_ctrl_offset_GRP": {
+    "Object Name": "l_spine_deformer_2_03_ctrl_offset_GRP",
+    "Parent": "l_spine_deformer_2_03_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_2_03_ctrl": {
+    "Object Name": "l_spine_deformer_2_03_ctrl",
+    "Parent": "l_spine_deformer_2_03_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "16::l_spine_deformer_2_03_ctrlShape": {
+    "Object Name": "l_spine_deformer_2_03_ctrlShape",
+    "Parent": "l_spine_deformer_2_03_ctrl",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_2_03_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_spine_deformer_2_03_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_spine_deformer_2_03_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "13::l_spine_deformer_2_04_ctrl_transComp_GRP": {
+    "Object Name": "l_spine_deformer_2_04_ctrl_transComp_GRP",
+    "Parent": "l_spine_deformer_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "14::l_spine_deformer_2_04_ctrl_offset_GRP": {
+    "Object Name": "l_spine_deformer_2_04_ctrl_offset_GRP",
+    "Parent": "l_spine_deformer_2_04_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_2_04_ctrl": {
+    "Object Name": "l_spine_deformer_2_04_ctrl",
+    "Parent": "l_spine_deformer_2_04_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "16::l_spine_deformer_2_04_ctrlShape": {
+    "Object Name": "l_spine_deformer_2_04_ctrlShape",
+    "Parent": "l_spine_deformer_2_04_ctrl",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_2_04_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_spine_deformer_2_04_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_spine_deformer_2_04_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "13::l_spine_deformer_2_05_ctrl_transComp_GRP": {
+    "Object Name": "l_spine_deformer_2_05_ctrl_transComp_GRP",
+    "Parent": "l_spine_deformer_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "14::l_spine_deformer_2_05_ctrl_offset_GRP": {
+    "Object Name": "l_spine_deformer_2_05_ctrl_offset_GRP",
+    "Parent": "l_spine_deformer_2_05_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_2_05_ctrl": {
+    "Object Name": "l_spine_deformer_2_05_ctrl",
+    "Parent": "l_spine_deformer_2_05_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "16::l_spine_deformer_2_05_ctrlShape": {
+    "Object Name": "l_spine_deformer_2_05_ctrlShape",
+    "Parent": "l_spine_deformer_2_05_ctrl",
+    "Absolute Animation Range": null
+  },
+  "15::l_spine_deformer_2_05_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_spine_deformer_2_05_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_spine_deformer_2_05_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "10::spine_deformer_bottom_ctrl_transComp_GRP": {
+    "Object Name": "spine_deformer_bottom_ctrl_transComp_GRP",
+    "Parent": "spinec_ctrl",
+    "Absolute Animation Range": null
+  },
+  "11::spine_deformer_bottom_ctrl_offset_GRP": {
+    "Object Name": "spine_deformer_bottom_ctrl_offset_GRP",
+    "Parent": "spine_deformer_bottom_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "12::spine_deformer_bottom_ctrl": {
+    "Object Name": "spine_deformer_bottom_ctrl",
+    "Parent": "spine_deformer_bottom_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "13::spine_deformer_bottom_ctrlShape": {
+    "Object Name": "spine_deformer_bottom_ctrlShape",
+    "Parent": "spine_deformer_bottom_ctrl",
+    "Absolute Animation Range": null
+  },
+  "12::spine_deformer_bottom_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "spine_deformer_bottom_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "spine_deformer_bottom_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "4::l_ik_ctrl_grp": {
+    "Object Name": "l_ik_ctrl_grp",
+    "Parent": "move_ctrl",
+    "Absolute Animation Range": null
+  },
+  "5::l_wrist_ik_ctrl_transComp_GRP": {
+    "Object Name": "l_wrist_ik_ctrl_transComp_GRP",
+    "Parent": "l_ik_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "6::l_wrist_ik_ctrl": {
+    "Object Name": "l_wrist_ik_ctrl",
+    "Parent": "l_wrist_ik_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "7::l_wrist_ik_ctrlShape": {
+    "Object Name": "l_wrist_ik_ctrlShape",
+    "Parent": "l_wrist_ik_ctrl",
+    "Absolute Animation Range": null
+  },
+  "5::l_arm_poleVector_ctrl_transComp_GRP": {
+    "Object Name": "l_arm_poleVector_ctrl_transComp_GRP",
+    "Parent": "l_ik_ctrl_grp",
+    "Absolute Animation Range": null
+  },
+  "6::l_arm_poleVector_ctrl": {
+    "Object Name": "l_arm_poleVector_ctrl",
+    "Parent": "l_arm_poleVector_ctrl_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "7::l_arm_poleVector_ctrlShape": {
+    "Object Name": "l_arm_poleVector_ctrlShape",
+    "Parent": "l_arm_poleVector_ctrl",
+    "Absolute Animation Range": null
+  },
+  "4::l_arm_sub_ctrl_grp": {
+    "Object Name": "l_arm_sub_ctrl_grp",
+    "Parent": "move_ctrl",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "5::l_wrist_sub_ctrl_transComp_GRP": {
+    "Object Name": "l_wrist_sub_ctrl_transComp_GRP",
+    "Parent": "l_arm_sub_ctrl_grp",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "6::l_wrist_sub_ctrl_offset_GRP": {
+    "Object Name": "l_wrist_sub_ctrl_offset_GRP",
+    "Parent": "l_wrist_sub_ctrl_transComp_GRP",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "7::l_wrist_sub_ctrl": {
+    "Object Name": "l_wrist_sub_ctrl",
+    "Parent": "l_wrist_sub_ctrl_offset_GRP",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "8::l_wrist_sub_ctrlShape": {
+    "Object Name": "l_wrist_sub_ctrlShape",
+    "Parent": "l_wrist_sub_ctrl",
+    "Absolute Animation Range": null
+  },
+  "7::l_wrist_sub_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_wrist_sub_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_wrist_sub_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "5::l_elbow_twist_sub_ctrl_transComp_GRP": {
+    "Object Name": "l_elbow_twist_sub_ctrl_transComp_GRP",
+    "Parent": "l_arm_sub_ctrl_grp",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "6::l_elbow_twist_sub_ctrl_offset_GRP": {
+    "Object Name": "l_elbow_twist_sub_ctrl_offset_GRP",
+    "Parent": "l_elbow_twist_sub_ctrl_transComp_GRP",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "7::l_elbow_twist_sub_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_elbow_twist_sub_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_elbow_twist_sub_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "7::l_elbow_twist_sub_ctrl_twist_GRP": {
+    "Object Name": "l_elbow_twist_sub_ctrl_twist_GRP",
+    "Parent": "l_elbow_twist_sub_ctrl_offset_GRP",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "8::l_elbow_twist_sub_ctrl": {
+    "Object Name": "l_elbow_twist_sub_ctrl",
+    "Parent": "l_elbow_twist_sub_ctrl_twist_GRP",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "9::l_elbow_twist_sub_ctrlShape": {
+    "Object Name": "l_elbow_twist_sub_ctrlShape",
+    "Parent": "l_elbow_twist_sub_ctrl",
+    "Absolute Animation Range": null
+  },
+  "8::l_elbow_twist_sub_ctrl_twist_GRP_parentConstraint1": {
+    "Object Name": "l_elbow_twist_sub_ctrl_twist_GRP_parentConstraint1",
+    "Parent": "l_elbow_twist_sub_ctrl_twist_GRP",
+    "Absolute Animation Range": null
+  },
+  "5::l_elbow_sub_ctrl_transComp_GRP": {
+    "Object Name": "l_elbow_sub_ctrl_transComp_GRP",
+    "Parent": "l_arm_sub_ctrl_grp",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "6::l_elbow_sub_ctrl_offset_GRP": {
+    "Object Name": "l_elbow_sub_ctrl_offset_GRP",
+    "Parent": "l_elbow_sub_ctrl_transComp_GRP",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "7::l_elbow_sub_ctrl": {
+    "Object Name": "l_elbow_sub_ctrl",
+    "Parent": "l_elbow_sub_ctrl_offset_GRP",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "8::l_elbow_sub_ctrlShape": {
+    "Object Name": "l_elbow_sub_ctrlShape",
+    "Parent": "l_elbow_sub_ctrl",
+    "Absolute Animation Range": null
+  },
+  "7::l_elbow_sub_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_elbow_sub_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_elbow_sub_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "5::l_shoulder_twist_sub_ctrl_transComp_GRP": {
+    "Object Name": "l_shoulder_twist_sub_ctrl_transComp_GRP",
+    "Parent": "l_arm_sub_ctrl_grp",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "6::l_shoulder_twist_sub_ctrl_offset_GRP": {
+    "Object Name": "l_shoulder_twist_sub_ctrl_offset_GRP",
+    "Parent": "l_shoulder_twist_sub_ctrl_transComp_GRP",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "7::l_shoulder_twist_sub_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_shoulder_twist_sub_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_shoulder_twist_sub_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "7::l_shoulder_twist_sub_ctrl_twist_GRP": {
+    "Object Name": "l_shoulder_twist_sub_ctrl_twist_GRP",
+    "Parent": "l_shoulder_twist_sub_ctrl_offset_GRP",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "8::l_shoulder_twist_sub_ctrl": {
+    "Object Name": "l_shoulder_twist_sub_ctrl",
+    "Parent": "l_shoulder_twist_sub_ctrl_twist_GRP",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "9::l_shoulder_twist_sub_ctrlShape": {
+    "Object Name": "l_shoulder_twist_sub_ctrlShape",
+    "Parent": "l_shoulder_twist_sub_ctrl",
+    "Absolute Animation Range": null
+  },
+  "8::l_shoulder_twist_sub_ctrl_twist_GRP_parentConstraint1": {
+    "Object Name": "l_shoulder_twist_sub_ctrl_twist_GRP_parentConstraint1",
+    "Parent": "l_shoulder_twist_sub_ctrl_twist_GRP",
+    "Absolute Animation Range": null
+  },
+  "5::l_shoulder_sub_ctrl_transComp_GRP": {
+    "Object Name": "l_shoulder_sub_ctrl_transComp_GRP",
+    "Parent": "l_arm_sub_ctrl_grp",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "6::l_shoulder_sub_ctrl_offset_GRP": {
+    "Object Name": "l_shoulder_sub_ctrl_offset_GRP",
+    "Parent": "l_shoulder_sub_ctrl_transComp_GRP",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "7::l_shoulder_sub_ctrl": {
+    "Object Name": "l_shoulder_sub_ctrl",
+    "Parent": "l_shoulder_sub_ctrl_offset_GRP",
+    "Absolute Animation Range": "1.0 -- 1.0"
+  },
+  "8::l_shoulder_sub_ctrlShape": {
+    "Object Name": "l_shoulder_sub_ctrlShape",
+    "Parent": "l_shoulder_sub_ctrl",
+    "Absolute Animation Range": null
+  },
+  "7::l_shoulder_sub_ctrl_offset_GRP_parentConstraint1": {
+    "Object Name": "l_shoulder_sub_ctrl_offset_GRP_parentConstraint1",
+    "Parent": "l_shoulder_sub_ctrl_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "1::DontTouch": {
+    "Object Name": "DontTouch",
+    "Parent": "naughtydog_test_rig_grp",
+    "Absolute Animation Range": null
+  },
+  "2::arm_blend_jnt_grp": {
+    "Object Name": "arm_blend_jnt_grp",
+    "Parent": "DontTouch",
+    "Absolute Animation Range": null
+  },
+  "3::l_shoulder_sub": {
+    "Object Name": "l_shoulder_sub",
+    "Parent": "arm_blend_jnt_grp",
+    "Absolute Animation Range": null
+  },
+  "4::l_shoulder_twist_sub": {
+    "Object Name": "l_shoulder_twist_sub",
+    "Parent": "l_shoulder_sub",
+    "Absolute Animation Range": null
+  },
+  "5::l_elbow_sub": {
+    "Object Name": "l_elbow_sub",
+    "Parent": "l_shoulder_twist_sub",
+    "Absolute Animation Range": null
+  },
+  "6::l_elbow_twist_sub": {
+    "Object Name": "l_elbow_twist_sub",
+    "Parent": "l_elbow_sub",
+    "Absolute Animation Range": null
+  },
+  "7::l_wrist_sub": {
+    "Object Name": "l_wrist_sub",
+    "Parent": "l_elbow_twist_sub",
+    "Absolute Animation Range": null
+  },
+  "8::l_wrist_sub_parentConstraint1": {
+    "Object Name": "l_wrist_sub_parentConstraint1",
+    "Parent": "l_wrist_sub",
+    "Absolute Animation Range": null
+  },
+  "6::l_elbow_sub_parentConstraint1": {
+    "Object Name": "l_elbow_sub_parentConstraint1",
+    "Parent": "l_elbow_sub",
+    "Absolute Animation Range": null
+  },
+  "4::l_shoulder_sub_parentConstraint1": {
+    "Object Name": "l_shoulder_sub_parentConstraint1",
+    "Parent": "l_shoulder_sub",
+    "Absolute Animation Range": null
+  },
+  "3::l_shoulder_ik": {
+    "Object Name": "l_shoulder_ik",
+    "Parent": "arm_blend_jnt_grp",
+    "Absolute Animation Range": null
+  },
+  "4::l_elbow_ik": {
+    "Object Name": "l_elbow_ik",
+    "Parent": "l_shoulder_ik",
+    "Absolute Animation Range": null
+  },
+  "5::l_wrist_ik": {
+    "Object Name": "l_wrist_ik",
+    "Parent": "l_elbow_ik",
+    "Absolute Animation Range": null
+  },
+  "6::l_wrist_ik_orientConstraint1": {
+    "Object Name": "l_wrist_ik_orientConstraint1",
+    "Parent": "l_wrist_ik",
+    "Absolute Animation Range": null
+  },
+  "5::effector1": {
+    "Object Name": "effector1",
+    "Parent": "l_elbow_ik",
+    "Absolute Animation Range": null
+  },
+  "4::l_shoulder_ik_parentConstraint1": {
+    "Object Name": "l_shoulder_ik_parentConstraint1",
+    "Parent": "l_shoulder_ik",
+    "Absolute Animation Range": null
+  },
+  "3::l_shoulder_fk": {
+    "Object Name": "l_shoulder_fk",
+    "Parent": "arm_blend_jnt_grp",
+    "Absolute Animation Range": null
+  },
+  "4::l_elbow_fk": {
+    "Object Name": "l_elbow_fk",
+    "Parent": "l_shoulder_fk",
+    "Absolute Animation Range": null
+  },
+  "5::l_wrist_fk": {
+    "Object Name": "l_wrist_fk",
+    "Parent": "l_elbow_fk",
+    "Absolute Animation Range": null
+  },
+  "6::l_wrist_fk_parentConstraint1": {
+    "Object Name": "l_wrist_fk_parentConstraint1",
+    "Parent": "l_wrist_fk",
+    "Absolute Animation Range": null
+  },
+  "5::l_elbow_fk_parentConstraint1": {
+    "Object Name": "l_elbow_fk_parentConstraint1",
+    "Parent": "l_elbow_fk",
+    "Absolute Animation Range": null
+  },
+  "4::l_shoulder_fk_parentConstraint1": {
+    "Object Name": "l_shoulder_fk_parentConstraint1",
+    "Parent": "l_shoulder_fk",
+    "Absolute Animation Range": null
+  },
+  "2::corrective_deformers_grp": {
+    "Object Name": "corrective_deformers_grp",
+    "Parent": "DontTouch",
+    "Absolute Animation Range": null
+  },
+  "3::corrective_deformer_loc_grp": {
+    "Object Name": "corrective_deformer_loc_grp",
+    "Parent": "corrective_deformers_grp",
+    "Absolute Animation Range": null
+  },
+  "4::spine_corrective_deformer_loc_grp": {
+    "Object Name": "spine_corrective_deformer_loc_grp",
+    "Parent": "corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "5::spine_corrective_deformer_top_loc_grp": {
+    "Object Name": "spine_corrective_deformer_top_loc_grp",
+    "Parent": "spine_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "6::spine_deformer_top_02_01": {
+    "Object Name": "spine_deformer_top_02_01",
+    "Parent": "spine_corrective_deformer_top_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::spine_deformer_top_02_Shape1": {
+    "Object Name": "spine_deformer_top_02_Shape1",
+    "Parent": "spine_deformer_top_02_01",
+    "Absolute Animation Range": null
+  },
+  "6::spine_deformer_top_02_02": {
+    "Object Name": "spine_deformer_top_02_02",
+    "Parent": "spine_corrective_deformer_top_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::spine_deformer_top_02_Shape2": {
+    "Object Name": "spine_deformer_top_02_Shape2",
+    "Parent": "spine_deformer_top_02_02",
+    "Absolute Animation Range": null
+  },
+  "6::spine_deformer_bottom_02_01": {
+    "Object Name": "spine_deformer_bottom_02_01",
+    "Parent": "spine_corrective_deformer_top_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::spine_deformer_bottom_02_Shape1": {
+    "Object Name": "spine_deformer_bottom_02_Shape1",
+    "Parent": "spine_deformer_bottom_02_01",
+    "Absolute Animation Range": null
+  },
+  "6::spine_deformer_bottom_02_02": {
+    "Object Name": "spine_deformer_bottom_02_02",
+    "Parent": "spine_corrective_deformer_top_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::spine_deformer_bottom_02_Shape2": {
+    "Object Name": "spine_deformer_bottom_02_Shape2",
+    "Parent": "spine_deformer_bottom_02_02",
+    "Absolute Animation Range": null
+  },
+  "6::spine_deformer_bottom_02_03": {
+    "Object Name": "spine_deformer_bottom_02_03",
+    "Parent": "spine_corrective_deformer_top_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::spine_deformer_bottom_02_Shape3": {
+    "Object Name": "spine_deformer_bottom_02_Shape3",
+    "Parent": "spine_deformer_bottom_02_03",
+    "Absolute Animation Range": null
+  },
+  "6::spine_deformer_top_center": {
+    "Object Name": "spine_deformer_top_center",
+    "Parent": "spine_corrective_deformer_top_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::spine_deformer_top_centerShape": {
+    "Object Name": "spine_deformer_top_centerShape",
+    "Parent": "spine_deformer_top_center",
+    "Absolute Animation Range": null
+  },
+  "5::spine_corrective_deformer_bottom_loc_grp": {
+    "Object Name": "spine_corrective_deformer_bottom_loc_grp",
+    "Parent": "spine_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "6::spine_deformer_bottom_01_03": {
+    "Object Name": "spine_deformer_bottom_01_03",
+    "Parent": "spine_corrective_deformer_bottom_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::spine_deformer_bottom_01_Shape3": {
+    "Object Name": "spine_deformer_bottom_01_Shape3",
+    "Parent": "spine_deformer_bottom_01_03",
+    "Absolute Animation Range": null
+  },
+  "6::spine_deformer_bottom_01_02": {
+    "Object Name": "spine_deformer_bottom_01_02",
+    "Parent": "spine_corrective_deformer_bottom_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::spine_deformer_bottom_01_Shape2": {
+    "Object Name": "spine_deformer_bottom_01_Shape2",
+    "Parent": "spine_deformer_bottom_01_02",
+    "Absolute Animation Range": null
+  },
+  "6::spine_deformer_bottom_01_01": {
+    "Object Name": "spine_deformer_bottom_01_01",
+    "Parent": "spine_corrective_deformer_bottom_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::spine_deformer_bottom_01_Shape1": {
+    "Object Name": "spine_deformer_bottom_01_Shape1",
+    "Parent": "spine_deformer_bottom_01_01",
+    "Absolute Animation Range": null
+  },
+  "6::spine_deformer_top_01_02": {
+    "Object Name": "spine_deformer_top_01_02",
+    "Parent": "spine_corrective_deformer_bottom_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::spine_deformer_top_01_Shape2": {
+    "Object Name": "spine_deformer_top_01_Shape2",
+    "Parent": "spine_deformer_top_01_02",
+    "Absolute Animation Range": null
+  },
+  "6::spine_deformer_top_01_01": {
+    "Object Name": "spine_deformer_top_01_01",
+    "Parent": "spine_corrective_deformer_bottom_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::spine_deformer_top_01_Shape1": {
+    "Object Name": "spine_deformer_top_01_Shape1",
+    "Parent": "spine_deformer_top_01_01",
+    "Absolute Animation Range": null
+  },
+  "6::spine_deformer_bottom_center": {
+    "Object Name": "spine_deformer_bottom_center",
+    "Parent": "spine_corrective_deformer_bottom_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::spine_deformer_bottom_centerShape": {
+    "Object Name": "spine_deformer_bottom_centerShape",
+    "Parent": "spine_deformer_bottom_center",
+    "Absolute Animation Range": null
+  },
+  "4::arm_corrective_deformers_loc_grp": {
+    "Object Name": "arm_corrective_deformers_loc_grp",
+    "Parent": "corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "5::trap_corrective_deformer_loc_grp": {
+    "Object Name": "trap_corrective_deformer_loc_grp",
+    "Parent": "arm_corrective_deformers_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "6::trap_deformer_1_03_loc": {
+    "Object Name": "trap_deformer_1_03_loc",
+    "Parent": "trap_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::trap_deformer_1_03_locShape": {
+    "Object Name": "trap_deformer_1_03_locShape",
+    "Parent": "trap_deformer_1_03_loc",
+    "Absolute Animation Range": null
+  },
+  "6::trap_deformer_3_01_loc": {
+    "Object Name": "trap_deformer_3_01_loc",
+    "Parent": "trap_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::trap_deformer_3_01_locShape": {
+    "Object Name": "trap_deformer_3_01_locShape",
+    "Parent": "trap_deformer_3_01_loc",
+    "Absolute Animation Range": null
+  },
+  "6::trap_deformer_2_02_loc": {
+    "Object Name": "trap_deformer_2_02_loc",
+    "Parent": "trap_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::trap_deformer_2_02_locShape": {
+    "Object Name": "trap_deformer_2_02_locShape",
+    "Parent": "trap_deformer_2_02_loc",
+    "Absolute Animation Range": null
+  },
+  "6::trap_deformer_2_03_loc": {
+    "Object Name": "trap_deformer_2_03_loc",
+    "Parent": "trap_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::trap_deformer_2_03_locShape": {
+    "Object Name": "trap_deformer_2_03_locShape",
+    "Parent": "trap_deformer_2_03_loc",
+    "Absolute Animation Range": null
+  },
+  "6::trap_deformer_2_01_loc": {
+    "Object Name": "trap_deformer_2_01_loc",
+    "Parent": "trap_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::trap_deformer_2_01_locShape": {
+    "Object Name": "trap_deformer_2_01_locShape",
+    "Parent": "trap_deformer_2_01_loc",
+    "Absolute Animation Range": null
+  },
+  "6::trap_deformer_3_02_loc": {
+    "Object Name": "trap_deformer_3_02_loc",
+    "Parent": "trap_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::trap_deformer_3_02_locShape": {
+    "Object Name": "trap_deformer_3_02_locShape",
+    "Parent": "trap_deformer_3_02_loc",
+    "Absolute Animation Range": null
+  },
+  "6::trap_deformer_3_03_loc": {
+    "Object Name": "trap_deformer_3_03_loc",
+    "Parent": "trap_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::trap_deformer_3_03_locShape": {
+    "Object Name": "trap_deformer_3_03_locShape",
+    "Parent": "trap_deformer_3_03_loc",
+    "Absolute Animation Range": null
+  },
+  "6::trap_deformer_1_01_loc": {
+    "Object Name": "trap_deformer_1_01_loc",
+    "Parent": "trap_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::trap_deformer_1_01_locShape": {
+    "Object Name": "trap_deformer_1_01_locShape",
+    "Parent": "trap_deformer_1_01_loc",
+    "Absolute Animation Range": null
+  },
+  "6::trap_deformer_1_02_loc": {
+    "Object Name": "trap_deformer_1_02_loc",
+    "Parent": "trap_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::trap_deformer_1_02_locShape": {
+    "Object Name": "trap_deformer_1_02_locShape",
+    "Parent": "trap_deformer_1_02_loc",
+    "Absolute Animation Range": null
+  },
+  "5::shoulder_corrective_deformer_loc_grp": {
+    "Object Name": "shoulder_corrective_deformer_loc_grp",
+    "Parent": "arm_corrective_deformers_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "6::shoulder_deformer_1_01_loc": {
+    "Object Name": "shoulder_deformer_1_01_loc",
+    "Parent": "shoulder_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::shoulder_deformer_1_01_locShape": {
+    "Object Name": "shoulder_deformer_1_01_locShape",
+    "Parent": "shoulder_deformer_1_01_loc",
+    "Absolute Animation Range": null
+  },
+  "6::shoulder_deformer_1_02_loc": {
+    "Object Name": "shoulder_deformer_1_02_loc",
+    "Parent": "shoulder_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::shoulder_deformer_1_02_locShape": {
+    "Object Name": "shoulder_deformer_1_02_locShape",
+    "Parent": "shoulder_deformer_1_02_loc",
+    "Absolute Animation Range": null
+  },
+  "6::shoulder_deformer_1_03_loc": {
+    "Object Name": "shoulder_deformer_1_03_loc",
+    "Parent": "shoulder_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::shoulder_deformer_1_03_locShape": {
+    "Object Name": "shoulder_deformer_1_03_locShape",
+    "Parent": "shoulder_deformer_1_03_loc",
+    "Absolute Animation Range": null
+  },
+  "6::shoulder_deformer_3_02_loc": {
+    "Object Name": "shoulder_deformer_3_02_loc",
+    "Parent": "shoulder_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::shoulder_deformer_3_02_locShape": {
+    "Object Name": "shoulder_deformer_3_02_locShape",
+    "Parent": "shoulder_deformer_3_02_loc",
+    "Absolute Animation Range": null
+  },
+  "6::shoulder_deformer_3_03_loc": {
+    "Object Name": "shoulder_deformer_3_03_loc",
+    "Parent": "shoulder_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::shoulder_deformer_3_03_locShape": {
+    "Object Name": "shoulder_deformer_3_03_locShape",
+    "Parent": "shoulder_deformer_3_03_loc",
+    "Absolute Animation Range": null
+  },
+  "6::shoulder_deformer_2_02_loc": {
+    "Object Name": "shoulder_deformer_2_02_loc",
+    "Parent": "shoulder_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::shoulder_deformer_2_02_locShape": {
+    "Object Name": "shoulder_deformer_2_02_locShape",
+    "Parent": "shoulder_deformer_2_02_loc",
+    "Absolute Animation Range": null
+  },
+  "6::shoulder_deformer_2_01_loc": {
+    "Object Name": "shoulder_deformer_2_01_loc",
+    "Parent": "shoulder_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::shoulder_deformer_2_01_locShape": {
+    "Object Name": "shoulder_deformer_2_01_locShape",
+    "Parent": "shoulder_deformer_2_01_loc",
+    "Absolute Animation Range": null
+  },
+  "6::shoulder_deformer_2_03_loc": {
+    "Object Name": "shoulder_deformer_2_03_loc",
+    "Parent": "shoulder_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::shoulder_deformer_2_03_locShape": {
+    "Object Name": "shoulder_deformer_2_03_locShape",
+    "Parent": "shoulder_deformer_2_03_loc",
+    "Absolute Animation Range": null
+  },
+  "6::shoulder_deformer_3_01_loc": {
+    "Object Name": "shoulder_deformer_3_01_loc",
+    "Parent": "shoulder_corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "7::shoulder_deformer_3_01_locShape": {
+    "Object Name": "shoulder_deformer_3_01_locShape",
+    "Parent": "shoulder_deformer_3_01_loc",
+    "Absolute Animation Range": null
+  },
+  "4::wrist_corrector_loc_grp": {
+    "Object Name": "wrist_corrector_loc_grp",
+    "Parent": "corrective_deformer_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "5::l_wrist_top_corrector_loc_transComp_GRP": {
+    "Object Name": "l_wrist_top_corrector_loc_transComp_GRP",
+    "Parent": "wrist_corrector_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "6::l_wrist_top_corrector_loc_offset_GRP": {
+    "Object Name": "l_wrist_top_corrector_loc_offset_GRP",
+    "Parent": "l_wrist_top_corrector_loc_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "7::l_wrist_top_corrector_loc": {
+    "Object Name": "l_wrist_top_corrector_loc",
+    "Parent": "l_wrist_top_corrector_loc_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "8::l_wrist_top_corrector_locShape": {
+    "Object Name": "l_wrist_top_corrector_locShape",
+    "Parent": "l_wrist_top_corrector_loc",
+    "Absolute Animation Range": null
+  },
+  "7::l_wrist_top_corrector_loc_offset_GRP_parentConstraint1": {
+    "Object Name": "l_wrist_top_corrector_loc_offset_GRP_parentConstraint1",
+    "Parent": "l_wrist_top_corrector_loc_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "5::l_wrist_bottom_corrector_loc_transComp_GRP": {
+    "Object Name": "l_wrist_bottom_corrector_loc_transComp_GRP",
+    "Parent": "wrist_corrector_loc_grp",
+    "Absolute Animation Range": null
+  },
+  "6::l_wrist_bottom_corrector_loc_offset_GRP": {
+    "Object Name": "l_wrist_bottom_corrector_loc_offset_GRP",
+    "Parent": "l_wrist_bottom_corrector_loc_transComp_GRP",
+    "Absolute Animation Range": null
+  },
+  "7::l_wrist_bottom_corrector_loc": {
+    "Object Name": "l_wrist_bottom_corrector_loc",
+    "Parent": "l_wrist_bottom_corrector_loc_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "8::l_wrist_bottom_corrector_locShape": {
+    "Object Name": "l_wrist_bottom_corrector_locShape",
+    "Parent": "l_wrist_bottom_corrector_loc",
+    "Absolute Animation Range": null
+  },
+  "7::l_wrist_bottom_corrector_loc_offset_GRP_parentConstraint1": {
+    "Object Name": "l_wrist_bottom_corrector_loc_offset_GRP_parentConstraint1",
+    "Parent": "l_wrist_bottom_corrector_loc_offset_GRP",
+    "Absolute Animation Range": null
+  },
+  "3::corrective_deformer_surface_grp": {
+    "Object Name": "corrective_deformer_surface_grp",
+    "Parent": "corrective_deformers_grp",
+    "Absolute Animation Range": null
+  },
+  "4::spine_corrective_grp": {
+    "Object Name": "spine_corrective_grp",
+    "Parent": "corrective_deformer_surface_grp",
+    "Absolute Animation Range": null
+  },
+  "5::spine_corrective_deformer_bottom_02": {
+    "Object Name": "spine_corrective_deformer_bottom_02",
+    "Parent": "spine_corrective_grp",
+    "Absolute Animation Range": null
+  },
+  "6::spine_corrective_deformer_bottom_Shape2": {
+    "Object Name": "spine_corrective_deformer_bottom_Shape2",
+    "Parent": "spine_corrective_deformer_bottom_02",
+    "Absolute Animation Range": null
+  },
+  "6::spine_corrective_deformer_bottom_Shape1Orig2": {
+    "Object Name": "spine_corrective_deformer_bottom_Shape1Orig2",
+    "Parent": "spine_corrective_deformer_bottom_02",
+    "Absolute Animation Range": null
+  },
+  "5::spine_corrective_deformer_bottom_01": {
+    "Object Name": "spine_corrective_deformer_bottom_01",
+    "Parent": "spine_corrective_grp",
+    "Absolute Animation Range": null
+  },
+  "6::spine_corrective_deformer_bottom_Shape1": {
+    "Object Name": "spine_corrective_deformer_bottom_Shape1",
+    "Parent": "spine_corrective_deformer_bottom_01",
+    "Absolute Animation Range": null
+  },
+  "6::spine_corrective_deformer_bottom_Shape1Orig1": {
+    "Object Name": "spine_corrective_deformer_bottom_Shape1Orig1",
+    "Parent": "spine_corrective_deformer_bottom_01",
+    "Absolute Animation Range": null
+  },
+  "5::spine_corrective_deformer_top_01": {
+    "Object Name": "spine_corrective_deformer_top_01",
+    "Parent": "spine_corrective_grp",
+    "Absolute Animation Range": null
+  },
+  "6::spine_corrective_deformer_top_Shape1": {
+    "Object Name": "spine_corrective_deformer_top_Shape1",
+    "Parent": "spine_corrective_deformer_top_01",
+    "Absolute Animation Range": null
+  },
+  "6::spine_corrective_deformer_top_Shape1Orig1": {
+    "Object Name": "spine_corrective_deformer_top_Shape1Orig1",
+    "Parent": "spine_corrective_deformer_top_01",
+    "Absolute Animation Range": null
+  },
+  "5::spine_corrective_deformer_top_02": {
+    "Object Name": "spine_corrective_deformer_top_02",
+    "Parent": "spine_corrective_grp",
+    "Absolute Animation Range": null
+  },
+  "6::spine_corrective_deformer_top_Shape2": {
+    "Object Name": "spine_corrective_deformer_top_Shape2",
+    "Parent": "spine_corrective_deformer_top_02",
+    "Absolute Animation Range": null
+  },
+  "6::spine_corrective_deformer_top_Shape1Orig2": {
+    "Object Name": "spine_corrective_deformer_top_Shape1Orig2",
+    "Parent": "spine_corrective_deformer_top_02",
+    "Absolute Animation Range": null
+  },
+  "4::arm_corrective_grp": {
+    "Object Name": "arm_corrective_grp",
+    "Parent": "corrective_deformer_surface_grp",
+    "Absolute Animation Range": null
+  },
+  "5::trap_corrective_deformer": {
+    "Object Name": "trap_corrective_deformer",
+    "Parent": "arm_corrective_grp",
+    "Absolute Animation Range": null
+  },
+  "6::trap_corrective_deformerShape": {
+    "Object Name": "trap_corrective_deformerShape",
+    "Parent": "trap_corrective_deformer",
+    "Absolute Animation Range": null
+  },
+  "6::trap_corrective_deformerShapeOrig": {
+    "Object Name": "trap_corrective_deformerShapeOrig",
+    "Parent": "trap_corrective_deformer",
+    "Absolute Animation Range": null
+  },
+  "5::shoulder_corrective_deformer": {
+    "Object Name": "shoulder_corrective_deformer",
+    "Parent": "arm_corrective_grp",
+    "Absolute Animation Range": null
+  },
+  "6::shoulder_corrective_deformerShape": {
+    "Object Name": "shoulder_corrective_deformerShape",
+    "Parent": "shoulder_corrective_deformer",
+    "Absolute Animation Range": null
+  },
+  "6::shoulder_corrective_deformerShapeOrig": {
+    "Object Name": "shoulder_corrective_deformerShapeOrig",
+    "Parent": "shoulder_corrective_deformer",
+    "Absolute Animation Range": null
+  },
+  "2::handle_grp": {
+    "Object Name": "handle_grp",
+    "Parent": "DontTouch",
+    "Absolute Animation Range": null
+  },
+  "3::l_arm_ik_handle": {
+    "Object Name": "l_arm_ik_handle",
+    "Parent": "handle_grp",
+    "Absolute Animation Range": null
+  },
+  "4::ikHandle1_poleVectorConstraint1": {
+    "Object Name": "ikHandle1_poleVectorConstraint1",
+    "Parent": "l_arm_ik_handle",
+    "Absolute Animation Range": null
+  },
+  "4::ikHandle1_pointConstraint1": {
+    "Object Name": "ikHandle1_pointConstraint1",
+    "Parent": "l_arm_ik_handle",
+    "Absolute Animation Range": null
+  },
+  "0::persp2": {
+    "Object Name": "persp2",
+    "Parent": null,
+    "Absolute Animation Range": null
+  },
+  "1::front_full": {
+    "Object Name": "front_full",
+    "Parent": "persp2",
+    "Absolute Animation Range": null
+  },
+  "0::shoulder_01": {
+    "Object Name": "shoulder_01",
+    "Parent": null,
+    "Absolute Animation Range": null
+  },
+  "1::shoulder_01Shape": {
+    "Object Name": "shoulder_01Shape",
+    "Parent": "shoulder_01",
+    "Absolute Animation Range": null
+  },
+  "1::shoulder_01_parentConstraint1": {
+    "Object Name": "shoulder_01_parentConstraint1",
+    "Parent": "shoulder_01",
+    "Absolute Animation Range": null
+  },
+  "0::shoulder_back": {
+    "Object Name": "shoulder_back",
+    "Parent": null,
+    "Absolute Animation Range": null
+  },
+  "1::shoulder_backShape": {
+    "Object Name": "shoulder_backShape",
+    "Parent": "shoulder_back",
+    "Absolute Animation Range": null
+  },
+  "1::shoulder_02_parentConstraint1": {
+    "Object Name": "shoulder_02_parentConstraint1",
+    "Parent": "shoulder_back",
+    "Absolute Animation Range": null
+  },
+  "0::stomach": {
+    "Object Name": "stomach",
+    "Parent": null,
+    "Absolute Animation Range": null
+  },
+  "1::stomachShape": {
+    "Object Name": "stomachShape",
+    "Parent": "stomach",
+    "Absolute Animation Range": null
+  },
+  "1::stomach_parentConstraint1": {
+    "Object Name": "stomach_parentConstraint1",
+    "Parent": "stomach",
+    "Absolute Animation Range": null
+  },
+  "0::bicep": {
+    "Object Name": "bicep",
+    "Parent": null,
+    "Absolute Animation Range": null
+  },
+  "1::bicepShape": {
+    "Object Name": "bicepShape",
+    "Parent": "bicep",
+    "Absolute Animation Range": null
+  },
+  "1::bicep_parentConstraint1": {
+    "Object Name": "bicep_parentConstraint1",
+    "Parent": "bicep",
+    "Absolute Animation Range": null
+  },
+  "0::persp3": {
+    "Object Name": "persp3",
+    "Parent": null,
+    "Absolute Animation Range": null
+  },
+  "1::perspShape3": {
+    "Object Name": "perspShape3",
+    "Parent": "persp3",
+    "Absolute Animation Range": null
+  },
+  "0::persp4": {
+    "Object Name": "persp4",
+    "Parent": null,
+    "Absolute Animation Range": null
+  },
+  "1::hand_front": {
+    "Object Name": "hand_front",
+    "Parent": "persp4",
+    "Absolute Animation Range": null
+  },
+  "0::persp5": {
+    "Object Name": "persp5",
+    "Parent": null,
+    "Absolute Animation Range": null
+  },
+  "1::perspShape5": {
+    "Object Name": "perspShape5",
+    "Parent": "persp5",
+    "Absolute Animation Range": null
+  },
+  "0::persp6": {
+    "Object Name": "persp6",
+    "Parent": null,
+    "Absolute Animation Range": null
+  },
+  "1::perspShape6": {
+    "Object Name": "perspShape6",
+    "Parent": "persp6",
+    "Absolute Animation Range": null}}
