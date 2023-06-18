@@ -57,6 +57,11 @@ def export_animation_range(objects, start_frame, end_frame, export_path):
     bake_animation_range(start_frame, end_frame)
     export_animation(objects, export_path)
 
+
+def export_animation_range_from_scene(scene_path, objects, start_frame, end_frame, export_path):
+    cmds.file(scene_path, open=True, force=True)
+    export_animation_range(objects, start_frame, end_frame, export_path)
+
 if __name__ == "__main__":
     def tst_scene_01():
         cmds.file(new=True, force=True)

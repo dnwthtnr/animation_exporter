@@ -13,8 +13,14 @@ from functools import partial
 class QueueItem(base_layouts.Horizontal_Layout):
     CloseButtonClicked = QtCore.Signal(object)
 
-    def __int__(self, export_name, scene_path, frame_range, export_directory):
+    ExportNameChanged = QtCore.Signal(str, str)
+    ExportFrameRangeChanged = QtCore.Signal(str, list)
+    ExportDirectoryChanged = QtCore.Signal(str, str)
+
+
+    def __int__(self, item_identifier, export_name, scene_path, frame_range, export_directory):
         super().__init__()
+        self.item_identifier = item_identifier
         self.export_name_widget = self.build_export_name()
         self.scene_path_widget = self.build_scene_path()
         self.frame_range_widget = self.build_frane_range()
@@ -38,7 +44,7 @@ class QueueItem(base_layouts.Horizontal_Layout):
 
     @property
     def frame_range(self):
-        _str_list =  self.frame_range_widget.text().split(" -- ")
+        _str_list = self.frame_range_widget.text().split(" -- ")
         return [float(_num) for _num in _str_list]
 
     @property
@@ -47,6 +53,7 @@ class QueueItem(base_layouts.Horizontal_Layout):
 
     def build_export_name(self, name):
         _widget = base_widgets.Line_Edit(text=name)
+        _widget.textEdited.connect(self.emit_export_name_changed)
         return _widget
 
     def build_scene_path(self, path):
@@ -57,10 +64,12 @@ class QueueItem(base_layouts.Horizontal_Layout):
     def build_frane_range(self, range):
         _widget = base_widgets.Line_Edit(text=" -- ".join(range))
         _widget.setReadOnly(True)
+        _widget.textEdited.connect(self.emit_export_name_changed)
         return _widget
 
     def build_export_directory(self, directory):
         _widget = line_edits.Folder_Selection_Line_Edit(directory)
+        _widget.textEdited.connect(self.emit_export_name_changed)
         return _widget
 
     def build_close_button(self):
@@ -69,8 +78,25 @@ class QueueItem(base_layouts.Horizontal_Layout):
         _widget.clicked.connect(partial(self.CloseButtonClicked.emit, self))
         return _widget
 
+    @QtCore.Slot()
+    def emit_export_name_changed(self):
+        self.ExportNameChanged.emit(self.item_identifier, self.export_name)
+
+    @QtCore.Slot()
+    def emit_export_directory_changed(self):
+        self.ExportDirectoryChanged.emit(self.item_identifier, self.export_directory)
+
+    @QtCore.Slot()
+    def emit_frame_range_changed(self):
+        self.ExportFrameRangeChanged.emit(self.item_identifier, self.frame_range)
+
+
 class QueueItemHolder(base_layouts.Vertical_Layout):
-    QueueItemRemoved = QtCore.Signal()
+    RemoveQueueItem = QtCore.Signal(str)
+
+    UpdateQueueItemName = QtCore.Signal(str, str)
+    UpdateQueueItemExportDirectory = QtCore.Signal(str, str)
+    UpdateQueueItemFrameRange = QtCore.Signal(str, list)
 
     def __int__(self):
         super().__init__()
@@ -89,7 +115,7 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
         self.addWidget(_layout, alignment=constants.align_center)
 
     @QtCore.Slot()
-    def add_queue_item(self, export_name, scene_path, frame_range, export_directory):
+    def add_queue_item(self, queue_item_identifier, export_name, scene_path, frame_range, export_directory):
         """
         Adds a queue item with the given attributes
         Parameters
@@ -106,12 +132,24 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
         if len(self.queue_items) == 0:
             self.clear_layout()
 
-        _item = QueueItem(export_name, scene_path, frame_range, export_directory)
+        _item = QueueItem(
+            item_identifier=queue_item_identifier,
+            export_name=export_name,
+            scene_path=scene_path,
+            frame_range=frame_range,
+            export_directory=export_directory
+        )
+
         _item.CloseButtonClicked.connect(self.remove_queue_item)
+        _item.ExportDirectoryChanged.connect(self.emit_update_queue_item_export_directory)
+        _item.ExportNameChanged.connect(self.emit_update_queue_item_name)
+        _item.ExportFrameRangeChanged.connect(self.emit_update_queue_item_frame_range)
 
         self.addWidget(_item)
 
         self.queue_items.append(_item)
+
+    #########################################################
 
     @QtCore.Slot()
     def remove_queue_item(self, queue_item):
@@ -125,10 +163,29 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
         -------
 
         """
+        self.RemoveQueueItem.emit(queue_item.item_identifier)
+
         self.disown_child(queue_item)
 
         _queue_index = self.queue_items.index(queue_item)
         self.queue_items.pop(_queue_index)
+
+
+    @QtCore.Slot()
+    def emit_update_queue_item_name(self, queue_item_identifier, new_name):
+        self.UpdateQueueItemName.emit(queue_item_identifier, new_name)
+
+    @QtCore.Slot()
+    def emit_update_queue_item_export_directory(self, queue_item_identifier, new_directory):
+        self.UpdateQueueItemExportDirectory.emit(queue_item_identifier, new_directory)
+
+
+    @QtCore.Slot()
+    def emit_update_queue_item_frame_range(self, queue_item_identifier, new_range):
+        self.UpdateQueueItemFrameRange(queue_item_identifier, new_range)
+
+
+    #############################################
 
     def clear_queue(self):
         """

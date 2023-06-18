@@ -3,9 +3,10 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.NOTSET)
 from PySide2 import QtCore, QtWidgets, QtGui
 from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants
-from animation_exporter.animation_exporter_interface.view import AnimationExporterFooter, AnimationExporterHeader, AnimationExporterSceneView
+from animation_exporter.animation_exporter_interface.view import AnimationExporterFooter, AnimationExportQueueView, AnimationExporterHeader, AnimationExporterSceneView
 
 # TODO: make a widget that holds different items to export -- like a queue
+
 # TODO: Allow for opening multiple file -- open file - get data and store with path -- when exporting reopen files and export
 
 
@@ -90,6 +91,9 @@ class ExporterMainWindow(base_windows.Main_Window):
         _widget = AnimationExporterSceneView.ExporterSceneView()
         _widget.ItemSelected.connect(self.SceneItemSelectedDataQuery.emit)
         return _widget
+
+    def build_export_queue(self):
+        _widget = AnimationExportQueueView.ExporterQueueDisplay
 
     def build_detail_panel(self):
         _empty = base_widgets.Label("No Details Yet")

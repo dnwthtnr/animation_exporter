@@ -106,6 +106,13 @@ def set_animation_frame_gap_threshold(frame_gap):
 
 export_queue_json_path = os.path.join(CURRENT_FOLDER, "export_queue.json")
 
+queue_item_identifier_key = "Queue_Item_Identifier"
+queue_item_export_name_key = "Export_Name"
+queue_item_scene_path_key = "Scene_Path"
+queue_item_animation_range_key = "Animation_Range"
+queue_item_objects_key = "Objects_To_Export"
+queue_item_export_directory_key = "Export_Directory"
+
 
 def get_export_queue():
     return read_json(export_queue_json_path)
@@ -114,18 +121,85 @@ def get_export_queue_length():
     _queue = get_export_queue()
     return len(_queue)
 
+def get_new_queue_item_identifier():
+    """
+    Generates a new unique queue item ID
+    Returns
+    -------
 
-def add_to_export_queue(scene_path, scene_objects, animation_range, export_directory):
+    """
+    if get_export_queue_length() > 0:
+        _current_indentifiers = [int(_id) for _id in list(get_export_queue().keys())]
+        _most_recent_id = max(_current_indentifiers)
+        _queue_item_identifier = f"{_most_recent_id + 1}"
+
+        return _queue_item_identifier
+
+    return "0"
+
+
+def add_to_export_queue(scene_path, export_name, scene_objects, animation_range, export_directory):
+    _queue_item_identifier = get_new_queue_item_identifier()
+
     _scene_data_dict = {}
-    _scene_data_dict["Scene_Path"] = scene_path
-    _scene_data_dict["Animation_Range"] = animation_range
-    _scene_data_dict["Objects_To_Export"] = scene_objects
-    _scene_data_dict["Export_Directory"] = export_directory
+    _scene_data_dict[   queue_item_identifier_key       ] = _queue_item_identifier
+    _scene_data_dict[   queue_item_scene_path_key       ] = scene_path
+    _scene_data_dict[   queue_item_export_name_key      ] = export_name
+    _scene_data_dict[   queue_item_animation_range_key  ] = animation_range
+    _scene_data_dict[   queue_item_objects_key          ] = scene_objects
+    _scene_data_dict[   queue_item_export_directory_key ] = export_directory
 
-    _queue_length = get_export_queue_length()
-    _queue_item_key = f"{_queue_length + 1}::{scene_path}"
-    
-    set_resource_value(json_path=export_queue_json_path, name=_queue_item_key, value=_scene_data_dict)
+
+    set_resource_value(json_path=export_queue_json_path, name=_queue_item_identifier, value=_scene_data_dict)
+
+
+def remove_export_queue_item(queue_item_identifier):
+    _queue = get_export_queue()
+
+    if queue_item_identifier not in _queue:
+        return 0
+
+    _queue.pop(queue_item_identifier)
+    write_json(
+        path=export_queue_json_path,
+        data=_queue
+    )
+    return 1
+
+def update_queue_item_data(queue_item_identifier, value_key, new_value):
+    """
+    Updates the value for the given queue ID and rewrites the queue to disk
+    Parameters
+    ----------
+    queue_item_identifier
+    value_key
+    new_value
+
+    Returns
+    -------
+
+    """
+    _queue = get_export_queue()
+
+    _queue_item_data = _queue.get(queue_item_identifier)
+
+    if _queue_item_data is None:
+        return
+
+    _queue_item_data[value_key] = new_value
+
+    _queue[queue_item_identifier] = _queue_item_data
+    write_json(
+        path=export_queue_json_path,
+        data=_queue
+    )
+
+def get_queue_item_data(queue_item_identifier, value_key):
+    _queue = get_export_queue()
+
+    _queue_item_data = _queue.get(queue_item_identifier)
+
+    return _queue_item_data.get(value_key)
     
 def clear_export_queue():
     write_json(path=export_queue_json_path, data={})
