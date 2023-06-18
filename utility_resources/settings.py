@@ -110,14 +110,22 @@ export_queue_json_path = os.path.join(CURRENT_FOLDER, "export_queue.json")
 def get_export_queue():
     return read_json(export_queue_json_path)
 
+def get_export_queue_length():
+    _queue = get_export_queue()
+    return len(_queue)
 
-def add_to_export_queue(scene_path, scene_objects, export_directory):
+
+def add_to_export_queue(scene_path, scene_objects, animation_range, export_directory):
     _scene_data_dict = {}
     _scene_data_dict["Scene_Path"] = scene_path
+    _scene_data_dict["Animation_Range"] = animation_range
     _scene_data_dict["Objects_To_Export"] = scene_objects
     _scene_data_dict["Export_Directory"] = export_directory
+
+    _queue_length = get_export_queue_length()
+    _queue_item_key = f"{_queue_length + 1}::{scene_path}"
     
-    set_resource_value(json_path=export_queue_json_path, name=scene_path, value=_scene_data_dict)
+    set_resource_value(json_path=export_queue_json_path, name=_queue_item_key, value=_scene_data_dict)
     
 def clear_export_queue():
     write_json(path=export_queue_json_path, data={})
