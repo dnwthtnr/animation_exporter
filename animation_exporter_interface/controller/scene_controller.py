@@ -3,8 +3,7 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.NOTSET)
 
-from maya import standalone
-from maya import cmds
+from maya import cmds, standalone
 from PySide2 import QtCore, QtWidgets
 
 from animation_exporter.utility_resources import settings
@@ -17,7 +16,7 @@ class Scene_Controller(QtCore.QObject):
     DetailPanelBuilt = QtCore.Signal(object)
 
     def __init__(self):
-        # standalone.initialize()
+        standalone.initialize()
         cmds.file(new=True, force=True)
         super().__init__()
 

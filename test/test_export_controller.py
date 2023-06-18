@@ -1,13 +1,17 @@
 import unittest
 from animation_exporter.animation_exporter_interface.controller import export_controller
-from maya import standalone, cmds
+from maya import cmds
+import os
+from pymel import core as pm
 
-standalone.initialize()
+test_cube_example_scene = os.path.join("data", "test_cube_animation", "test_cube_animation.mb")
+test_cube_example_export =os.path.join("data", "test_cube_animation",  "test_cube_animation.fbx")
 
 def tst_scene_01():
     cmds.file(new=True, force=True)
 
     _cube = "cube"
+
     cmds.polyCube(name=_cube)
 
     _childCube = "childcube"

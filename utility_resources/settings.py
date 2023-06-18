@@ -100,3 +100,24 @@ def set_animation_frame_gap_threshold(frame_gap):
 
     """
     set_animation_parser_resource_value("Animation_Frame_Gap_Threshold", frame_gap)
+    
+
+############################################################
+
+export_queue_json_path = os.path.join(CURRENT_FOLDER, "export_queue.json")
+
+
+def get_export_queue():
+    return read_json(export_queue_json_path)
+
+
+def add_to_export_queue(scene_path, scene_objects, export_directory):
+    _scene_data_dict = {}
+    _scene_data_dict["Scene_Path"] = scene_path
+    _scene_data_dict["Objects_To_Export"] = scene_objects
+    _scene_data_dict["Export_Directory"] = export_directory
+    
+    set_resource_value(json_path=export_queue_json_path, name=scene_path, value=_scene_data_dict)
+    
+def clear_export_queue():
+    write_json(path=export_queue_json_path, data={})

@@ -5,11 +5,17 @@ from PySide2 import QtCore, QtWidgets, QtGui
 from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants
 from animation_exporter.animation_exporter_interface.view import AnimationExporterFooter, AnimationExporterHeader, AnimationExporterSceneView
 
+# TODO: make a widget that holds different items to export -- like a queue
+# TODO: Allow for opening multiple file -- open file - get data and store with path -- when exporting reopen files and export
+
 
 class ExporterMainWindow(base_windows.Main_Window):
     SceneSelectedContentQuery = QtCore.Signal(object)
 
     SceneItemSelectedDataQuery = QtCore.Signal(object)
+
+
+    ExportButtonClicked = QtCore.Signal(list, str)
 
     def __init__(self):
         super().__init__()
@@ -70,6 +76,7 @@ class ExporterMainWindow(base_windows.Main_Window):
 
         """
         _widget = AnimationExporterFooter.ExporterFooter()
+        _widget.ExportButtonClicked.connect(self.emit_export_signal)
         return _widget
 
     def build_scene_item_outliner(self):
@@ -111,3 +118,25 @@ class ExporterMainWindow(base_windows.Main_Window):
         """
         logger.debug(f'Received scene contents: {scene_contents}')
         self.scene_item_outliner.populate_item_view(scene_contents)
+
+
+    @QtCore.Slot()
+    def emit_export_signal(self, *args):
+
+        _object = self.scene_item_outliner.current_selection()
+
+        # self.ExportButtonClicked.emit(_object, )
+
+if __name__ == "__main__":
+    import sys
+
+    _app = QtWidgets.QApplication(sys.argv)
+
+    try:
+        _window = ExporterMainWindow()
+        _window.finish_initialization()
+        _window.show()
+    except Exception as e:
+        print(e)
+
+    sys.exit(_app.exec_())

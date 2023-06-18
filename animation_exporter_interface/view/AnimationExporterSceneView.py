@@ -50,6 +50,18 @@ class ExporterSceneView(base_layouts.Vertical_Layout):
         _view.SelectionChanged.connect(self.emit_item_selection_changed)
         return _view
 
+    def current_selection(self):
+        """
+        The currently selected item
+
+        Returns
+        -------
+        str
+            The item name
+
+        """
+        return self.item_view.current_selection()
+
 
     #signals
 

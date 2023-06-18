@@ -1,15 +1,22 @@
 
+import logging
+import os.path
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
 from PySide2 import QtCore, QtWidgets, QtGui
 from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants, line_edits
+from functools import partial
 
 
 class ExporterFooter(base_layouts.Horizontal_Layout):
-    ExportButtonClicked = QtCore.Signal()
+    ExportButtonClicked = QtCore.Signal(str)
     CloseButtonClicked = QtCore.Signal()
 
     def __init__(self):
         super().__init__()
-        self.folder_picker = None
+        self.output_location_selection = None
         self.finish_initialization()
 
     def finish_initialization(self):
@@ -23,7 +30,8 @@ class ExporterFooter(base_layouts.Horizontal_Layout):
 
     @property
     def export_directory(self):
-        return self.folder_picker.filepath
+        if self.output_location_selection is not None:
+            return self.output_location_selection.directory
 
     def build_button_holder(self):
         self.export_button = self.build_export_button()
@@ -35,7 +43,7 @@ class ExporterFooter(base_layouts.Horizontal_Layout):
 
     def build_export_button(self):
         _button = base_widgets.Button(text="Export")
-        _button.clicked.connect(self.ExportButtonClicked.emit)
+        _button.clicked.connect(self.emit_export_signal)
         return _button
 
     def build_close_button(self):
@@ -58,4 +66,35 @@ class ExporterFooter(base_layouts.Horizontal_Layout):
 
     def build_output_location_selector(self):
         _file_picker = line_edits.Folder_Selection_Line_Edit("")
+        _file_picker.textEdited.connect(self.text_updated)
         return _file_picker
+
+    @QtCore.Slot()
+    def emit_export_signal(self):
+        logger.info(f'Attempting to emit ExportButtonClicked with directory: {self.export_directory}')
+        try:
+            self.ExportButtonClicked.emit(self.export_directory)
+            logger.info(f'Successfully emitted signal ExportButtonClicked with directory: {self.export_directory}')
+        except Exception as e:
+            logger.warning(f'Encountered exception while attempting to emit ExportButtonClicked signal with directory: {self.export_directory}')
+            logger.exception(e)
+
+    @QtCore.Slot()
+    def text_updated(self, text):
+        if not os.path.exists(text):
+            # display that it needs to be a path
+            return
+
+
+if __name__ == "__main__":
+    import sys
+
+    _app = QtWidgets.QApplication(sys.argv)
+
+    try:
+        _window = ExporterFooter()
+        _window.show()
+    except Exception as e:
+        print(e)
+
+    sys.exit(_app.exec_())
