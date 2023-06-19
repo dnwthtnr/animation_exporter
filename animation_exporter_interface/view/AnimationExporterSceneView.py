@@ -10,8 +10,6 @@ class ExporterSceneView(base_layouts.Vertical_Layout):
         self.item_view = None
         self.item_model = None
 
-        self.finish_initialization()
-
     def finish_initialization(self):
         self.content_panel = base_layouts.Vertical_Layout()
         self.addWidget(self.content_panel)
@@ -68,3 +66,18 @@ class ExporterSceneView(base_layouts.Vertical_Layout):
     @QtCore.Slot()
     def emit_item_selection_changed(self, item):
         self.ItemSelected.emit(item)
+
+
+if __name__ == "__main__":
+    import sys
+
+    _app = QtWidgets.QApplication(sys.argv)
+
+    try:
+        _window = ExporterSceneView()
+        _window.finish_initialization()
+        _window.show()
+    except Exception as e:
+        print(e)
+
+    sys.exit(_app.exec_())

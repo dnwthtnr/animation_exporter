@@ -3,7 +3,6 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.NOTSET)
 from PySide2 import QtCore, QtWidgets, QtGui
 from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants
-from animation_exporter.animation_exporter_interface.view import AnimationExporterFooter, AnimationExportQueueView, AnimationExporterHeader, AnimationExporterSceneView
 
 # TODO: make a widget that holds different items to export -- like a queue
 
@@ -11,34 +10,52 @@ from animation_exporter.animation_exporter_interface.view import AnimationExport
 
 
 class ExporterMainWindow(base_windows.Main_Window):
-    SceneSelectedContentQuery = QtCore.Signal(object)
-
-    SceneItemSelectedDataQuery = QtCore.Signal(object)
-
-
-    ExportButtonClicked = QtCore.Signal(list, str)
-
-    def __init__(self):
-        super().__init__()
+    InitializationFinished = QtCore.Signal()
 
     def finish_initialization(self):
-        self.header = self.build_main_window_header()
+        logger.info(f'Building holders for main widgets.')
+        try:
+            self.header = self.build_main_window_header()
+            self.focal_tab_widget = self.build_focal_tab_widget()
+            self.footer = self.build_main_window_footer()
+            logger.info(f'Successfully built holders for (header, focal_tab_widget, footer) :: {self.header, self.focal_tab_widget, self.footer}')
+        except Exception as e:
+            logger.error(f'Encountered exception while attempting to build holders for (header, focal_tab_widget, footer) :: {self.header, self.focal_tab_widget, self.footer}')
+            logger.exception(e)
 
-        _focal_panel_holder = self.build_focal_panels()
+        logger.info(f'Building central widget and adding holders')
+        try:
+            central_layout = base_layouts.Vertical_Layout()
 
-        self.footer = self.build_main_window_footer()
+            central_layout.addWidget(self.header, alignment=constants.align_top)
+            central_layout.addWidget(self.focal_tab_widget)
+            central_layout.addWidget(self.footer, alignment=constants.align_bottom)
 
-        central_layout = base_layouts.Vertical_Layout()
+            logger.info(f'Successfully built central widget and added holders')
+        except Exception as e:
+            logger.error(f'Encountered exception while attempting to build central widget and add holders :: central_widget {central_layout}')
+            logger.exception(e)
 
-        central_layout.addWidget(self.header, alignment=constants.align_top)
-        central_layout.addWidget(_focal_panel_holder)
-        central_layout.addWidget(self.footer, alignment=constants.align_bottom)
-
+        logger.info(f'Setting central widget')
         self.setCentralWidget(central_layout)
 
+        logger.info(f'Resizing window: {self}')
         self.resize(500, 450)
 
-    def build_focal_panels(self):
+        logger.info(f'Emitting InitializationFinished signal')
+        self.InitializationFinished.emit()
+
+
+    def __init__(self):
+        self.header = None
+        self.focal_tab_widget = None
+        self.footer = None
+        super().__init__()
+
+
+    # region #######################| TAB WIDGET STUFF |##########################
+
+    def build_focal_tab_widget(self):
         """
         Builds the focal panels for the window
 
@@ -46,15 +63,15 @@ class ExporterMainWindow(base_windows.Main_Window):
         -------
 
         """
-        self.scene_item_outliner = self.build_scene_item_outliner()
+        return base_layouts.TabWidget()
 
-        self.detail_view = self.build_detail_panel()
+    @QtCore.Slot()
+    def addFocalPanel(self, panel, title):
+        self.focal_tab_widget.addTab(panel, title)
+    # endregion
 
-        _focal_panel_holder = base_layouts.Horizontal_Layout()
-        _focal_panel_holder.addWidget(self.scene_item_outliner)
-        _focal_panel_holder.addWidget(self.detail_view)
 
-        return _focal_panel_holder
+    # region #######################| HEADER STUFF |##########################
 
 
     def build_main_window_header(self):
@@ -65,9 +82,15 @@ class ExporterMainWindow(base_windows.Main_Window):
         -------
 
         """
-        _widget = AnimationExporterHeader.ExporterHeader()
-        _widget.SceneSelected.connect(self.SceneSelectedContentQuery.emit)
-        return _widget
+        return base_layouts.Vertical_Layout()
+
+    @QtCore.Slot()
+    def addHeader(self, panel):
+        self.header.clearAndAddWidget(panel)
+    # endregion
+
+
+    # region #######################| FOOTER STUFF |##########################
 
     def build_main_window_footer(self):
         """
@@ -76,60 +99,12 @@ class ExporterMainWindow(base_windows.Main_Window):
         -------
 
         """
-        _widget = AnimationExporterFooter.ExporterFooter()
-        _widget.ExportButtonClicked.connect(self.emit_export_signal)
-        return _widget
-
-    def build_scene_item_outliner(self):
-        """
-        Builds the scene item outliner
-
-        Returns
-        -------
-
-        """
-        _widget = AnimationExporterSceneView.ExporterSceneView()
-        _widget.ItemSelected.connect(self.SceneItemSelectedDataQuery.emit)
-        return _widget
-
-    def build_export_queue(self):
-        _widget = AnimationExportQueueView.ExporterQueueDisplay
-
-    def build_detail_panel(self):
-        _empty = base_widgets.Label("No Details Yet")
-        _widget = base_layouts.Vertical_Layout()
-        _widget.addWidget(_empty, alignment=constants.align_center)
-        return _widget
+        return base_layouts.Vertical_Layout()
 
     @QtCore.Slot()
-    def add_detail_panel(self, panel):
-        print(panel)
-        self.detail_view.clear_layout()
-        self.detail_view.addWidget(panel)
-
-    @QtCore.Slot()
-    def populate_scene_contents(self, scene_contents):
-        """
-        Populated the scene item outliner
-
-        Parameters
-        ----------
-        scene_contents
-
-        Returns
-        -------
-
-        """
-        logger.debug(f'Received scene contents: {scene_contents}')
-        self.scene_item_outliner.populate_item_view(scene_contents)
-
-
-    @QtCore.Slot()
-    def emit_export_signal(self, *args):
-
-        _object = self.scene_item_outliner.current_selection()
-
-        # self.ExportButtonClicked.emit(_object, )
+    def addFooter(self, panel):
+        self.footer.clearAndAddWidget(panel)
+    # endregion
 
 if __name__ == "__main__":
     import sys

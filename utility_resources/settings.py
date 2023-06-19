@@ -58,8 +58,8 @@ def settings_last_read_modification_date():
 
 def set_settings_last_read_modification_date(date):
     set_setting_resource_value(
-        setting_resource_name="settings.json::Last_Read_Modification_Date",
-        setting_resource_value=date
+        name="settings.json::Last_Read_Modification_Date",
+        value=date
     )
 
 
@@ -107,11 +107,12 @@ def set_animation_frame_gap_threshold(frame_gap):
 export_queue_json_path = os.path.join(CURRENT_FOLDER, "export_queue.json")
 
 queue_item_identifier_key = "Queue_Item_Identifier"
-queue_item_export_name_key = "Export_Name"
-queue_item_scene_path_key = "Scene_Path"
-queue_item_animation_range_key = "Animation_Range"
-queue_item_objects_key = "Objects_To_Export"
-queue_item_export_directory_key = "Export_Directory"
+item_export_name_key = "Export_Name"
+scene_path_key = "Scene_Path"
+animation_range_key = "Animation_Range"
+export_objects_key = "Objects_To_Export"
+export_directory_key = "Export_Directory"
+animation_partitions_key = "Animation_Partitions"
 
 
 def get_export_queue():
@@ -143,11 +144,11 @@ def add_to_export_queue(scene_path, export_name, scene_objects, animation_range,
 
     _scene_data_dict = {}
     _scene_data_dict[   queue_item_identifier_key       ] = _queue_item_identifier
-    _scene_data_dict[   queue_item_scene_path_key       ] = scene_path
-    _scene_data_dict[   queue_item_export_name_key      ] = export_name
-    _scene_data_dict[   queue_item_animation_range_key  ] = animation_range
-    _scene_data_dict[   queue_item_objects_key          ] = scene_objects
-    _scene_data_dict[   queue_item_export_directory_key ] = export_directory
+    _scene_data_dict[   scene_path_key] = scene_path
+    _scene_data_dict[   item_export_name_key] = export_name
+    _scene_data_dict[   animation_range_key] = animation_range
+    _scene_data_dict[   export_objects_key] = scene_objects
+    _scene_data_dict[   export_directory_key] = export_directory
 
 
     set_resource_value(json_path=export_queue_json_path, name=_queue_item_identifier, value=_scene_data_dict)
@@ -203,3 +204,8 @@ def get_queue_item_data(queue_item_identifier, value_key):
     
 def clear_export_queue():
     write_json(path=export_queue_json_path, data={})
+
+
+#############################################################################
+
+

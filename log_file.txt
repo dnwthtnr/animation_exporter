@@ -1,0 +1,507 @@
+Beginning construction of panels
+Building main window header
+Successfully built header and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x1ab51d945b0) at 0x000001AB529FD3C8>
+Building main window footer
+Successfully built footer and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x1ab51d93d60) at 0x000001AB529FDA88>
+Building scene view panel and controller
+Scene panel successfully built
+Connecting signals between _scene_view, _scene_controller and panel_controller
+Successfully connected scene view signals
+Emitting FocalPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterSceneView.ExporterSceneView(0x1ab51d95f10) at 0x000001AB52A028C8>
+Building queue panel and controller
+Queue panel successfully built
+Connecting signals between queue_runner, queue_view and panel_controller
+Successfully connected queue panel signals
+Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x1ab51d96220) at 0x000001AB52A029C8>
+Successfully emitted queue panel on FocalPanelBuilt signal
+Construction of panels complete
+Beginning construction of panels
+Building main window header
+Successfully built header and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x21088aeb600) at 0x000002108976A3C8>
+Building main window footer
+Successfully built footer and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x21088aeacd0) at 0x000002108976AA88>
+Building scene view panel and controller
+Scene panel successfully built
+Connecting signals between _scene_view, _scene_controller and panel_controller
+Successfully connected scene view signals
+Emitting FocalPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterSceneView.ExporterSceneView(0x21088aeee70) at 0x0000021089770F08>
+Construction of panels complete
+Beginning construction of panels
+Construction of panels complete
+Beginning construction of panels
+Construction of panels complete
+Beginning construction of panels
+Construction of panels complete
+Beginning construction of panels
+Construction of panels complete
+Beginning construction of panels
+Construction of panels complete
+Beginning construction of panels
+Construction of panels complete
+Beginning construction of panels
+Building main window header
+Successfully built header and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x2901dd74250) at 0x000002901EA1D408>
+Building main window footer
+Successfully built footer and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x2901dd75830) at 0x000002901EA1DAC8>
+Building scene view panel and controller
+Scene panel successfully built
+Connecting signals between _scene_view, _scene_controller and panel_controller
+Successfully connected scene view signals
+Emitting FocalPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterSceneView.ExporterSceneView(0x2901dd75de0) at 0x000002901EA21EC8>
+Building queue panel and controller
+Queue panel successfully built
+Connecting signals between queue_runner, queue_view and panel_controller
+Successfully connected queue panel signals
+Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x2901dd77510) at 0x000002901EA21D88>
+Successfully emitted queue panel on FocalPanelBuilt signal
+Construction of panels complete
+Beginning construction of panels
+Building main window header
+Successfully built header and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x29b7a557e60) at 0x0000029B7B1BD408>
+Building main window footer
+Successfully built footer and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x29b7a558090) at 0x0000029B7B1BDAC8>
+Building scene view panel and controller
+Scene panel successfully built
+Connecting signals between _scene_view, _scene_controller and panel_controller
+Successfully connected scene view signals
+Emitting FocalPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterSceneView.ExporterSceneView(0x29b7a55a390) at 0x0000029B7B1C2EC8>
+Building queue panel and controller
+Queue panel successfully built
+Connecting signals between queue_runner, queue_view and panel_controller
+Successfully connected queue panel signals
+Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x29b7a55bf20) at 0x0000029B7B1C28C8>
+Successfully emitted queue panel on FocalPanelBuilt signal
+Construction of panels complete
+Beginning construction of panels
+Building main window header
+Successfully built header and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x17bcf6f0800) at 0x0000017BD0299548>
+Building main window footer
+Successfully built footer and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x17bcf6f24e0) at 0x0000017BD0299C08>
+Building scene view panel and controller
+Scene panel successfully built
+Connecting signals between _scene_view, _scene_controller and panel_controller
+Successfully connected scene view signals
+Emitting FocalPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterSceneView.ExporterSceneView(0x17bcf756160) at 0x0000017BD029EF08>
+Building queue panel and controller
+Queue panel successfully built
+Connecting signals between queue_runner, queue_view and panel_controller
+Successfully connected queue panel signals
+Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x17bcf79af20) at 0x0000017BD029EA08>
+Successfully emitted queue panel on FocalPanelBuilt signal
+Construction of panels complete
+Beginning construction of panels
+Building main window header
+Successfully built header and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x21f47e1ecf0) at 0x0000021F48AD4AC8>
+Building main window footer
+Successfully built footer and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x21f47e21220) at 0x0000021F48AD81C8>
+Building scene view panel and controller
+Scene panel successfully built
+Connecting signals between _scene_view, _scene_controller and panel_controller
+Successfully connected scene view signals
+Emitting FocalPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterSceneView.ExporterSceneView(0x21f48069450) at 0x0000021F48ADCB48>
+Building queue panel and controller
+Queue panel successfully built
+Connecting signals between queue_runner, queue_view and panel_controller
+Successfully connected queue panel signals
+Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x21f480675e0) at 0x0000021F48ADC208>
+Successfully emitted queue panel on FocalPanelBuilt signal
+Construction of panels complete
+Beginning construction of panels
+Building main window header
+Successfully built header and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x2c77a48c240) at 0x000002C77B122A08>
+Building main window footer
+Successfully built footer and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x2c77a48ebd0) at 0x000002C77B126108>
+Building scene view panel and controller
+Scene panel successfully built
+Connecting signals between _scene_view, _scene_controller and panel_controller
+Successfully connected scene view signals
+Emitting FocalPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterSceneView.ExporterSceneView(0x2c77a490ed0) at 0x000002C77B129A88>
+Building queue panel and controller
+Queue panel successfully built
+Connecting signals between queue_runner, queue_view and panel_controller
+Successfully connected queue panel signals
+Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x2c77a491a30) at 0x000002C77B129F08>
+Successfully emitted queue panel on FocalPanelBuilt signal
+Construction of panels complete
+Beginning construction of panels
+Building main window header
+Successfully built header and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x237b5f88d60) at 0x00000237B6A7E1C8>
+Building main window footer
+Successfully built footer and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x237b5f8a340) at 0x00000237B6A7E888>
+Building scene view panel and controller
+Scene panel successfully built
+Connecting signals between _scene_view, _scene_controller and panel_controller
+Successfully connected scene view signals
+Emitting FocalPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterSceneView.ExporterSceneView(0x237b5f8adc0) at 0x00000237B6A81F08>
+Building queue panel and controller
+Queue panel successfully built
+Connecting signals between queue_runner, queue_view and panel_controller
+Successfully connected queue panel signals
+Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x237b5f8bae0) at 0x00000237B6A81E88>
+Successfully emitted queue panel on FocalPanelBuilt signal
+Construction of panels complete
+Building holders for main widgets.
+Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.Vertical_Layout(0x2887ac92b00) at 0x0000028870290F08>, <pyqt_interface_elements.base_layouts.TabWidget(0x2887ac91ec0) at 0x00000288705BC808>, <pyqt_interface_elements.base_layouts.Vertical_Layout(0x2887ac93120) at 0x0000028871304C08>)
+Building central widget and adding holders
+Successfully built central widget and added holders
+Setting central widget
+Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x2887ac92470) at 0x0000028870290E08>
+Emitting InitializationFinished signal
+Building holders for main widgets.
+Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.Vertical_Layout(0x216c3a6c4a0) at 0x00000216B8FF0F08>, <pyqt_interface_elements.base_layouts.TabWidget(0x216c3a6c510) at 0x00000216B931C848>, <pyqt_interface_elements.base_layouts.Vertical_Layout(0x216c3a6afa0) at 0x00000216BA07E488>)
+Building central widget and adding holders
+Successfully built central widget and added holders
+Setting central widget
+Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x216c3a6c430) at 0x00000216B8FF0E08>
+Emitting InitializationFinished signal
+Building holders for main widgets.
+Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.Vertical_Layout(0x20034933060) at 0x0000020029F00F08>, <pyqt_interface_elements.base_layouts.TabWidget(0x20034934090) at 0x000002002A22C888>, <pyqt_interface_elements.base_layouts.Vertical_Layout(0x20034934b80) at 0x000002002AF9E448>)
+Building central widget and adding holders
+Successfully built central widget and added holders
+Setting central widget
+Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x20034934020) at 0x0000020029F00E08>
+Emitting InitializationFinished signal
+Building holders for main widgets.
+Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.Vertical_Layout(0x2674f84db50) at 0x000002674B9D0EC8>, <pyqt_interface_elements.base_layouts.TabWidget(0x2674f84fbb0) at 0x000002674BCFCC88>, <pyqt_interface_elements.base_layouts.Vertical_Layout(0x2674f84ffa0) at 0x000002674BD98B48>)
+Building central widget and adding holders
+Successfully built central widget and added holders
+Setting central widget
+Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x2674f84f050) at 0x000002674B9D0DC8>
+Emitting InitializationFinished signal
+Building holders for main widgets.
+Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.Vertical_Layout(0x2263b1661d0) at 0x00000226316F9FC8>, <pyqt_interface_elements.base_layouts.TabWidget(0x2263b167200) at 0x00000226305610C8>, <pyqt_interface_elements.base_layouts.Vertical_Layout(0x2263b1672e0) at 0x000002263BD16748>)
+Building central widget and adding holders
+Successfully built central widget and added holders
+Setting central widget
+Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x2263b1673c0) at 0x0000022630560FC8>
+Emitting InitializationFinished signal
+Building holders for main widgets.
+Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.Vertical_Layout(0x2a2a8f2e0a0) at 0x000002A29F4F9FC8>, <pyqt_interface_elements.base_layouts.TabWidget(0x2a2a8f2e8f0) at 0x000002A29E3410C8>, <pyqt_interface_elements.base_layouts.Vertical_Layout(0x2a2a8f2e9d0) at 0x000002A2A9B28808>)
+Building central widget and adding holders
+Successfully built central widget and added holders
+Setting central widget
+Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x2a2a8f2ed50) at 0x000002A29E340FC8>
+Emitting InitializationFinished signal
+Building holders for main widgets.
+Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.Vertical_Layout(0x242963756d0) at 0x00000242922A10C8>, <pyqt_interface_elements.base_layouts.TabWidget(0x24296375270) at 0x00000242922BAD08>, <pyqt_interface_elements.base_layouts.Vertical_Layout(0x242963752e0) at 0x0000024293476548>)
+Building central widget and adding holders
+Successfully built central widget and added holders
+Setting central widget
+Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x24296376000) at 0x00000242922A0F88>
+Emitting InitializationFinished signal
+Building holders for main widgets.
+Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.Vertical_Layout(0x1c3a0ce7160) at 0x000001C39CE2A448>, <pyqt_interface_elements.base_layouts.TabWidget(0x1c3a0ce70f0) at 0x000001C39CE2D1C8>, <pyqt_interface_elements.base_layouts.Vertical_Layout(0x1c3a0ce7da0) at 0x000001C39DE96B88>)
+Building central widget and adding holders
+Successfully built central widget and added holders
+Setting central widget
+Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x1c3a0ce6c90) at 0x000001C39CE11448>
+Emitting InitializationFinished signal
+Beginning construction of panels
+Building main window header
+Successfully built header and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x1c3a0ce72b0) at 0x000001C3A233B908>
+Building main window footer
+Successfully built footer and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x1c3a0ce8c10) at 0x000001C3A233BF08>
+Building scene view panel and controller
+Encountered exception while attempting to build scene view. Aborting
+module 'maya.cmds' has no attribute 'file'
+Traceback (most recent call last):
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\panel_controller.py", line 109, in build_scene_view
+    _scene_controller = scene_controller.Scene_Controller()
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\scene_controller.py", line 19, in __init__
+    cmds.file(new=True, force=True)
+AttributeError: module 'maya.cmds' has no attribute 'file'
+Building queue panel and controller
+Queue panel successfully built
+Connecting signals between queue_runner, queue_view and panel_controller
+Successfully connected queue panel signals
+Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x1c3a0cea6c0) at 0x000001C3A2341D08>
+Successfully emitted queue panel on FocalPanelBuilt signal
+Construction of panels complete
+Building holders for main widgets.
+Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.Vertical_Layout(0x23a4b5b73b0) at 0x0000023A476EA448>, <pyqt_interface_elements.base_layouts.TabWidget(0x23a4b5b8e60) at 0x0000023A476ED1C8>, <pyqt_interface_elements.base_layouts.Vertical_Layout(0x23a4b5b8d10) at 0x0000023A48766C88>)
+Building central widget and adding holders
+Successfully built central widget and added holders
+Setting central widget
+Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x23a4b5b6af0) at 0x0000023A476D1448>
+Emitting InitializationFinished signal
+Beginning construction of panels
+Building main window header
+Successfully built header and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x23a4b5b96b0) at 0x0000023A4CBDBA88>
+Building main window footer
+Successfully built footer and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x23a4b5bad00) at 0x0000023A4CBE10C8>
+Building scene view panel and controller
+Encountered exception while attempting to build scene view. Aborting
+module 'maya.cmds' has no attribute 'file'
+Traceback (most recent call last):
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\panel_controller.py", line 109, in build_scene_view
+    _scene_controller = scene_controller.Scene_Controller()
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\scene_controller.py", line 19, in __init__
+    cmds.file(new=True, force=True)
+AttributeError: module 'maya.cmds' has no attribute 'file'
+Building queue panel and controller
+Queue panel successfully built
+Connecting signals between queue_runner, queue_view and panel_controller
+Successfully connected queue panel signals
+Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x23a4b5bc430) at 0x0000023A4CBE1EC8>
+Successfully emitted queue panel on FocalPanelBuilt signal
+Construction of panels complete
+Building holders for main widgets.
+Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.Vertical_Layout(0x2132c5a75c0) at 0x000002132DA75288>, <pyqt_interface_elements.base_layouts.TabWidget(0x2132c5a8120) at 0x00000213286C1408>, <pyqt_interface_elements.base_layouts.Vertical_Layout(0x2132c5a8820) at 0x0000021329795E88>)
+Building central widget and adding holders
+Successfully built central widget and added holders
+Setting central widget
+Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x2132c5a71d0) at 0x00000213286C1348>
+Emitting InitializationFinished signal
+Beginning construction of panels
+Building main window header
+Successfully built header and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x2132c5a9150) at 0x000002132DBDB948>
+Building main window footer
+Successfully built footer and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x2132c5aa500) at 0x000002132DBDBF48>
+Building scene view panel and controller
+Encountered exception while attempting to build scene view. Aborting
+module 'maya.cmds' has no attribute 'file'
+Traceback (most recent call last):
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\panel_controller.py", line 109, in build_scene_view
+    _scene_controller = scene_controller.Scene_Controller()
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\scene_controller.py", line 19, in __init__
+    cmds.file(new=True, force=True)
+AttributeError: module 'maya.cmds' has no attribute 'file'
+Building queue panel and controller
+Queue panel successfully built
+Connecting signals between queue_runner, queue_view and panel_controller
+Successfully connected queue panel signals
+Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x2132c5acf00) at 0x000002132DBE1D48>
+Successfully emitted queue panel on FocalPanelBuilt signal
+Construction of panels complete
+Building holders for main widgets.
+Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.Vertical_Layout(0x216d93f12d0) at 0x00000216D5941CC8>, <pyqt_interface_elements.base_layouts.TabWidget(0x216d93f3560) at 0x00000216D5561408>, <pyqt_interface_elements.base_layouts.Vertical_Layout(0x216d93f2ca0) at 0x00000216D65BE608>)
+Building central widget and adding holders
+Successfully built central widget and added holders
+Setting central widget
+Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x216d93f2060) at 0x00000216D5561348>
+Emitting InitializationFinished signal
+Beginning construction of panels
+Building main window header
+Successfully built header and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x216d93f3bf0) at 0x00000216DAA344C8>
+Building main window footer
+Successfully built footer and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x216d93f5320) at 0x00000216DAA34AC8>
+Building scene view panel and controller
+Encountered exception while attempting to build scene view. Aborting
+module 'maya.cmds' has no attribute 'file'
+Traceback (most recent call last):
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\panel_controller.py", line 109, in build_scene_view
+    _scene_controller = scene_controller.Scene_Controller()
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\scene_controller.py", line 19, in __init__
+    cmds.file(new=True, force=True)
+AttributeError: module 'maya.cmds' has no attribute 'file'
+Building queue panel and controller
+Queue panel successfully built
+Connecting signals between queue_runner, queue_view and panel_controller
+Successfully connected queue panel signals
+Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x216d93f74d0) at 0x00000216DAA378C8>
+Successfully emitted queue panel on FocalPanelBuilt signal
+Construction of panels complete
+Building holders for main widgets.
+Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.Vertical_Layout(0x2d96959a8e0) at 0x000002D96ABA8688>, <pyqt_interface_elements.base_layouts.TabWidget(0x2d96959a950) at 0x000002D9656E13C8>, <pyqt_interface_elements.base_layouts.Vertical_Layout(0x2d96959c550) at 0x000002D96674E648>)
+Building central widget and adding holders
+Successfully built central widget and added holders
+Setting central widget
+Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x2d96959a100) at 0x000002D9656E1308>
+Emitting InitializationFinished signal
+Beginning construction of panels
+Building main window header
+Successfully built header and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x2d96959cda0) at 0x000002D96AAD0088>
+Building main window footer
+Successfully built footer and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x2d96959df90) at 0x000002D96ABBBF08>
+Building scene view panel and controller
+Encountered exception while attempting to build scene view. Aborting
+module 'maya.cmds' has no attribute 'file'
+Traceback (most recent call last):
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\panel_controller.py", line 109, in build_scene_view
+    _scene_controller = scene_controller.Scene_Controller()
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\scene_controller.py", line 19, in __init__
+    cmds.file(new=True, force=True)
+AttributeError: module 'maya.cmds' has no attribute 'file'
+Building queue panel and controller
+Queue panel successfully built
+Connecting signals between queue_runner, queue_view and panel_controller
+Successfully connected queue panel signals
+Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x2d9695a0140) at 0x000002D96ABC1CC8>
+Successfully emitted queue panel on FocalPanelBuilt signal
+Construction of panels complete
+Building holders for main widgets.
+Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.Vertical_Layout(0x2826a2c2dd0) at 0x000002826713DB88>, <pyqt_interface_elements.base_layouts.TabWidget(0x2826a2c49d0) at 0x000002826671CD08>, <pyqt_interface_elements.base_layouts.Vertical_Layout(0x2826a2c41f0) at 0x0000028267478B08>)
+Building central widget and adding holders
+Successfully built central widget and added holders
+Setting central widget
+Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x2826a2c1b70) at 0x00000282663E1448>
+Emitting InitializationFinished signal
+Beginning construction of panels
+Building main window header
+Successfully built header and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x2826a2c4180) at 0x000002826B8FC848>
+Building main window footer
+Successfully built footer and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x2826a2c5d10) at 0x000002826B8FCE48>
+Building scene view panel and controller
+Encountered exception while attempting to build scene view. Aborting
+module 'maya.cmds' has no attribute 'file'
+Traceback (most recent call last):
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\panel_controller.py", line 109, in build_scene_view
+    _scene_controller = scene_controller.Scene_Controller()
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\scene_controller.py", line 19, in __init__
+    cmds.file(new=True, force=True)
+AttributeError: module 'maya.cmds' has no attribute 'file'
+Building queue panel and controller
+Queue panel successfully built
+Connecting signals between queue_runner, queue_view and panel_controller
+Successfully connected queue panel signals
+Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x2826a2c8010) at 0x000002826B8E8488>
+Successfully emitted queue panel on FocalPanelBuilt signal
+Construction of panels complete
+Building holders for main widgets.
+Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.Vertical_Layout(0x18959417970) at 0x000001895A86EEC8>, <pyqt_interface_elements.base_layouts.TabWidget(0x189594191f0) at 0x0000018955521408>, <pyqt_interface_elements.base_layouts.Vertical_Layout(0x18959419030) at 0x00000189565AD048>)
+Building central widget and adding holders
+Successfully built central widget and added holders
+Setting central widget
+Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x189594177b0) at 0x0000018955521348>
+Emitting InitializationFinished signal
+Beginning construction of panels
+Building main window header
+Successfully built header and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x1895941a450) at 0x000001895A9FC848>
+Building main window footer
+Successfully built footer and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x1895941ab50) at 0x000001895A9FCE48>
+Building scene view panel and controller
+Encountered exception while attempting to build scene view. Aborting
+module 'maya.cmds' has no attribute 'file'
+Traceback (most recent call last):
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\panel_controller.py", line 109, in build_scene_view
+    _scene_controller = scene_controller.Scene_Controller()
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\scene_controller.py", line 19, in __init__
+    cmds.file(new=True, force=True)
+AttributeError: module 'maya.cmds' has no attribute 'file'
+Building queue panel and controller
+Queue panel successfully built
+Connecting signals between queue_runner, queue_view and panel_controller
+Successfully connected queue panel signals
+Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x1895941c590) at 0x000001895AA01C48>
+Successfully emitted queue panel on FocalPanelBuilt signal
+Construction of panels complete
+Building holders for main widgets.
+Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.Vertical_Layout(0x202119decf0) at 0x000002020DE3BD08>, <pyqt_interface_elements.base_layouts.TabWidget(0x202119dfcb0) at 0x000002020EB9EE48>, <pyqt_interface_elements.base_layouts.Vertical_Layout(0x202119df770) at 0x000002020EB87BC8>)
+Building central widget and adding holders
+Successfully built central widget and added holders
+Setting central widget
+Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x202119de970) at 0x000002020DB01448>
+Emitting InitializationFinished signal
+Beginning construction of panels
+Building main window header
+Successfully built header and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x202119df7e0) at 0x0000020212FEC848>
+Building main window footer
+Successfully built footer and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x202119e2480) at 0x0000020212FECE48>
+Building scene view panel and controller
+Encountered exception while attempting to build scene view. Aborting
+module 'maya.cmds' has no attribute 'file'
+Traceback (most recent call last):
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\panel_controller.py", line 109, in build_scene_view
+    _scene_controller = scene_controller.Scene_Controller()
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\scene_controller.py", line 19, in __init__
+    cmds.file(new=True, force=True)
+AttributeError: module 'maya.cmds' has no attribute 'file'
+Building queue panel and controller
+Queue panel successfully built
+Connecting signals between queue_runner, queue_view and panel_controller
+Successfully connected queue panel signals
+Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x202119e4160) at 0x0000020212FF1C48>
+Successfully emitted queue panel on FocalPanelBuilt signal
+Construction of panels complete
+Building holders for main widgets.
+Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.Vertical_Layout(0x181949f1160) at 0x0000018190E5BD08>, <pyqt_interface_elements.base_layouts.TabWidget(0x181949f3000) at 0x0000018191BACE48>, <pyqt_interface_elements.base_layouts.Vertical_Layout(0x181949f24a0) at 0x0000018191B95B88>)
+Building central widget and adding holders
+Successfully built central widget and added holders
+Setting central widget
+Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x181949f1e10) at 0x0000018190B21408>
+Emitting InitializationFinished signal
+Beginning construction of panels
+Building main window header
+Successfully built header and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x181949f2510) at 0x000001819600C888>
+Building main window footer
+Successfully built footer and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x181949f4500) at 0x000001819600CE88>
+Building scene view panel and controller
+Encountered exception while attempting to build scene view. Aborting
+module 'maya.cmds' has no attribute 'file'
+Traceback (most recent call last):
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\panel_controller.py", line 109, in build_scene_view
+    _scene_controller = scene_controller.Scene_Controller()
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\scene_controller.py", line 19, in __init__
+    cmds.file(new=True, force=True)
+AttributeError: module 'maya.cmds' has no attribute 'file'
+Building queue panel and controller
+Queue panel successfully built
+Connecting signals between queue_runner, queue_view and panel_controller
+Successfully connected queue panel signals
+Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x181949f6640) at 0x0000018196011C88>
+Successfully emitted queue panel on FocalPanelBuilt signal
+Construction of panels complete
+Building holders for main widgets.
+Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.Vertical_Layout(0x1ef8d5600a0) at 0x000001EF8969A348>, <pyqt_interface_elements.base_layouts.TabWidget(0x1ef8d562330) at 0x000001EF899BCCC8>, <pyqt_interface_elements.base_layouts.Vertical_Layout(0x1ef8d561df0) at 0x000001EF8A719DC8>)
+Building central widget and adding holders
+Successfully built central widget and added holders
+Setting central widget
+Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x1ef8d560a40) at 0x000001EF89682348>
+Emitting InitializationFinished signal
+Beginning construction of panels
+Building main window header
+Successfully built header and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x1ef8d562d40) at 0x000001EF8EB8B908>
+Building main window footer
+Successfully built footer and connected signals
+Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x1ef8d5638a0) at 0x000001EF8EB8BEC8>
+Building scene view panel and controller
+Encountered exception while attempting to build scene view. Aborting
+module 'maya.cmds' has no attribute 'file'
+Traceback (most recent call last):
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\panel_controller.py", line 111, in build_scene_view
+    _scene_controller = scene_controller.Scene_Controller()
+  File "Q:\__packages\_GitHub\animation_exporter\animation_exporter_interface\controller\scene_controller.py", line 19, in __init__
+    cmds.file(new=True, force=True)
+AttributeError: module 'maya.cmds' has no attribute 'file'
+Building queue panel and controller
+Queue panel successfully built
+Connecting signals between queue_runner, queue_view and panel_controller
+Successfully connected queue panel signals
+Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x1ef8d565ba0) at 0x000001EF8EB91CC8>
+Successfully emitted queue panel on FocalPanelBuilt signal
+Construction of panels complete

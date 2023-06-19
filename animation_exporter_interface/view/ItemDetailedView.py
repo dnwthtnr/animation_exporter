@@ -1,18 +1,20 @@
 import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.NOTSET)
-from PySide2 import QtCore, QtWidgets, QtGui
+
 from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants
-from animation_exporter.animation_exporter_interface.view import AnimationExporterFooter, AnimationExporterHeader, AnimationExporterSceneView
 
 
-class DetailedViewPanel(base_layouts.Vertical_Layout):
+class ItemDetailedView(base_layouts.Vertical_Layout):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, item_data_dictionary, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.item_data = item_data_dictionary
 
 
     def addSection(self, name, data):
+        if not isinstance(data, str):
+            data = f"{data}"
         _label = base_widgets.Label(text=name)
         _data_layout = base_layouts.Vertical_Layout()
 
@@ -23,4 +25,9 @@ class DetailedViewPanel(base_layouts.Vertical_Layout):
 
         self.addWidget(_data_layout)
         return
+
+    def addButton(self, text):
+        _button = base_widgets.Button(text=text)
+        self.addWidget(_button)
+        return _button
 

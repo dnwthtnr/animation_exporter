@@ -98,12 +98,12 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
     UpdateQueueItemExportDirectory = QtCore.Signal(str, str)
     UpdateQueueItemFrameRange = QtCore.Signal(str, list)
 
+    def finish_initialization(self):
+        self.populate_with_empty_view()
+
     def __int__(self):
         super().__init__()
         self.queue_items = []
-
-        self.populate_with_empty_view()
-
 
     def populate_with_empty_view(self):
         self.clear_layout()
@@ -216,68 +216,39 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
         _widget = line_edits.Folder_Selection_Line_Edit(directory)
         return _widget
 
-class ExporterQueueDisplay(base_layouts.Vertical_Layout):
-    ExportQueueDataQuery = QtCore.Signal()
-
-    def __init__(self):
-        super().__init__()
-
-
-    def finish_initialization(self):
-        _button_holder = self.build_button_holder()
-
-
-        self.content_panel = base_layouts.Vertical_Layout()
-        self.populate_with_empty_view()
-
-        self.addWidget(self.content_panel, stretch=1)
-        self.addWidget(_button_holder, alignment=constants.align_bottom)
-
-        self.ExportQueueDataQuery.emit()
-
-
-    #####################view#######################
-
-    @QtCore.Slot()
-    def populate_queue_view(self, content_dictionary):
-        self.content_panel.clear_layout()
-
-        self.item_model = model_view_delegate.Selection_Tree_Model(content_dictionary)
-
-        self.item_view = self.build_item_view()
-        self.item_view.setModel(self.item_model)
-
-        self.content_panel.addWidget(self.item_view)
-
-
-    # TODO: Seperate method to add singular export items instead of
-
-    def build_item_view(self):
-        _view = model_view_delegate.Selection_Table_Model()
-        _view.horizontalHeader().setStretchLastSection(True)
-        _view.setSelectionBehavior(model_view_delegate.Table_Item_Selection_View.SelectRows)
-        _view.SelectionChanged.connect(self.emit_item_selection_changed)
-        return _view
-
-    #############buttons################
-
-    def build_button_holder(self):
-        self.export_button = self.build_export_button()
-        self.close_button = self.build_close_button()
-
-        _layout = base_layouts.Horizontal_Layout()
-        _layout.addWidgets([self.export_button, self.close_button])
-        return _layout
-
-    def build_export_button(self):
-        _button = base_widgets.Button(text="Remove")
-        # _button.clicked.connect(self.emit_export_signal)
-        return _button
-
-    def build_close_button(self):
-        _button = base_widgets.Button(text="Close")
-        # _button.clicked.connect(self.CloseButtonClicked.emit)
-        return _button
+# class ExporterQueueDisplay(base_layouts.Vertical_Layout):
+#     ExportQueueDataQuery = QtCore.Signal()
+#
+#     def __init__(self):
+#         super().__init__()
+#
+#
+#     def finish_initialization(self):
+#         # _button_holder = self.build_button_holder()
+#
+#
+#         self.content_panel = base_layouts.Vertical_Layout()
+#         self.populate_with_empty_view()
+#
+#         self.addWidget(self.content_panel, stretch=1)
+#         # self.addWidget(_button_holder, alignment=constants.align_bottom)
+#
+#         self.ExportQueueDataQuery.emit()
+#
+#     #############buttons################
+#
+#     def build_button_holder(self):
+#         self.export_button = self.build_export_button()
+#         self.remove_button = self.build_remove_button()
+#
+#         _layout = base_layouts.Horizontal_Layout()
+#         _layout.addWidgets([self.export_button, self.close_button])
+#         return _layout
+#
+#     def build_export_button(self):
+#         _button = base_widgets.Button(text="Remove")
+#         # _button.clicked.connect(self.emit_export_signal)
+#         return _button
 
 
 if __name__ == "__main__":
@@ -286,7 +257,7 @@ if __name__ == "__main__":
     _app = QtWidgets.QApplication(sys.argv)
 
     try:
-        _window = ExporterQueueDisplay()
+        _window = QueueItemHolder()
         _window.finish_initialization()
         _window.show()
     except Exception as e:

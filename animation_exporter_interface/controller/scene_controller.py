@@ -5,28 +5,32 @@ logger.setLevel(logging.NOTSET)
 
 from maya import cmds, standalone
 from PySide2 import QtCore, QtWidgets
+from functools import partial
+import threading
 
 from animation_exporter.utility_resources import settings
-from animation_exporter.animation_exporter_interface.view import ItemDetailedView
 
+def run_on_thread(_partial):
+    _t = threading.Thread(target=_partial, args=[])
+    _return = _t.run()
+    return _return
 
 class Scene_Controller(QtCore.QObject):
     SceneContentDataResponse = QtCore.Signal(object)
 
-    DetailPanelBuilt = QtCore.Signal(object)
+    ItemDetailsDataResponse = QtCore.Signal(dict)
 
     def __init__(self):
-        standalone.initialize()
-        cmds.file(new=True, force=True)
+        run_on_thread(standalone.initialize)
         super().__init__()
 
     @QtCore.Slot()
     def open_file(self, filepath):
-        logger.info(f'Opening file: {filepath}')
+        logger.info(f'Opening file: {filepath} on a separate thread ')
         try:
-            cmds.file(filepath, open=True, force=True)
+            run_on_thread(partial(cmds.file, filepath, open=True, force=True))
             logger.info(f'File successfully opened ')
-            self.emit_scene_contents()
+            run_on_thread(self.emit_scene_contents)
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to open file {filepath}')
             logger.exception(e)
@@ -303,16 +307,21 @@ class Scene_Controller(QtCore.QObject):
 
     #region Object stuff
 
-    def emit_item_panel(self, panel):
-        self.DetailPanelBuilt.emit(panel)
-
     @QtCore.Slot()
-    def emit_item_detailed_view(self, item):
-        _item_view = ItemDetailedView.DetailedViewPanel()
+    def emit_item_details_on_thread(self, item):
+        _item_data_dict = run_on_thread(partial(self.emit_item_details_dictionary, item))
+
+
+    def emit_item_details_dictionary(self, item):
+        # TODO: Start caching this stuf somehow -- lags when requerying stuff
+
+        _item_data_dict = {}
         if self.object_has_or_holds_animation(item):
             _partitions = self.separate_animation_partitions(item)
-            _item_view.addSection("Animation Partitions", f'{_partitions}')
 
-            _item_view.addSection("Object Animation Range", "".join(self.get_descendant_animation_range(item)))
-        self.emit_item_panel(_item_view)
-        return
+            _item_data_dict[settings.animation_partitions_key] = _partitions
+
+            _animation_range = self.get_descendant_animation_range(item)
+            _item_data_dict[settings.animation_range_key] = _animation_range
+
+        self.ItemDetailsDataResponse.emit(_item_data_dict)

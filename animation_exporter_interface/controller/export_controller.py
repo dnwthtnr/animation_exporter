@@ -3,12 +3,10 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.NOTSET)
 
-from maya import cmds, standalone, mel
+from maya import cmds, mel
 from PySide2 import QtCore, QtWidgets
 
 from animation_exporter.utility_resources import settings
-
-standalone.initialize()
 
 
 def set_animation_start(frame):
