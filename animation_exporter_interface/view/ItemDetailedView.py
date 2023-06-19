@@ -2,7 +2,27 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.NOTSET)
 
-from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants
+from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants, proceadural_displays
+
+class ItemDetailAttributeHolder(proceadural_displays.AbstractEntryHolder):
+
+    def __int__(self, attribute_dictionary, attribute_mapping_dictionary):
+        print(attribute_mapping_dictionary)
+        super().__int__(attribute_dictionary=attribute_dictionary, attribute_mapping_dictionary=attribute_mapping_dictionary, map_by_type=False)
+
+
+    def create_attribute_entry(self, attribute_name, attribute_value, attribute_mapping_dictionary, map_by_type):
+        _entry = None
+        if isinstance(attribute_value, list) and len(attribute_value) == 2:
+            _entry = attribute_mapping_dictionary["TwoDim"]
+
+        elif isinstance(attribute_value, str):
+            _entry = attribute_mapping_dictionary[str]
+
+        if _entry is None:
+            return None
+
+        return _entry(attribute_name, attribute_value)
 
 
 class ItemDetailedView(base_layouts.Vertical_Layout):
@@ -10,6 +30,31 @@ class ItemDetailedView(base_layouts.Vertical_Layout):
     def __init__(self, item_data_dictionary, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.item_data = item_data_dictionary
+
+
+    def finish_initialization(self):
+        self.attribute_holder = self.build_attribute_holder()
+        _button = self.build_add_to_queue_button()
+
+        self.addWidget(self.attribute_holder)
+        self.addWidget(_button)
+        return
+
+    def build_attribute_holder(self):
+        _attr_map_dict = {
+            "TwoDim": proceadural_displays.TwoDimentionalLineEditAttributeEditor,
+            str: proceadural_displays.LineEditAttributeEditor
+        }
+        _holder = ItemDetailAttributeHolder(attribute_dictionary=self.item_data, attribute_mapping_dictionary=_attr_map_dict)
+        return _holder
+
+    def build_add_to_queue_button(self):
+        _button = base_widgets.Button(text="Add to Queue")
+        _button.clicked.connect(self.emit_add_to_queue)
+        return _button
+
+    def emit_add_to_queue(self):
+        return
 
 
     def addSection(self, name, data):

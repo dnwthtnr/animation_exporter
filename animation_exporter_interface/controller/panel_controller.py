@@ -164,14 +164,8 @@ class PanelController(QtCore.QObject):
 
     @QtCore.Slot()
     def generate_scene_detail_panel(self, item_detail_dictionary):
-        _item_view = ItemDetailedView.DetailedViewPanel()
-
-        for _detail_name, _detail_value in item_detail_dictionary.items():
-            _item_view.addSection(_detail_name, _detail_value)
-
-        _export_button = _item_view.addButton("Add To Queue")
-        _export_button.clicked.connect()
-
+        _item_view = ItemDetailedView.ItemDetailedView(item_detail_dictionary)
+        _item_view.finish_initialization()
         self.SceneDetailPanelBuilt.emit(_item_view)
     # endregion
 
