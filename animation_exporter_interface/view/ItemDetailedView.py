@@ -6,9 +6,13 @@ from pyqt_interface_elements import base_widgets, base_layouts, base_windows, co
 
 class ItemDetailAttributeHolder(proceadural_displays.AbstractEntryHolder):
 
-    def __int__(self, attribute_dictionary, attribute_mapping_dictionary):
-        print(attribute_mapping_dictionary)
-        super().__int__(attribute_dictionary=attribute_dictionary, attribute_mapping_dictionary=attribute_mapping_dictionary, map_by_type=False)
+    def __int__(self, *args, **kwargs):
+        print('stuff',*args, **kwargs)
+        print(super())
+        super().__int__(
+            *args,
+            **kwargs
+        )
 
 
     def create_attribute_entry(self, attribute_name, attribute_value, attribute_mapping_dictionary, map_by_type):
@@ -45,7 +49,7 @@ class ItemDetailedView(base_layouts.Vertical_Layout):
             "TwoDim": proceadural_displays.TwoDimentionalLineEditAttributeEditor,
             str: proceadural_displays.LineEditAttributeEditor
         }
-        _holder = ItemDetailAttributeHolder(attribute_dictionary=self.item_data, attribute_mapping_dictionary=_attr_map_dict)
+        _holder = ItemDetailAttributeHolder()
         return _holder
 
     def build_add_to_queue_button(self):
