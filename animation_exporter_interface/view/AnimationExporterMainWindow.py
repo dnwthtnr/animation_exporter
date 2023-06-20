@@ -40,7 +40,7 @@ class ExporterMainWindow(base_windows.Main_Window):
         self.setCentralWidget(central_layout)
 
         logger.info(f'Resizing window: {self}')
-        self.resize(500, 450)
+        self.resize(700, 450)
 
         logger.info(f'Emitting InitializationFinished signal')
         self.InitializationFinished.emit()

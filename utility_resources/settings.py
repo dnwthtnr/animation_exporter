@@ -11,10 +11,9 @@ def read_json(path):
 
 
 def write_json(path, data):
-    with open(path, 'r+') as file:
-        _data = json.dump(path, data)
+    with open(path, 'w') as file:
+        file.write(json.dumps(data, indent=4, sort_keys=True, ))
 
-    return _data
 
 
 def set_resource_value(json_path, name, value):
@@ -22,6 +21,22 @@ def set_resource_value(json_path, name, value):
 
     if name in _setting_resource_data:
         _setting_resource_data[name] = value
+
+        write_json(path=json_path, data=_setting_resource_data)
+
+
+def add_resource_value(json_path, name, value):
+    _setting_resource_data = read_json(json_path)
+
+    _setting_resource_data[name] = value
+
+    write_json(path=json_path, data=_setting_resource_data)
+
+def remove_resource_value(json_path, name):
+    _setting_resource_data = read_json(json_path)
+
+    if name in _setting_resource_data:
+        _setting_resource_data.pop(name)
 
         write_json(path=json_path, data=_setting_resource_data)
 
@@ -150,21 +165,15 @@ def add_to_export_queue(scene_path, export_name, scene_objects, animation_range,
     _scene_data_dict[   export_objects_key] = scene_objects
     _scene_data_dict[   export_directory_key] = export_directory
 
+    print('setting')
 
-    set_resource_value(json_path=export_queue_json_path, name=_queue_item_identifier, value=_scene_data_dict)
+
+    add_resource_value(json_path=export_queue_json_path, name=_queue_item_identifier, value=_scene_data_dict)
+    return _queue_item_identifier
 
 
 def remove_export_queue_item(queue_item_identifier):
-    _queue = get_export_queue()
-
-    if queue_item_identifier not in _queue:
-        return 0
-
-    _queue.pop(queue_item_identifier)
-    write_json(
-        path=export_queue_json_path,
-        data=_queue
-    )
+    remove_resource_value(json_path=export_queue_json_path, name=queue_item_identifier)
     return 1
 
 def update_queue_item_data(queue_item_identifier, value_key, new_value):
@@ -180,9 +189,12 @@ def update_queue_item_data(queue_item_identifier, value_key, new_value):
     -------
 
     """
+    print('editing', queue_item_identifier, value_key, new_value)
     _queue = get_export_queue()
 
     _queue_item_data = _queue.get(queue_item_identifier)
+    print(_queue)
+    print('i', _queue_item_data)
 
     if _queue_item_data is None:
         return
@@ -190,6 +202,7 @@ def update_queue_item_data(queue_item_identifier, value_key, new_value):
     _queue_item_data[value_key] = new_value
 
     _queue[queue_item_identifier] = _queue_item_data
+    print(_queue)
     write_json(
         path=export_queue_json_path,
         data=_queue

@@ -20,6 +20,8 @@ from animation_exporter.animation_exporter_interface.controller import (
     queue_controller,
     scene_controller
 )
+from animation_exporter.utility_resources import settings
+
 
 class PanelController(QtCore.QObject):
     HeaderPanelBuilt = QtCore.Signal(object)
@@ -29,7 +31,7 @@ class PanelController(QtCore.QObject):
 
 
     # region Local Signals
-    AddToExportQueue = QtCore.Signal(object, object, object, object, object)
+    QueueItemAdded = QtCore.Signal(object, object, object, object, object)
     AddToQueueButtonClicked = QtCore.Signal(str, list)
     SceneSelected = QtCore.Signal(str)
     ExportButtonClicked = QtCore.Signal()
@@ -72,8 +74,11 @@ class PanelController(QtCore.QObject):
             _queue_view.UpdateQueueItemName.connect(queue_controller.update_queue_item_export_name)
             _queue_view.UpdateQueueItemExportDirectory.connect(queue_controller.update_queue_item_export_directory)
             _queue_view.UpdateQueueItemFrameRange.connect(queue_controller.update_queue_item_export_frame_range)
+            _queue_view.StartQueueButtonClicked.connect(_queue_runner.start_queue)
 
-            self.AddToExportQueue.connect(queue_controller.add_queue_item)
+            self.QueueItemAdded.connect(_queue_view.add_queue_item)
+
+            # self.AddToExportQueue.connect(queue_controller.add_queue_item)
             logger.info(f'Successfully connected queue panel signals')
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to connect queue view signals. Aborting')
@@ -89,17 +94,34 @@ class PanelController(QtCore.QObject):
             logger.exception(e)
             return
 
+        _queue_view.finish_initialization()
+
     @QtCore.Slot()
-    def emit_add_to_export_queue(self, scene_path, export_name, scene_objects, animation_range, export_directory):
+    def emit_add_to_export_queue(self, export_data_dictionary):
         logger.info(f'Caught signal to add item to export queue. Attempting to emit AddToExportQueue')
+
+        scene_path = export_data_dictionary.get(settings.scene_path_key)
+        export_name = export_data_dictionary.get(settings.item_export_name_key)
+        scene_objects = export_data_dictionary.get(settings.export_objects_key)
+        animation_range = export_data_dictionary.get(settings.animation_range_key)
+        export_directory = export_data_dictionary.get(settings.export_directory_key)
+
         logger.debug(f'New export queue item data: {scene_path, export_name, scene_objects, animation_range, export_directory}')
         try:
-            self.AddToExportQueue.emit(scene_path, export_name, scene_objects, animation_range, export_directory)
+            _queue_item_identifier = queue_controller.add_queue_item(scene_path, export_name, scene_objects, animation_range, export_directory)
             logger.info(f'Successfully emitted AddToExportQueue')
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to emit AddToExportQueue with queue item data. Aborting')
             logger.exception(e)
             return
+
+        self.QueueItemAdded.emit(
+            _queue_item_identifier,
+            export_name,
+            scene_path,
+            animation_range,
+            export_directory
+        )
     # endregion
 
 
@@ -166,6 +188,7 @@ class PanelController(QtCore.QObject):
     def generate_scene_detail_panel(self, item_detail_dictionary):
         _item_view = ItemDetailedView.ItemDetailedView(item_detail_dictionary)
         _item_view.finish_initialization()
+        _item_view.AddToQueueButtonClicked.connect(self.emit_add_to_export_queue)
         self.SceneDetailPanelBuilt.emit(_item_view)
     # endregion
 

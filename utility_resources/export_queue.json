@@ -1,3 +1,54 @@
 {
-
+    "0": {
+        "Animation_Range": [
+            1.0,
+            415.4477049319728
+        ],
+        "Export_Directory": "Q:/",
+        "Export_Name": "placeholder_name",
+        "Objects_To_Export": [
+            ""
+        ],
+        "Queue_Item_Identifier": "0",
+        "Scene_Path": "Q:/animation_01.ma"
+    },
+    "1": {
+        "Animation_Range": [
+            0.8,
+            470.89172482993195
+        ],
+        "Export_Directory": "Q:/",
+        "Export_Name": "placeholder_name",
+        "Objects_To_Export": [
+            ""
+        ],
+        "Queue_Item_Identifier": "1",
+        "Scene_Path": "Q:/animation_01.ma"
+    },
+    "2": {
+        "Animation_Range": [
+            0.8,
+            470.89172482993195
+        ],
+        "Export_Directory": "Q:/",
+        "Export_Name": "placeholder_name new",
+        "Objects_To_Export": [
+            ""
+        ],
+        "Queue_Item_Identifier": "2",
+        "Scene_Path": "Q:/animation_01.ma"
+    },
+    "3": {
+        "Animation_Range": [
+            1.0,
+            415.4477049319728
+        ],
+        "Export_Directory": "Q:/",
+        "Export_Name": "placeholder_name",
+        "Objects_To_Export": [
+            ""
+        ],
+        "Queue_Item_Identifier": "3",
+        "Scene_Path": "Q:/animation_01.ma"
+    }
 }

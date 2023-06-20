@@ -13,18 +13,17 @@ from functools import partial
 class QueueItem(base_layouts.Horizontal_Layout):
     CloseButtonClicked = QtCore.Signal(object)
 
-    ExportNameChanged = QtCore.Signal(str, str)
-    ExportFrameRangeChanged = QtCore.Signal(str, list)
-    ExportDirectoryChanged = QtCore.Signal(str, str)
+    ExportNameChanged = QtCore.Signal(object, str)
+    ExportFrameRangeChanged = QtCore.Signal(object, list)
+    ExportDirectoryChanged = QtCore.Signal(object, str)
 
-
-    def __int__(self, item_identifier, export_name, scene_path, frame_range, export_directory):
-        super().__init__()
+    def __init__(self, item_identifier, export_name, scene_path, frame_range, export_directory):
+        super().__init__(spacing = 7)
         self.item_identifier = item_identifier
-        self.export_name_widget = self.build_export_name()
-        self.scene_path_widget = self.build_scene_path()
-        self.frame_range_widget = self.build_frane_range()
-        self.export_directory_widget = self.build_export_directory()
+        self.export_name_widget = self.build_export_name(export_name)
+        self.scene_path_widget = self.build_scene_path(scene_path)
+        self.frame_range_widget = self.build_frane_range(frame_range)
+        self.export_directory_widget = self.build_export_directory(export_directory)
         _close_button = self.build_close_button()
 
         self.addWidget(self.export_name_widget)
@@ -44,8 +43,7 @@ class QueueItem(base_layouts.Horizontal_Layout):
 
     @property
     def frame_range(self):
-        _str_list = self.frame_range_widget.text().split(" -- ")
-        return [float(_num) for _num in _str_list]
+        return self.frame_range_widget.value()
 
     @property
     def export_directory(self):
@@ -62,9 +60,8 @@ class QueueItem(base_layouts.Horizontal_Layout):
         return _widget
 
     def build_frane_range(self, range):
-        _widget = base_widgets.Line_Edit(text=" -- ".join(range))
-        _widget.setReadOnly(True)
-        _widget.textEdited.connect(self.emit_export_name_changed)
+        _widget = line_edits.TwoDimensionalFloat(x_val=range[0], y_val=range[1])
+        _widget.valueChanged.connect(self.emit_frame_range_changed)
         return _widget
 
     def build_export_directory(self, directory):
@@ -79,40 +76,50 @@ class QueueItem(base_layouts.Horizontal_Layout):
         return _widget
 
     @QtCore.Slot()
-    def emit_export_name_changed(self):
+    def emit_export_name_changed(self, *args):
         self.ExportNameChanged.emit(self.item_identifier, self.export_name)
 
     @QtCore.Slot()
-    def emit_export_directory_changed(self):
+    def emit_export_directory_changed(self, *args):
         self.ExportDirectoryChanged.emit(self.item_identifier, self.export_directory)
 
     @QtCore.Slot()
-    def emit_frame_range_changed(self):
+    def emit_frame_range_changed(self, *args):
         self.ExportFrameRangeChanged.emit(self.item_identifier, self.frame_range)
 
 
 class QueueItemHolder(base_layouts.Vertical_Layout):
-    RemoveQueueItem = QtCore.Signal(str)
+    RemoveQueueItem = QtCore.Signal(object)
 
-    UpdateQueueItemName = QtCore.Signal(str, str)
-    UpdateQueueItemExportDirectory = QtCore.Signal(str, str)
-    UpdateQueueItemFrameRange = QtCore.Signal(str, list)
+    UpdateQueueItemName = QtCore.Signal(object, str)
+    UpdateQueueItemExportDirectory = QtCore.Signal(object, str)
+    UpdateQueueItemFrameRange = QtCore.Signal(object, list)
+
+    StartQueueButtonClicked = QtCore.Signal()
+    queue_items = []
 
     def finish_initialization(self):
+        self.queue_item_layout = base_layouts.Vertical_Layout()
         self.populate_with_empty_view()
+
+        self.export_button = base_widgets.Button(text='Start Queue')
+        self.export_button.clicked.connect(self.StartQueueButtonClicked.emit)
+
+        self.addWidget(self.queue_item_layout)
+        self.addWidget(self.export_button)
 
     def __int__(self):
         super().__init__()
-        self.queue_items = []
 
     def populate_with_empty_view(self):
-        self.clear_layout()
+        self.queue_item_layout.clear_layout()
         _layout = base_layouts.Vertical_Layout()
 
         _label = base_widgets.Label(f'Queue is Currently Empty')
 
         _layout.addWidget(_label)
-        self.addWidget(_layout, alignment=constants.align_center)
+        self.queue_item_layout.addWidget(_layout, alignment=constants.align_center)
+
 
     @QtCore.Slot()
     def add_queue_item(self, queue_item_identifier, export_name, scene_path, frame_range, export_directory):
@@ -120,6 +127,7 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
         Adds a queue item with the given attributes
         Parameters
         ----------
+        queue_item_identifier
         export_name
         scene_path
         frame_range
@@ -130,7 +138,8 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
 
         """
         if len(self.queue_items) == 0:
-            self.clear_layout()
+            self.queue_item_layout.clear_layout()
+            self.queue_item_layout.addStretch(1)
 
         _item = QueueItem(
             item_identifier=queue_item_identifier,
@@ -145,7 +154,7 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
         _item.ExportNameChanged.connect(self.emit_update_queue_item_name)
         _item.ExportFrameRangeChanged.connect(self.emit_update_queue_item_frame_range)
 
-        self.addWidget(_item)
+        self.queue_item_layout.insertWidget(0, _item)
 
         self.queue_items.append(_item)
 
@@ -215,40 +224,6 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
     def build_export_directory(self, directory):
         _widget = line_edits.Folder_Selection_Line_Edit(directory)
         return _widget
-
-# class ExporterQueueDisplay(base_layouts.Vertical_Layout):
-#     ExportQueueDataQuery = QtCore.Signal()
-#
-#     def __init__(self):
-#         super().__init__()
-#
-#
-#     def finish_initialization(self):
-#         # _button_holder = self.build_button_holder()
-#
-#
-#         self.content_panel = base_layouts.Vertical_Layout()
-#         self.populate_with_empty_view()
-#
-#         self.addWidget(self.content_panel, stretch=1)
-#         # self.addWidget(_button_holder, alignment=constants.align_bottom)
-#
-#         self.ExportQueueDataQuery.emit()
-#
-#     #############buttons################
-#
-#     def build_button_holder(self):
-#         self.export_button = self.build_export_button()
-#         self.remove_button = self.build_remove_button()
-#
-#         _layout = base_layouts.Horizontal_Layout()
-#         _layout.addWidgets([self.export_button, self.close_button])
-#         return _layout
-#
-#     def build_export_button(self):
-#         _button = base_widgets.Button(text="Remove")
-#         # _button.clicked.connect(self.emit_export_signal)
-#         return _button
 
 
 if __name__ == "__main__":

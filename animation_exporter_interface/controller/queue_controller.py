@@ -61,7 +61,7 @@ class QueueRunner(QtCore.QObject):
         super().__init__()
     @QtCore.Slot()
     def start_queue(self, clear_on_completion=False):
-        logger.infop(f'Starting export queue. Clearing on completion: "{clear_on_completion}"')
+        logger.info(f'Starting export queue. Clearing on completion: "{clear_on_completion}"')
         _queue = settings.get_export_queue()
         for _queue_item_id in _queue:
             export_queue_item(_queue_item_id)
@@ -78,17 +78,19 @@ def remove_queue_item(queue_item_identifier):
 
 @QtCore.Slot()
 def add_queue_item(scene_path, export_name, scene_objects, animation_range, export_directory):
-    settings.add_to_export_queue(
+    _id = settings.add_to_export_queue(
         scene_path=scene_path,
         export_name=export_name,
         scene_objects=scene_objects,
         animation_range=animation_range,
         export_directory=export_directory
     )
+    return _id
 
 
 @QtCore.Slot()
 def update_queue_item_export_name(queue_item_identifier, new_name):
+    print(queue_item_identifier)
     settings.update_queue_item_data(
         queue_item_identifier=queue_item_identifier,
         value_key=settings.item_export_name_key,

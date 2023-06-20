@@ -41,6 +41,7 @@ def export_animation(objects, export_path):
     logger.debug(f'Exporting objects: {objects}')
     try:
         cmds.select(objects)
+        print(cmds.ls(), objects)
         cmds.file(export_path, exportSelected=True, type="FBX export", force=True, prompt=False)
 
 

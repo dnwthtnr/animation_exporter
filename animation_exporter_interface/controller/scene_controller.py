@@ -1,5 +1,7 @@
 
 import logging
+import os.path
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.NOTSET)
 
@@ -46,6 +48,10 @@ class Scene_Controller(QtCore.QObject):
         logger.debug(f'Dictionary: {_object_data_dict}')
         self.SceneContentDataResponse.emit(_object_data_dict)
 
+    @property
+    def current_file(self):
+        return cmds.file(query=True, expandName=True)
+
     ####################################################
     # region static
 
@@ -89,6 +95,7 @@ class Scene_Controller(QtCore.QObject):
                     return True
 
         return False
+
 
     def get_top_level_objects(self):
         """
@@ -138,7 +145,7 @@ class Scene_Controller(QtCore.QObject):
                 "Parent": parent,
                 "Children": _children,
                 "Type": cmds.objectType(_object),
-                "Absolute Animation Range": self.get_descendant_animation_range(_object)
+                "Absolute Animation Range": f"{self.get_descendant_animation_range(_object)}"
             }
             _hierarchy_dictionary[_object] = _object_data_dictionary
 
@@ -222,6 +229,15 @@ class Scene_Controller(QtCore.QObject):
 
         return sorted(animation_times_list)
 
+    def get_export_objects(self, object):
+        _object_export_list = self.get_descendants(object)
+        _object_export_list.append(object)
+        print(_object_export_list)
+        return _object_export_list
+
+    def get_descendants(self, object):
+        return cmds.listRelatives(object, allDescendents=True)
+
     def get_object_animation_times_list(self, object):
         """
         Collects all the frames containing animation for the given object
@@ -289,7 +305,7 @@ class Scene_Controller(QtCore.QObject):
         """
         _animation_times_list = self.get_descendant_animation_times_list(object)
         if len(_animation_times_list) > 1:
-            return f"{_animation_times_list[0] } -- {_animation_times_list[-1]}"
+            return [_animation_times_list[0], _animation_times_list[-1]]
 
 
     ####################################
@@ -319,9 +335,18 @@ class Scene_Controller(QtCore.QObject):
         if self.object_has_or_holds_animation(item):
             _partitions = self.separate_animation_partitions(item)
 
-            _item_data_dict[settings.animation_partitions_key] = _partitions
+            _item_data_dict[settings.animation_partitions_key] = f"{_partitions}"
 
             _animation_range = self.get_descendant_animation_range(item)
+
             _item_data_dict[settings.animation_range_key] = _animation_range
+
+            _item_data_dict[settings.scene_path_key] = self.current_file
+            _item_data_dict[settings.item_export_name_key] = f'placeholder_name'
+            _item_data_dict[settings.export_objects_key] = self.get_export_objects(item)
+            _item_data_dict[settings.export_directory_key] = os.path.dirname(self.current_file)
+
+        print(_item_data_dict)
+
 
         self.ItemDetailsDataResponse.emit(_item_data_dict)
