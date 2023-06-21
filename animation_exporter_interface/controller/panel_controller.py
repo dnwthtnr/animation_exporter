@@ -186,6 +186,8 @@ class PanelController(QtCore.QObject):
 
     @QtCore.Slot()
     def generate_scene_detail_panel(self, item_detail_dictionary):
+        logger.info(f'Signal caught to build scene detail view for dict: {item_detail_dictionary}')
+        print(item_detail_dictionary)
         _item_view = ItemDetailedView.ItemDetailedView(item_detail_dictionary)
         _item_view.finish_initialization()
         _item_view.AddToQueueButtonClicked.connect(self.emit_add_to_export_queue)

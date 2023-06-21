@@ -3,7 +3,7 @@ import logging
 import os.path
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.NOTSET)
+logger.setLevel(logging.DEBUG)
 
 from maya import cmds, standalone
 from PySide2 import QtCore, QtWidgets
@@ -37,7 +37,6 @@ class Scene_Controller(QtCore.QObject):
             logger.warning(f'Encountered exception while attempting to open file {filepath}')
             logger.exception(e)
             return
-
 
     @QtCore.Slot()
     def emit_scene_contents(self):
@@ -229,14 +228,22 @@ class Scene_Controller(QtCore.QObject):
 
         return sorted(animation_times_list)
 
-    def get_export_objects(self, object):
-        _object_export_list = self.get_descendants(object)
-        _object_export_list.append(object)
-        print(_object_export_list)
+    def get_export_objects(self, _object):
+        logger.debug(f'Attempting to get all export objects for: {_object}')
+        _object_export_list = []
+        try:
+            _object_export_list = self.get_descendants(_object)
+            _object_export_list.append(_object)
+            logger.debug(f'Successfully got export objects for : {_object}')
+            logger.debug(f'Export objects: {_object_export_list}')
+        except Exception as e:
+            logger.error(f'Encountered exception whil attempting to get export objects for: {_object}. Aborting.')
+            logger.exception(e)
+            raise e
         return _object_export_list
 
-    def get_descendants(self, object):
-        return cmds.listRelatives(object, allDescendents=True)
+    def get_descendants(self, _object):
+        return cmds.listRelatives(_object, allDescendents=True)
 
     def get_object_animation_times_list(self, object):
         """
@@ -328,25 +335,55 @@ class Scene_Controller(QtCore.QObject):
         _item_data_dict = run_on_thread(partial(self.emit_item_details_dictionary, item))
 
 
-    def emit_item_details_dictionary(self, item):
+    def emit_item_details_dictionary(self, object_name):
         # TODO: Start caching this stuf somehow -- lags when requerying stuff
 
-        _item_data_dict = {}
-        if self.object_has_or_holds_animation(item):
-            _partitions = self.separate_animation_partitions(item)
+        if self.object_has_or_holds_animation(object_name):
+            logger.debug(f'Getting details for object: {object_name}')
 
-            _item_data_dict[settings.animation_partitions_key] = f"{_partitions}"
+            try:
+                _animation_partitions = self.separate_animation_partitions(object_name)
+                logger.debug(f'_animation_partitions for object: {object_name} :: {_animation_partitions}')
 
-            _animation_range = self.get_descendant_animation_range(item)
+                _animation_range = self.get_descendant_animation_range(object_name)
+                logger.debug(f'_animation_range for object: {object_name} :: {_animation_range}')
 
-            _item_data_dict[settings.animation_range_key] = _animation_range
+                _scene_path = self.current_file
+                logger.debug(f'_scene_path for object: {object_name} :: {_scene_path}')
 
-            _item_data_dict[settings.scene_path_key] = self.current_file
-            _item_data_dict[settings.item_export_name_key] = f'placeholder_name'
-            _item_data_dict[settings.export_objects_key] = self.get_export_objects(item)
-            _item_data_dict[settings.export_directory_key] = os.path.dirname(self.current_file)
+                _item_export_name = f'placeholder_name'
+                logger.debug(f'_item_export_name for object: {object_name} :: {_item_export_name}')
 
-        print(_item_data_dict)
+                _objects_to_export = self.get_export_objects(object_name)
+                logger.debug(f'_objects_to_export for object: {object_name} :: {_objects_to_export}')
+
+                _export_directory = os.path.dirname(self.current_file)
+                logger.debug(f'_export_directory for object: {object_name} :: {_export_directory}')
+
+                logger.info(f'Successfully queried item details for : {object_name}')
+
+            except Exception as e:
+                logger.error(f'Encountered exception while attempting to query item detail data. Aborting')
+                logger.exception(e)
+                raise e
 
 
-        self.ItemDetailsDataResponse.emit(_item_data_dict)
+
+            logger.debug(f'Populating detail dictionary for object: {object_name}')
+            try:
+                _item_data_dict = {}
+                _item_data_dict[    settings.animation_partitions_key   ] = f"{_animation_partitions}"
+                _item_data_dict[    settings.animation_range_key        ] = _animation_range
+                _item_data_dict[    settings.scene_path_key             ] = _scene_path
+                _item_data_dict[    settings.item_export_name_key       ] = _item_export_name
+                _item_data_dict[    settings.export_objects_key         ] = _objects_to_export
+                _item_data_dict[    settings.export_directory_key       ] = _export_directory
+                logger.debug(f'Successfully populated detail dictionary for object: {object_name}')
+            except Exception as e:
+                logger.error(f'Encountered exception while attempting to populate item data dictionary. Aborting')
+                logger.exception(e)
+                raise e
+
+            logger.debug(f'Emitting ItemDetailDataResponse with dictionary')
+            logger.debug(_item_data_dict)
+            self.ItemDetailsDataResponse.emit(_item_data_dict)
