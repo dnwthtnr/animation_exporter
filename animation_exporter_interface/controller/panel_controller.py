@@ -32,6 +32,8 @@ class PanelController(QtCore.QObject):
 
 
     # region Local Signals
+    QueueDataResponse = QtCore.Signal(object)
+    QueuePathsDataResponse = QtCore.Signal(object)
     QueueItemAdded = QtCore.Signal(object, object, object, object, object)
     AddToQueueButtonClicked = QtCore.Signal(str, list)
     # SceneSelected = QtCore.Signal(str)
@@ -68,17 +70,20 @@ class PanelController(QtCore.QObject):
 
         logger.debug(f'Connecting signals between queue_runner, queue_view and panel_controller')
         try:
-            _queue_runner.RemoveQueueItem.connect(_queue_view.remove_queue_item)
+            _queue_runner.QueueItemRemoved.connect(_queue_view.remove_queue_item)
 
-            _queue_view.RemoveQueueItem.connect(queue_controller.remove_queue_item)
+            _queue_view.QueueSelected.connect(self.queue_selected)
+            _queue_view.QueueSelectionListDataQuery.connect(self.emit_queue_paths)
+
+            _queue_view.RemoveQueueItem.connect(queue_controller.remove_export_queue_item)
             _queue_view.UpdateQueueItemName.connect(queue_controller.update_queue_item_export_name)
             _queue_view.UpdateQueueItemExportDirectory.connect(queue_controller.update_queue_item_export_directory)
             _queue_view.UpdateQueueItemFrameRange.connect(queue_controller.update_queue_item_export_frame_range)
             _queue_view.StartQueueButtonClicked.connect(_queue_runner.start_queue)
 
             self.QueueItemAdded.connect(_queue_view.add_queue_item)
-
-            # self.AddToExportQueue.connect(queue_controller.add_queue_item)
+            self.QueueDataResponse.connect(_queue_view.populate_queue_view)
+            self.QueuePathsDataResponse.connect(_queue_view.populate_queues_combobox)
             logger.info(f'Successfully connected queue panel signals')
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to connect queue view signals. Aborting')
@@ -97,6 +102,15 @@ class PanelController(QtCore.QObject):
         _queue_view.finish_initialization()
 
     @QtCore.Slot()
+    def queue_selected(self, queue_path):
+        queue_controller.set_current_queue_path(queue_path)
+        self.QueueDataResponse.emit(queue_controller.current_export_queue())
+
+    @QtCore.Slot()
+    def emit_queue_paths(self):
+        self.QueuePathsDataResponse.emit(queue_controller.queue_paths())
+
+    @QtCore.Slot()
     def emit_add_to_export_queue(self, export_data_dictionary):
         logger.info(f'Caught signal to add item to export queue. Attempting to emit AddToExportQueue')
 
@@ -108,7 +122,7 @@ class PanelController(QtCore.QObject):
 
         logger.debug(f'New export queue item data: {scene_path, export_name, scene_objects, animation_range, export_directory}')
         try:
-            _queue_item_identifier = queue_controller.add_queue_item(scene_path, export_name, scene_objects, animation_range, export_directory)
+            _queue_item_identifier = queue_controller.add_to_export_queue(scene_path, export_name, scene_objects, animation_range, export_directory)
             logger.info(f'Successfully emitted AddToExportQueue')
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to emit AddToExportQueue with queue item data. Aborting')

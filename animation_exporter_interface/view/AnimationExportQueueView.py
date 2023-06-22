@@ -1,4 +1,3 @@
-
 import logging
 import os.path
 
@@ -6,8 +5,10 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 from PySide2 import QtCore, QtWidgets, QtGui
-from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants, line_edits, model_view_delegate, icons
+from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants, line_edits, \
+    model_view_delegate, icons
 from functools import partial
+from animation_exporter.utility_resources import settings
 
 
 class QueueItem(base_layouts.Horizontal_Layout):
@@ -18,7 +19,7 @@ class QueueItem(base_layouts.Horizontal_Layout):
     ExportDirectoryChanged = QtCore.Signal(object, str)
 
     def __init__(self, item_identifier, export_name, scene_path, frame_range, export_directory):
-        super().__init__(spacing = 7)
+        super().__init__(spacing=7)
         self.item_identifier = item_identifier
         self.export_name_widget = self.build_export_name(export_name)
         self.scene_path_widget = self.build_scene_path(scene_path)
@@ -31,7 +32,6 @@ class QueueItem(base_layouts.Horizontal_Layout):
         self.addWidget(self.frame_range_widget)
         self.addWidget(self.export_directory_widget)
         self.addWidget(_close_button)
-
 
     @property
     def export_name(self):
@@ -96,6 +96,10 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
     UpdateQueueItemFrameRange = QtCore.Signal(object, list)
 
     StartQueueButtonClicked = QtCore.Signal()
+
+    QueueSelectionListDataQuery = QtCore.Signal()
+    QueueSelected = QtCore.Signal(str)
+
     queue_items = []
 
     def finish_initialization(self):
@@ -105,8 +109,71 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
         self.export_button = base_widgets.Button(text='Start Queue')
         self.export_button.clicked.connect(self.StartQueueButtonClicked.emit)
 
+        _queue_selection_widget = self.build_queue_selection_combobox()
+
+        self.addWidget(_queue_selection_widget, alignment=constants.align_top)
         self.addWidget(self.queue_item_layout)
         self.addWidget(self.export_button)
+
+        self.QueueSelectionListDataQuery.emit()
+
+    #######################################################
+
+    def build_queue_selection_combobox(self):
+        _label = base_widgets.Label(text="Current Export Queue:")
+
+        self.queues_combo = base_widgets.ComboBox()
+        self.queues_combo.currentTextChanged.connect(self.QueueSelected.emit)
+
+        _layout = base_layouts.Horizontal_Layout(spacing=5)
+        _layout.addWidget(_label)
+        _layout.addWidget(self.queues_combo, stretch=1)
+        return _layout
+
+    @QtCore.Slot()
+    def populate_queues_combobox(self, queues):
+        self.queues_combo.clear()
+        self.queues_combo.addItems(queues)
+        self.queues_combo.setCurrentIndex(0)
+
+    @QtCore.Slot()
+    def add_queue(self, queue):
+        self.queues_combo.addItem(queue)
+
+    # @QtCore.Slot()
+    # def remove_queue(self, queue):
+    #     self.queues_combo.index
+    #     self.queues_combo.removeItem(queue)
+
+    ###########################
+
+    @QtCore.Slot()
+    def populate_queue_view(self, queue):
+        """
+        Clears the queue item holder and populates from the given queue
+        Parameters
+        ----------
+        queue
+
+        Returns
+        -------
+
+        """
+        self.clear_queue()
+
+        if len(queue) == 0:
+            self.populate_with_empty_view()
+
+        logger.info(f'Populating queue view from given queue.')
+        logger.debug(f'Given queue: {queue}')
+        for _queue_item_dict in queue.values():
+            self.add_queue_item(
+                queue_item_identifier=_queue_item_dict.get(settings.queue_item_identifier_key),
+                export_name=_queue_item_dict.get(settings.item_export_name_key),
+                scene_path=_queue_item_dict.get(settings.scene_path_key),
+                frame_range=_queue_item_dict.get(settings.animation_range_key),
+                export_directory=_queue_item_dict.get(settings.export_directory_key)
+            )
 
     def __int__(self):
         super().__init__()
@@ -119,7 +186,6 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
 
         _layout.addWidget(_label)
         self.queue_item_layout.addWidget(_layout, alignment=constants.align_center)
-
 
     @QtCore.Slot()
     def add_queue_item(self, queue_item_identifier, export_name, scene_path, frame_range, export_directory):
@@ -179,7 +245,6 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
         _queue_index = self.queue_items.index(queue_item)
         self.queue_items.pop(_queue_index)
 
-
     @QtCore.Slot()
     def emit_update_queue_item_name(self, queue_item_identifier, new_name):
         self.UpdateQueueItemName.emit(queue_item_identifier, new_name)
@@ -188,11 +253,9 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
     def emit_update_queue_item_export_directory(self, queue_item_identifier, new_directory):
         self.UpdateQueueItemExportDirectory.emit(queue_item_identifier, new_directory)
 
-
     @QtCore.Slot()
     def emit_update_queue_item_frame_range(self, queue_item_identifier, new_range):
         self.UpdateQueueItemFrameRange(queue_item_identifier, new_range)
-
 
     #############################################
 

@@ -16,7 +16,7 @@ class ExporterSceneView(base_layouts.Vertical_Layout):
         self.content_panel = base_layouts.Vertical_Layout()
 
         self.addWidget(_current_scene_widget, alignment=constants.align_top)
-        self.addWidget(self.content_panel)
+        self.addWidget(self.content_panel, stretch=1)
         self.populate_with_empty_view()
 
     def build_current_scene_widget(self):
