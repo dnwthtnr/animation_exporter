@@ -8,7 +8,7 @@ from PySide2 import QtCore, QtWidgets, QtGui
 from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants, line_edits, \
     model_view_delegate, icons
 from functools import partial
-from animation_exporter.utility_resources import settings
+from animation_exporter.utility_resources import  keys
 
 
 class QueueItem(base_layouts.Horizontal_Layout):
@@ -168,11 +168,11 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
         logger.debug(f'Given queue: {queue}')
         for _queue_item_dict in queue.values():
             self.add_queue_item(
-                queue_item_identifier=_queue_item_dict.get(settings.queue_item_identifier_key),
-                export_name=_queue_item_dict.get(settings.item_export_name_key),
-                scene_path=_queue_item_dict.get(settings.scene_path_key),
-                frame_range=_queue_item_dict.get(settings.animation_range_key),
-                export_directory=_queue_item_dict.get(settings.export_directory_key)
+                queue_item_identifier=_queue_item_dict.get(keys.queue_item_identifier_key),
+                export_name=_queue_item_dict.get(keys.item_export_name_key),
+                scene_path=_queue_item_dict.get(keys.scene_path_key),
+                frame_range=_queue_item_dict.get(keys.animation_range_key),
+                export_directory=_queue_item_dict.get(keys.export_directory_key)
             )
 
     def __int__(self):

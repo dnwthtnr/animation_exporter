@@ -4,7 +4,7 @@ logger.setLevel(logging.DEBUG)
 
 import os
 
-from animation_exporter.utility_resources import settings
+from animation_exporter.utility_resources import settings, keys
 from animation_exporter.animation_exporter_interface.controller import export_controller
 from PySide2 import QtCore
 from functools import partial
@@ -19,7 +19,7 @@ default_queue_name = "export_queue"
 
 
 _queue_settings = local_settings_manager.SettingsForModule(module_name="queues")
-_default_queue_settings_path = os.path.join(settings.CURRENT_FOLDER, 'defaults', "queues.json")
+_default_queue_settings_path = os.path.join(settings.DEFAULTS_FOLDER, "queues.json")
 _default_queue_settings = partial(file_management.read_json, _default_queue_settings_path)
 if _queue_settings.settings_size() < len(_default_queue_settings()):
     _queue_settings.overwrite_with_dictionary(_default_queue_settings())
@@ -81,8 +81,8 @@ if len(queue_paths()) == 1:
 
 
 
-export_queue_json_path = os.path.join(settings.CURRENT_FOLDER, "export_queue.json")
-queues_json_path = os.path.join(settings.CURRENT_FOLDER, "export_queue.json")
+export_queue_json_path = os.path.join(settings.RESOURCES_FOLDER, "export_queue.json")
+queues_json_path = os.path.join(settings.RESOURCES_FOLDER, "export_queue.json")
 
 queue_item_identifier_key = "Queue_Item_Identifier"
 item_export_name_key = "Export_Name"
@@ -193,24 +193,24 @@ def export_queue_item(queue_item_identifier):
     try:
         _export_name = get_queue_item_data(
             queue_item_identifier=queue_item_identifier,
-            value_key=settings.item_export_name_key
+            value_key=keys.item_export_name_key
         )
         _export_directory = get_queue_item_data(
             queue_item_identifier=queue_item_identifier,
-            value_key=settings.export_directory_key
+            value_key=keys.export_directory_key
         )
         _export_range = get_queue_item_data(
             queue_item_identifier=queue_item_identifier,
-            value_key=settings.animation_range_key
+            value_key=keys.animation_range_key
         )
 
         _object = get_queue_item_data(
             queue_item_identifier=queue_item_identifier,
-            value_key=settings.export_objects_key
+            value_key=keys.export_objects_key
         )
         _scene_path = get_queue_item_data(
             queue_item_identifier=queue_item_identifier,
-            value_key=settings.scene_path_key
+            value_key=keys.scene_path_key
         )
         logger.info(f'Successfully queried data for queue item {queue_item_identifier}:{_export_name}')
         logger.debug(f'\n\nQueue item ID: {queue_item_identifier}\nexport name: {_export_name}, export directory: {_export_directory}, export range: {_export_range}, scene_path: {_scene_path}, objects: {_object}')
@@ -258,7 +258,7 @@ class QueueRunner(QtCore.QObject):
 def update_queue_item_export_name(queue_item_identifier, new_name):
     update_queue_item_data(
         queue_item_identifier=queue_item_identifier,
-        value_key=settings.item_export_name_key,
+        value_key=keys.item_export_name_key,
         new_value=new_name
     )
 
@@ -266,7 +266,7 @@ def update_queue_item_export_name(queue_item_identifier, new_name):
 def update_queue_item_export_directory(queue_item_identifier, new_directory):
     update_queue_item_data(
         queue_item_identifier=queue_item_identifier,
-        value_key=settings.export_directory_key,
+        value_key=keys.export_directory_key,
         new_value=new_directory
     )
 
@@ -274,7 +274,7 @@ def update_queue_item_export_directory(queue_item_identifier, new_directory):
 def update_queue_item_export_frame_range(queue_item_identifier, new_range):
     update_queue_item_data(
         queue_item_identifier=queue_item_identifier,
-        value_key=settings.animation_range_key,
+        value_key=keys.animation_range_key,
         new_value=new_range
     )
 

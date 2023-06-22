@@ -10,7 +10,7 @@ from PySide2 import QtCore, QtWidgets
 from functools import partial
 from system_allocation import thread
 
-from animation_exporter.utility_resources import settings
+from animation_exporter.utility_resources import settings, keys
 
 class Scene_Controller(QtCore.QObject):
     SceneContentDataResponse = QtCore.Signal(object)
@@ -367,12 +367,12 @@ class Scene_Controller(QtCore.QObject):
             logger.debug(f'Populating detail dictionary for object: {object_name}')
             try:
                 _item_data_dict = {}
-                _item_data_dict[    settings.animation_partitions_key   ] = f"{_animation_partitions}"
-                _item_data_dict[    settings.animation_range_key        ] = _animation_range
-                _item_data_dict[    settings.scene_path_key             ] = _scene_path
-                _item_data_dict[    settings.item_export_name_key       ] = _item_export_name
-                _item_data_dict[    settings.export_objects_key         ] = _objects_to_export
-                _item_data_dict[    settings.export_directory_key       ] = _export_directory
+                _item_data_dict[    keys.animation_partitions_key   ] = f"{_animation_partitions}"
+                _item_data_dict[    keys.animation_range_key        ] = _animation_range
+                _item_data_dict[    keys.scene_path_key             ] = _scene_path
+                _item_data_dict[    keys.item_export_name_key       ] = _item_export_name
+                _item_data_dict[    keys.export_objects_key         ] = _objects_to_export
+                _item_data_dict[    keys.export_directory_key       ] = _export_directory
                 logger.debug(f'Successfully populated detail dictionary for object: {object_name}')
             except Exception as e:
                 logger.error(f'Encountered exception while attempting to populate item data dictionary. Aborting')

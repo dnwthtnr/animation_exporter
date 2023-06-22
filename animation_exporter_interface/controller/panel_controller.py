@@ -20,7 +20,7 @@ from animation_exporter.animation_exporter_interface.controller import (
     queue_controller,
     scene_controller
 )
-from animation_exporter.utility_resources import settings
+from animation_exporter.utility_resources import keys
 
 
 class PanelController(QtCore.QObject):
@@ -114,11 +114,11 @@ class PanelController(QtCore.QObject):
     def emit_add_to_export_queue(self, export_data_dictionary):
         logger.info(f'Caught signal to add item to export queue. Attempting to emit AddToExportQueue')
 
-        scene_path = export_data_dictionary.get(settings.scene_path_key)
-        export_name = export_data_dictionary.get(settings.item_export_name_key)
-        scene_objects = export_data_dictionary.get(settings.export_objects_key)
-        animation_range = export_data_dictionary.get(settings.animation_range_key)
-        export_directory = export_data_dictionary.get(settings.export_directory_key)
+        scene_path = export_data_dictionary.get(keys.scene_path_key)
+        export_name = export_data_dictionary.get(keys.item_export_name_key)
+        scene_objects = export_data_dictionary.get(keys.export_objects_key)
+        animation_range = export_data_dictionary.get(keys.animation_range_key)
+        export_directory = export_data_dictionary.get(keys.export_directory_key)
 
         logger.debug(f'New export queue item data: {scene_path, export_name, scene_objects, animation_range, export_directory}')
         try:
