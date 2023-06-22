@@ -25,7 +25,7 @@ class ExporterFooter(base_layouts.Horizontal_Layout):
         _export_path_holder = self.build_folder_selection_holder()
 
         self.output_location_selection = self.build_output_location_selector()
-        self.addWidget(_export_path_holder)
+        # self.addWidget(_export_path_holder)
         self.addWidget(_button_holder, alignment=constants.align_right)
 
     @property
@@ -38,7 +38,7 @@ class ExporterFooter(base_layouts.Horizontal_Layout):
         self.close_button = self.build_close_button()
 
         _layout = base_layouts.Horizontal_Layout()
-        _layout.addWidgets([self.export_button, self.close_button])
+        _layout.addWidget(self.close_button)
         return _layout
 
     def build_export_button(self):

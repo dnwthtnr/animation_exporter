@@ -11,10 +11,10 @@ class ExporterHeader(base_layouts.Horizontal_Layout):
         self.build_header()
 
     def build_header(self):
-        self.file_selection_line = self.build_file_picker()
-        self.selection_title_label = self.build_file_label()
-
-        self.addWidgets([self.selection_title_label, self.file_selection_line])
+        # self.file_selection_line = self.build_file_picker()
+        # self.selection_title_label = self.build_file_label()
+        #
+        # self.addWidgets([self.selection_title_label, self.file_selection_line])
         return
 
     def build_file_label(self):

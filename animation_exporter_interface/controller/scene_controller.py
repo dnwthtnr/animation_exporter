@@ -8,14 +8,9 @@ logger.setLevel(logging.DEBUG)
 from maya import cmds, standalone
 from PySide2 import QtCore, QtWidgets
 from functools import partial
-import threading
+from system_allocation import thread
 
 from animation_exporter.utility_resources import settings
-
-def run_on_thread(_partial):
-    _t = threading.Thread(target=_partial, args=[])
-    _return = _t.run()
-    return _return
 
 class Scene_Controller(QtCore.QObject):
     SceneContentDataResponse = QtCore.Signal(object)
@@ -23,16 +18,16 @@ class Scene_Controller(QtCore.QObject):
     ItemDetailsDataResponse = QtCore.Signal(dict)
 
     def __init__(self):
-        run_on_thread(standalone.initialize)
+        thread.run_on_thread(standalone.initialize)
         super().__init__()
 
     @QtCore.Slot()
     def open_file(self, filepath):
         logger.info(f'Opening file: {filepath} on a separate thread ')
         try:
-            run_on_thread(partial(cmds.file, filepath, open=True, force=True))
+            thread.run_on_thread(partial(cmds.file, filepath, open=True, force=True))
             logger.info(f'File successfully opened ')
-            run_on_thread(self.emit_scene_contents)
+            thread.run_on_thread(self.emit_scene_contents)
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to open file {filepath}')
             logger.exception(e)
@@ -332,7 +327,7 @@ class Scene_Controller(QtCore.QObject):
 
     @QtCore.Slot()
     def emit_item_details_on_thread(self, item):
-        _item_data_dict = run_on_thread(partial(self.emit_item_details_dictionary, item))
+        _item_data_dict = thread.run_on_thread(partial(self.emit_item_details_dictionary, item))
 
 
     def emit_item_details_dictionary(self, object_name):

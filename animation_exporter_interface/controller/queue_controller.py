@@ -7,6 +7,8 @@ import os
 from animation_exporter.utility_resources import settings
 from animation_exporter.animation_exporter_interface.controller import export_controller
 from PySide2 import QtCore
+from functools import partial
+from system_allocation import thread
 
 
 def export_queue_item(queue_item_identifier):
@@ -33,7 +35,7 @@ def export_queue_item(queue_item_identifier):
             queue_item_identifier=queue_item_identifier,
             value_key=settings.scene_path_key
         )
-        logger.info(f'Successfully queried data for queue item {queue_item_identifier}')
+        logger.info(f'Successfully queried data for queue item {queue_item_identifier}:{_export_name}')
         logger.debug(f'\n\nQueue item ID: {queue_item_identifier}\nexport name: {_export_name}, export directory: {_export_directory}, export range: {_export_range}, scene_path: {_scene_path}, objects: {_object}')
     except Exception as e:
         logger.warning(f'Encountered exception while attempting to get data for queue item ID: {queue_item_identifier}')
@@ -41,13 +43,15 @@ def export_queue_item(queue_item_identifier):
 
     logger.info(f'Attempting to export for queue item ID: {queue_item_identifier}')
     try:
-        export_controller.export_animation_range_from_scene(
+        _export_partial = partial(
+            export_controller.export_animation_range_from_scene,
             scene_path=_scene_path,
             objects=_object,
             start_frame=_export_range[0],
             end_frame=_export_range[1],
             export_path=os.path.join(_export_directory, f"{_export_name}.fbx")
         )
+        thread.run_on_thread(_export_partial)
         logger.info(f'Successfully exported queue item ID: {queue_item_identifier}')
     except Exception as e:
         logger.warning(f'Encountered exception while attempting to begin export for for queue item ID: {queue_item_identifier}')

@@ -3,6 +3,7 @@ from pyqt_interface_elements import base_widgets, base_layouts, base_windows, li
 
 
 class ExporterSceneView(base_layouts.Vertical_Layout):
+    SceneSelected = QtCore.Signal(object)
     ItemSelected = QtCore.Signal(object)
 
     def __init__(self, *args, **kwargs):
@@ -11,9 +12,31 @@ class ExporterSceneView(base_layouts.Vertical_Layout):
         self.item_model = None
 
     def finish_initialization(self):
+        _current_scene_widget = self.build_current_scene_widget()
         self.content_panel = base_layouts.Vertical_Layout()
+
+        self.addWidget(_current_scene_widget, alignment=constants.align_top)
         self.addWidget(self.content_panel)
         self.populate_with_empty_view()
+
+    def build_current_scene_widget(self):
+
+        _label = self.build_file_label()
+        _file_picker = self.build_file_picker()
+
+        _layout = base_layouts.Horizontal_Layout()
+        _layout.addWidgets([_label, _file_picker])
+
+        return _layout
+
+    def build_file_label(self):
+        _label = base_widgets.Label(text="Current Scene: ")
+        return _label
+
+    def build_file_picker(self):
+        _file_picker = line_edits.File_Selection_Line_Edit("")
+        _file_picker.FileSelected.connect(self.SceneSelected.emit)
+        return _file_picker
 
 
     def populate_with_empty_view(self):

@@ -28,13 +28,13 @@ class PanelController(QtCore.QObject):
     FooterPanelBuilt = QtCore.Signal(object)
     FocalPanelBuilt = QtCore.Signal(object, object)
     ConstructionFinished = QtCore.Signal()
+    CloseButtonClicked = QtCore.Signal()
 
 
     # region Local Signals
     QueueItemAdded = QtCore.Signal(object, object, object, object, object)
     AddToQueueButtonClicked = QtCore.Signal(str, list)
-    SceneSelected = QtCore.Signal(str)
-    ExportButtonClicked = QtCore.Signal()
+    # SceneSelected = QtCore.Signal(str)
     SceneDetailPanelBuilt = QtCore.Signal(object)
 
     # endregion
@@ -151,12 +151,11 @@ class PanelController(QtCore.QObject):
         try:
 
             _scene_view.ItemSelected.connect(_scene_controller.emit_item_details_on_thread)
+            _scene_view.SceneSelected.connect(_scene_controller.open_file)
 
             _scene_controller.SceneContentDataResponse.connect(_scene_view.populate_item_view)
             _scene_controller.ItemDetailsDataResponse.connect(self.generate_scene_detail_panel)
 
-
-            self.SceneSelected.connect(_scene_controller.open_file)
             self.SceneDetailPanelBuilt.connect(_scene_detail_view.clearAndAddWidget)
             logger.info(f'Successfully connected scene view signals')
         except Exception as e:
@@ -209,7 +208,7 @@ class PanelController(QtCore.QObject):
         logger.info(f'Building main window header')
         try:
             _widget = AnimationExporterHeader.ExporterHeader()
-            _widget.SceneSelected.connect(self.SceneSelected.emit)
+            # _widget.SceneSelected.connect(self.SceneSelected.emit)
             logger.info(f'Successfully built header and connected signals')
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to build header and connewct signal. Aborting')
@@ -234,7 +233,7 @@ class PanelController(QtCore.QObject):
         logger.info(f'Building main window footer')
         try:
             _widget = AnimationExporterFooter.ExporterFooter()
-            _widget.ExportButtonClicked.connect(self.ExportButtonClicked.emit)
+            _widget.CloseButtonClicked.connect(self.CloseButtonClicked.emit)
             logger.info(f'Successfully built footer and connected signals')
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to build footer and connect signal. Aborting')

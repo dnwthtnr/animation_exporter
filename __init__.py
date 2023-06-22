@@ -22,6 +22,7 @@ def build_animation_exporter_window():
     _panel_controller.HeaderPanelBuilt.connect(_window.addHeader)
     _panel_controller.FooterPanelBuilt.connect(_window.addFooter)
     _panel_controller.FocalPanelBuilt.connect(_window.addFocalPanel)
+    _panel_controller.CloseButtonClicked.connect(_window.close)
 
     _window.finish_initialization()
 
