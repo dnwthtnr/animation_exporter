@@ -2,7 +2,7 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.NOTSET)
 from PySide2 import QtCore, QtWidgets, QtGui
-from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants
+from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants, styles
 
 # TODO: make a widget that holds different items to export -- like a queue
 
@@ -40,7 +40,8 @@ class ExporterMainWindow(base_windows.Main_Window):
         self.setCentralWidget(central_layout)
 
         logger.info(f'Resizing window: {self}')
-        self.resize(700, 450)
+        self.resize(850, 450)
+        # self.setStyleSheet(styles.maya_widget)
 
         logger.info(f'Emitting InitializationFinished signal')
         self.InitializationFinished.emit()

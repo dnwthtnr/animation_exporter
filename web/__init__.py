@@ -1,4 +1,5 @@
-
+import file_management
+import os
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -8,14 +9,20 @@ from selenium.webdriver.chrome.options import Options
 
 from PySide2 import QtCore
 
+chrome_folder = os.path.join(file_management.APPDATA, "chrome-win64")
 
+CHROME_PATH = '/usr/bin/google-chrome'
+CHROMEDRIVER_PATH = '/usr/bin/chromedriver'
 
 class SyncSketchInstance(QtCore.QObject):
     IncorrectLogin = QtCore.Signal()
+    LoginSuccessful = QtCore.Signal()
 
     def __init__(self):
         super().__init__()
-        self.driver = webdriver.Chrome()
+        _options = Options()
+        _options.add_argument("--headless")
+        self.driver = webdriver.Chrome(options=_options)
         self.driver.get(r"https://syncsketch.com/login")
 
     def login(self, email, password):
@@ -36,7 +43,6 @@ class SyncSketchInstance(QtCore.QObject):
 
     def wait(self):
         self.driver.implicitly_wait(10)
-        # WebDriverWait(driver=self.driver, timeout=10)
 
     def check_for_login_errors(self):
         self.wait()
@@ -50,6 +56,7 @@ class SyncSketchInstance(QtCore.QObject):
             self.IncorrectLogin.emit()
         else:
             print("[+] Login successful")
+            self.LoginSuccessful.emit()
 
 
 

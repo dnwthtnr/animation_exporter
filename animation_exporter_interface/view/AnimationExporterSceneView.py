@@ -1,5 +1,5 @@
 from PySide2 import QtCore, QtWidgets, QtGui
-from pyqt_interface_elements import base_widgets, base_layouts, base_windows, line_edits, model_view_delegate, constants
+from pyqt_interface_elements import base_widgets, base_layouts, base_windows, line_edits, model_view_delegate, constants, styles
 
 
 class ExporterSceneView(base_layouts.Vertical_Layout):
@@ -15,9 +15,14 @@ class ExporterSceneView(base_layouts.Vertical_Layout):
         _current_scene_widget = self.build_current_scene_widget()
         self.content_panel = base_layouts.Vertical_Layout()
 
-        self.addWidget(_current_scene_widget, alignment=constants.align_top)
-        self.addWidget(self.content_panel, stretch=1)
+        _central = base_layouts.Vertical_Layout()
+        _central.addWidget(_current_scene_widget, alignment=constants.align_top)
+        _central.addWidget(self.content_panel, stretch=1)
+
+        self.addWidget(_central)
         self.populate_with_empty_view()
+        _central.setStyleSheet(styles.maya_outliner)
+        self.setStyleSheet(styles.maya_outliner)
 
     def build_current_scene_widget(self):
 

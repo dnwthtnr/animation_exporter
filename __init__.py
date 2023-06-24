@@ -2,14 +2,13 @@ from animation_exporter import (
     logger
 )
 
-from PySide2 import QtWidgets
+from PySide2 import QtWidgets, QtCore
 import sys
 
 from animation_exporter import animation_exporter_interface, utility_resources
 
 
-
-
+import threading
 
 def build_animation_exporter_window():
     _panel_controller = animation_exporter_interface.controller.panel_controller.PanelController()
@@ -27,13 +26,27 @@ def build_animation_exporter_window():
     _window.finish_initialization()
 
     return _window
+class _uiuThread(threading.Thread):
+
+    def __init__(self):
+        super().__init__()
+
+    def start(self):
+        self.win = build_animation_exporter_window()
+        self.win.show()
+        super().start()
+        return
+
 
 
 if __name__ == "__main__":
 
     _app = QtWidgets.QApplication(sys.argv)
 
-    _window = build_animation_exporter_window()
-    _window.show()
+    # _window = build_animation_exporter_window()
+    # _window.moveToThread(_daemon_thread)
+    # _window.show()
+    _win = _uiuThread()
+    _win.start()
 
     sys.exit(_app.exec_())

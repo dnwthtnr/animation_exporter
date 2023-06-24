@@ -5,7 +5,7 @@ logger.setLevel(logging.NOTSET)
 
 from PySide2 import QtCore
 
-from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants, proceadural_displays
+from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants, proceadural_displays, styles
 
 _attr_map_dict = {
     "TwoDim": proceadural_displays.TwoDimentionalLineEditAttributeEditor,
@@ -54,7 +54,6 @@ class ItemDetailedView(base_layouts.Vertical_Layout):
     def __init__(self, item_data_dictionary, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.item_data = item_data_dictionary
-        print(item_data_dictionary)
 
     def finish_initialization(self):
         self.attribute_holder = self.build_attribute_holder()
@@ -62,6 +61,7 @@ class ItemDetailedView(base_layouts.Vertical_Layout):
 
         self.addWidget(self.attribute_holder)
         self.addWidget(_button)
+        self.setStyleSheet(styles.maya_detail_view)
         return
 
     def build_attribute_holder(self):

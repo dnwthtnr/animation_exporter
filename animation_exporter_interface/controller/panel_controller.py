@@ -1,13 +1,17 @@
 import logging
+import threading
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+from maya import utils, standalone
 
 from PySide2 import QtCore, QtWidgets, QtGui
 from pyqt_interface_elements import (
     base_widgets,
     base_layouts,
     base_windows,
-    constants
+    constants,
+    styles
 )
 from animation_exporter.animation_exporter_interface.view import (
     AnimationExporterFooter,
@@ -51,7 +55,10 @@ class PanelController(QtCore.QObject):
         logger.info(f'Construction of panels complete')
 
     def __init__(self, *args, **kwargs):
+
         super().__init__(*args, **kwargs)
+        self.worker_thread = threading.Thread(daemon=True)
+        self.worker_thread.start()
 
 
     # region #######################| QUEUE STUFF |##########################
@@ -144,7 +151,12 @@ class PanelController(QtCore.QObject):
     def build_scene_view(self):
         logger.debug(f'Building scene view panel and controller')
         try:
+
+            import time
+            time.sleep(1)
             _scene_controller = scene_controller.Scene_Controller()
+            # _scene_controller.moveToThread(self.worker_thread)
+
             _scene_view = AnimationExporterSceneView.ExporterSceneView()
             _scene_view._controller = _scene_controller
             logger.info(f'Scene panel successfully built')
@@ -195,6 +207,7 @@ class PanelController(QtCore.QObject):
         _empty = base_widgets.Label("No Details Yet")
         _widget = base_layouts.Vertical_Layout()
         _widget.addWidget(_empty, alignment=constants.align_center)
+        _widget.setStyleSheet(styles.maya_detail_view)
         return _widget
 
     @QtCore.Slot()
