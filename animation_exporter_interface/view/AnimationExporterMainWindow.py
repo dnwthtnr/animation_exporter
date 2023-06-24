@@ -41,7 +41,7 @@ class ExporterMainWindow(base_windows.Main_Window):
 
         logger.info(f'Resizing window: {self}')
         self.resize(850, 450)
-        # self.setStyleSheet(styles.maya_widget)
+        self.setStyleSheet(styles.maya_widget)
 
         logger.info(f'Emitting InitializationFinished signal')
         self.InitializationFinished.emit()

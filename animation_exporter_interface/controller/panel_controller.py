@@ -169,6 +169,7 @@ class PanelController(QtCore.QObject):
         _scene_detail_view = self.build_empty_detail_panel()
 
         _scene_view_splitter = base_layouts.Splitter()
+        _scene_view_splitter.setStyleSheet(styles.maya_splitter)
         _scene_view_splitter.addWidget(_scene_view)
         _scene_view_splitter.addWidget(_scene_detail_view)
 
