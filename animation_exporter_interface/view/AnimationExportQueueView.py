@@ -43,6 +43,8 @@ class QueueItem(base_layouts.ExpandWhenClicked):
         self.addExpandedWidget(self.frame_range_widget)
         self.addExpandedWidget(self.export_directory_widget)
 
+        self.expanded_layout.setStyleSheet(styles.maya_detail_view)
+
     @property
     def export_name(self):
         return self.export_name_widget.text()
@@ -70,19 +72,19 @@ class QueueItem(base_layouts.ExpandWhenClicked):
         _widget = proceadural_displays.LineEditAttributeEditor(attribute_name="Scene Path", attribute_value=path)
         _widget.setStyleSheet(styles.maya_outliner)
         _widget.valueEdited.connect(self.emit_export_name_changed)
-
-        # _widget = base_widgets.Line_Edit(text=path)
-        # _widget.setReadOnly(True)
+        _widget.setReadOnly(True)
         return _widget
 
     def build_frane_range(self, range):
-        _widget = line_edits.TwoDimensionalFloat(x_val=range[0], y_val=range[1])
-        _widget.valueChanged.connect(self.emit_frame_range_changed)
+        _widget = proceadural_displays.TwoDimentionalLineEditAttributeEditor(attribute_name="Export Range", attribute_value=range)
+        # _widget = line_edits.TwoDimensionalFloat(x_val=range[0], y_val=range[1])
+        _widget.valueEdited.connect(self.emit_frame_range_changed)
         return _widget
 
     def build_export_directory(self, directory):
-        _widget = line_edits.Folder_Selection_Line_Edit(directory)
-        _widget.textEdited.connect(self.emit_export_name_changed)
+
+        _widget = proceadural_displays.ChooseDirectoryAttributeEditor(attribute_name="Export Directory", attribute_value=directory)
+        _widget.valueEdited.connect(self.emit_export_name_changed)
         return _widget
 
     def build_close_button(self):

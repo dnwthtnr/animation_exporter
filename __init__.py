@@ -23,7 +23,6 @@ def build_animation_exporter_window():
     _panel_controller.FocalPanelBuilt.connect(_window.addFocalPanel)
     _panel_controller.CloseButtonClicked.connect(_window.close)
 
-    _window.finish_initialization()
 
     return _window
 class _uiuThread(threading.Thread):
@@ -43,10 +42,13 @@ if __name__ == "__main__":
 
     _app = QtWidgets.QApplication(sys.argv)
 
-    # _window = build_animation_exporter_window()
-    # _window.moveToThread(_daemon_thread)
-    # _window.show()
-    _win = _uiuThread()
-    _win.start()
+    _thread = QtCore.QThread()
+
+    _window = build_animation_exporter_window()
+    _window.moveToThread(_thread)
+    _window.finish_initialization()
+    _window.show()
+    # _win = _uiuThread()
+    # _win.start()
 
     sys.exit(_app.exec_())
