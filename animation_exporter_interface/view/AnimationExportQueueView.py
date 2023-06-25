@@ -28,7 +28,7 @@ class QueueItem(base_layouts.ExpandWhenClicked):
     ExportDirectoryChanged = QtCore.Signal(object, str)
 
     def __init__(self, item_identifier, export_name, scene_path, frame_range, export_directory):
-        super().__init__(spacing=7)
+        super().__init__(margins=[5,5,5,5], spacing=5)
         self.item_identifier = item_identifier
         self.export_name_widget = self.build_export_name(export_name)
         self.scene_path_widget = self.build_scene_path(scene_path)
@@ -43,7 +43,8 @@ class QueueItem(base_layouts.ExpandWhenClicked):
         self.addExpandedWidget(self.frame_range_widget)
         self.addExpandedWidget(self.export_directory_widget)
 
-        self.expanded_layout.setStyleSheet(styles.maya_detail_view)
+        self.set_expanded_stylesheet(styles.maya_expanded_collapsible_layout)
+        self.set_collapsed_stylesheet(styles.maya_collapsed_layout)
 
     @property
     def export_name(self):
@@ -62,28 +63,25 @@ class QueueItem(base_layouts.ExpandWhenClicked):
         return self.export_directory_widget.directory
 
     def build_export_name(self, name):
-        _widget = proceadural_displays.LineEditAttributeEditor(attribute_name="Export File Name", attribute_value=name)
-        _widget.setStyleSheet(styles.maya_outliner)
+        _widget = proceadural_displays.LineEditAttributeEditor(attribute_name="Export File Name:", attribute_value=name)
         _widget.valueEdited.connect(self.emit_export_name_changed)
         return _widget
 
     def build_scene_path(self, path):
 
-        _widget = proceadural_displays.LineEditAttributeEditor(attribute_name="Scene Path", attribute_value=path)
-        _widget.setStyleSheet(styles.maya_outliner)
+        _widget = proceadural_displays.LineEditAttributeEditor(attribute_name="Scene Path:", attribute_value=path)
         _widget.valueEdited.connect(self.emit_export_name_changed)
         _widget.setReadOnly(True)
         return _widget
 
     def build_frane_range(self, range):
-        _widget = proceadural_displays.TwoDimentionalLineEditAttributeEditor(attribute_name="Export Range", attribute_value=range)
-        # _widget = line_edits.TwoDimensionalFloat(x_val=range[0], y_val=range[1])
+        _widget = proceadural_displays.TwoDimentionalLineEditAttributeEditor(attribute_name="Export Range:", attribute_value=range)
         _widget.valueEdited.connect(self.emit_frame_range_changed)
         return _widget
 
     def build_export_directory(self, directory):
 
-        _widget = proceadural_displays.ChooseDirectoryAttributeEditor(attribute_name="Export Directory", attribute_value=directory)
+        _widget = proceadural_displays.ChooseDirectoryAttributeEditor(attribute_name="Export Directory:", attribute_value=directory)
         _widget.valueEdited.connect(self.emit_export_name_changed)
         return _widget
 
