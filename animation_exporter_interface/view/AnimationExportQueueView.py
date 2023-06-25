@@ -5,13 +5,22 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 from PySide2 import QtCore, QtWidgets, QtGui
-from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants, line_edits, \
-    model_view_delegate, icons
+from pyqt_interface_elements import (
+    base_widgets,
+    base_layouts,
+    base_windows,
+    constants,
+    line_edits,
+    model_view_delegate,
+    icons,
+    styles,
+proceadural_displays
+)
 from functools import partial
 from animation_exporter.utility_resources import  keys
 
 
-class QueueItem(base_layouts.Horizontal_Layout):
+class QueueItem(base_layouts.ExpandWhenClicked):
     CloseButtonClicked = QtCore.Signal(object)
 
     ExportNameChanged = QtCore.Signal(object, str)
@@ -27,11 +36,12 @@ class QueueItem(base_layouts.Horizontal_Layout):
         self.export_directory_widget = self.build_export_directory(export_directory)
         _close_button = self.build_close_button()
 
-        self.addWidget(self.export_name_widget)
-        self.addWidget(self.scene_path_widget)
-        self.addWidget(self.frame_range_widget)
-        self.addWidget(self.export_directory_widget)
-        self.addWidget(_close_button)
+        self.addCollapsedWidget(self.export_name_widget)
+        self.addCollapsedWidget(_close_button, alignment=constants.align_right)
+
+        self.addExpandedWidget(self.scene_path_widget)
+        self.addExpandedWidget(self.frame_range_widget)
+        self.addExpandedWidget(self.export_directory_widget)
 
     @property
     def export_name(self):
@@ -50,13 +60,19 @@ class QueueItem(base_layouts.Horizontal_Layout):
         return self.export_directory_widget.directory
 
     def build_export_name(self, name):
-        _widget = base_widgets.Line_Edit(text=name)
-        _widget.textEdited.connect(self.emit_export_name_changed)
+        _widget = proceadural_displays.LineEditAttributeEditor(attribute_name="Export File Name", attribute_value=name)
+        _widget.setStyleSheet(styles.maya_outliner)
+        _widget.valueEdited.connect(self.emit_export_name_changed)
         return _widget
 
     def build_scene_path(self, path):
-        _widget = base_widgets.Line_Edit(text=path)
-        _widget.setReadOnly(True)
+
+        _widget = proceadural_displays.LineEditAttributeEditor(attribute_name="Scene Path", attribute_value=path)
+        _widget.setStyleSheet(styles.maya_outliner)
+        _widget.valueEdited.connect(self.emit_export_name_changed)
+
+        # _widget = base_widgets.Line_Edit(text=path)
+        # _widget.setReadOnly(True)
         return _widget
 
     def build_frane_range(self, range):
