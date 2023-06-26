@@ -48,19 +48,19 @@ class QueueItem(base_layouts.ExpandWhenClicked):
 
     @property
     def export_name(self):
-        return self.export_name_widget.text()
+        return self.export_name_widget.attribute_value
 
     @property
     def scene_path(self):
-        return self.scene_path_widget.text()
+        return self.scene_path_widget.attribute_value
 
     @property
     def frame_range(self):
-        return self.frame_range_widget.value()
+        return self.frame_range_widget.attribute_value
 
     @property
     def export_directory(self):
-        return self.export_directory_widget.directory
+        return self.export_directory_widget.attribute_value
 
     def build_export_name(self, name):
         _widget = proceadural_displays.LineEditAttributeEditor(attribute_name="Export File Name:", attribute_value=name)
@@ -122,16 +122,23 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
         self.queue_item_layout = base_layouts.Vertical_Layout()
         self.populate_with_empty_view()
 
-        self.export_button = base_widgets.Button(text='Start Queue')
-        self.export_button.clicked.connect(self.StartQueueButtonClicked.emit)
+        self.export_button = self.build_start_button()
 
         _queue_selection_widget = self.build_queue_selection_combobox()
 
         self.addWidget(_queue_selection_widget, alignment=constants.align_top)
-        self.addWidget(self.queue_item_layout)
-        self.addWidget(self.export_button)
+        self.addWidget(self.queue_item_layout, stretch=1)
+        self.addWidget(self.export_button, alignment=constants.align_right)
 
         self.QueueSelectionListDataQuery.emit()
+        self.setStyleSheet(styles.queue_view)
+
+    def build_start_button(self):
+        _button = base_widgets.Button(text='Start Queue')
+        _button.setMinimumSize(105, 25)
+        _button.clicked.connect(self.StartQueueButtonClicked.emit)
+        _button.setStyleSheet(styles.maya_button)
+        return _button
 
     #######################################################
 
@@ -285,24 +292,6 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
         for _queue_item in self.queue_items:
             self.remove_queue_item(_queue_item)
         return
-
-    def build_export_name(self, name):
-        _widget = base_widgets.Line_Edit(text=name)
-        return _widget
-
-    def build_scene_path(self, path):
-        _widget = base_widgets.Line_Edit(text=path)
-        _widget.setReadOnly(True)
-        return _widget
-
-    def build_frane_range(self, range):
-        _widget = base_widgets.Line_Edit(text=" -- ".join(range))
-        _widget.setReadOnly(True)
-        return _widget
-
-    def build_export_directory(self, directory):
-        _widget = line_edits.Folder_Selection_Line_Edit(directory)
-        return _widget
 
 
 if __name__ == "__main__":

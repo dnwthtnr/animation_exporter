@@ -25,16 +25,6 @@ def build_animation_exporter_window():
 
 
     return _window
-class _uiuThread(threading.Thread):
-
-    def __init__(self):
-        super().__init__()
-
-    def start(self):
-        self.win = build_animation_exporter_window()
-        self.win.show()
-        super().start()
-        return
 
 
 def main():
@@ -52,6 +42,5 @@ def main():
 
     sys.exit(_app.exec_())
 
-print('run')
-
-main()
+if __name__ == "__main__":
+    main()

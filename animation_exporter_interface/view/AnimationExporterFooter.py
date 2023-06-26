@@ -14,24 +14,30 @@ class ExporterFooter(base_layouts.Horizontal_Layout):
     ExportButtonClicked = QtCore.Signal(str)
     CloseButtonClicked = QtCore.Signal()
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.output_location_selection = None
         self.finish_initialization()
 
     def finish_initialization(self):
         _button_holder = self.build_button_holder()
+        _version_footer = self.build_version_footer()
 
         _export_path_holder = self.build_folder_selection_holder()
 
         self.output_location_selection = self.build_output_location_selector()
-        self.addWidget(_button_holder, alignment=constants.align_right)
+        self.addWidget(_version_footer, alignment=constants.align_left)
+        # self.addWidget(_button_holder, alignment=constants.align_right)
         self.setStyleSheet(styles.maya_tab_widget)
 
     @property
     def export_directory(self):
         if self.output_location_selection is not None:
             return self.output_location_selection.directory
+
+    def build_version_footer(self):
+        _label = base_widgets.Label(text="version: 1.0.0")
+        return _label
 
     def build_button_holder(self):
         self.export_button = self.build_export_button()

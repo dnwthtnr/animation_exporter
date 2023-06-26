@@ -13,6 +13,19 @@ class ExporterMainWindow(base_windows.Main_Window):
     InitializationFinished = QtCore.Signal()
 
     def finish_initialization(self):
+        self.setStyleSheet(styles.maya_widget)
+
+        logger.info(f'Building menubar')
+        try:
+            _menubar = self.build_menu_bar()
+            self.setMenuBar(_menubar)
+            logger.info(f'Successfully built and set menu bar')
+        except Exception as e:
+            logger.error(
+                f'Encountered exception while attempting to build and set menu bar')
+            logger.exception(e)
+
+
         logger.info(f'Building holders for main widgets.')
         try:
             self.header = self.build_main_window_header()
@@ -41,7 +54,8 @@ class ExporterMainWindow(base_windows.Main_Window):
 
         logger.info(f'Resizing window: {self}')
         self.resize(850, 450)
-        self.setStyleSheet(styles.maya_widget)
+
+        self.setWindowTitle(f'AnimExporter')
 
         logger.info(f'Emitting InitializationFinished signal')
         self.InitializationFinished.emit()
@@ -52,6 +66,16 @@ class ExporterMainWindow(base_windows.Main_Window):
         self.focal_tab_widget = None
         self.footer = None
         super().__init__()
+
+    def build_menu_bar(self):
+        _menu_bar = base_widgets.MenuBar()
+        _menu_bar.setStyleSheet(styles.maya_menu_bar)
+
+        _file_menu = _menu_bar.addMenu("&File")
+
+        _edit_menu = _menu_bar.addMenu("&Edit")
+
+        return _menu_bar
 
 
     # region #######################| TAB WIDGET STUFF |##########################

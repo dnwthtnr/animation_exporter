@@ -172,6 +172,7 @@ class PanelController(QtCore.QObject):
         _scene_view_splitter.setStyleSheet(styles.maya_splitter)
         _scene_view_splitter.addWidget(_scene_view)
         _scene_view_splitter.addWidget(_scene_detail_view)
+        _scene_view_splitter.setSizes([450, 300])
 
 
         logger.debug(f'Connecting signals between _scene_view, _scene_controller and panel_controller')
@@ -260,7 +261,7 @@ class PanelController(QtCore.QObject):
         """
         logger.info(f'Building main window footer')
         try:
-            _widget = AnimationExporterFooter.ExporterFooter()
+            _widget = AnimationExporterFooter.ExporterFooter(margins=4)
             _widget.CloseButtonClicked.connect(self.CloseButtonClicked.emit)
             logger.info(f'Successfully built footer and connected signals')
         except Exception as e:

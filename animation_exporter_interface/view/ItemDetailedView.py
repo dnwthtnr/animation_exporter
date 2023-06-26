@@ -60,7 +60,7 @@ class ItemDetailedView(base_layouts.Vertical_Layout):
         _button = self.build_add_to_queue_button()
 
         self.addWidget(self.attribute_holder)
-        self.addWidget(_button)
+        self.addWidget(_button, alignment=constants.align_right)
         self.setStyleSheet(styles.maya_detail_view)
         return
 
@@ -79,6 +79,7 @@ class ItemDetailedView(base_layouts.Vertical_Layout):
 
     def build_add_to_queue_button(self):
         _button = base_widgets.Button(text="Add to Queue")
+        _button.setMinimumSize(105, 25)
         _button.clicked.connect(self.emit_add_to_queue)
         return _button
 

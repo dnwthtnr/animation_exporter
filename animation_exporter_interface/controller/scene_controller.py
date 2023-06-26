@@ -66,7 +66,7 @@ class __Scene_Controller(QtCore.QObject):
         if self.is_animated(object):
             return True
         else:
-            _object_relatives = cmds.listRelatives(object, allDescendents=True)
+            _object_relatives = cmds.listRelatives(object, allDescendents=True, fullPath=True)
             if _object_relatives is not None:
                 for _object in _object_relatives:
                     if self.is_animated(_object) is True:
@@ -135,7 +135,7 @@ class __Scene_Controller(QtCore.QObject):
 
         for _object in objects:
 
-            _children = cmds.listRelatives(_object, children=True)
+            _children = cmds.listRelatives(_object, children=True, fullPath=True)
 
             _object_data_dictionary = {
                 "Object Name": _object,
@@ -210,7 +210,7 @@ class __Scene_Controller(QtCore.QObject):
             The animation frames or None if there are none
 
         """
-        _descendants = cmds.listRelatives(object, allDescendents=True)
+        _descendants = cmds.listRelatives(object, allDescendents=True, fullPath=True)
 
         animation_times_list = []
         if self.is_animated(object) is True:
@@ -241,7 +241,7 @@ class __Scene_Controller(QtCore.QObject):
         return _object_export_list
 
     def get_descendants(self, _object):
-        return cmds.listRelatives(_object, allDescendents=True)
+        return cmds.listRelatives(_object, allDescendents=True, fullPath=True)
 
     def get_object_animation_times_list(self, object):
         """
@@ -436,7 +436,7 @@ class Scene_Controller(QtCore.QObject):
         if self.is_animated(object):
             return True
         else:
-            _object_relatives = cmds.listRelatives(object, allDescendents=True)
+            _object_relatives = cmds.listRelatives(object, allDescendents=True, fullPath=True)
             if _object_relatives is not None:
                 for _object in _object_relatives:
                     if self.is_animated(_object) is True:
@@ -475,6 +475,7 @@ class Scene_Controller(QtCore.QObject):
         logger.info(f'Getting scene contests')
         _scene_items = cmds.ls(dagObjects=True)
         _top_level_scene_items = [_item for _item in _scene_items if cmds.listRelatives(_item, allParents=True) == None]
+        print(_top_level_scene_items)
         logger.info(f'Scene contents queried and filtered to top level: {_top_level_scene_items}')
         return _top_level_scene_items
 
@@ -505,13 +506,13 @@ class Scene_Controller(QtCore.QObject):
 
         for _object in objects:
 
-            _children = cmds.listRelatives(_object, children=True)
+            _children = cmds.listRelatives(_object, children=True, fullPath=True)
 
             _object_data_dictionary = {
                 "Object Name": _object,
                 "Parent": parent,
                 "Children": _children,
-                "Type": cmds.objectType(_object),
+                # "Type": cmds.objectType(_object),
                 "Absolute Animation Range": f"{self.get_descendant_animation_range(_object)}"
             }
             _hierarchy_dictionary[_object] = _object_data_dictionary
@@ -580,7 +581,7 @@ class Scene_Controller(QtCore.QObject):
             The animation frames or None if there are none
 
         """
-        _descendants = cmds.listRelatives(object, allDescendents=True)
+        _descendants = cmds.listRelatives(object, allDescendents=True, fullPath=True)
 
         animation_times_list = []
         if self.is_animated(object) is True:
@@ -611,7 +612,7 @@ class Scene_Controller(QtCore.QObject):
         return _object_export_list
 
     def get_descendants(self, _object):
-        return cmds.listRelatives(_object, allDescendents=True)
+        return cmds.listRelatives(_object, allDescendents=True, fullPath=True)
 
     def get_object_animation_times_list(self, object):
         """
