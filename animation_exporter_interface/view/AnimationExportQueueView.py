@@ -28,7 +28,7 @@ class QueueItem(base_layouts.ExpandWhenClicked):
     ExportDirectoryChanged = QtCore.Signal(object, str)
 
     def __init__(self, item_identifier, export_name, scene_path, frame_range, export_directory):
-        super().__init__(margins=[5,5,5,5], spacing=5)
+        super().__init__(margins=[5, 5, 0, 0], spacing=5)
         self.item_identifier = item_identifier
         self.export_name_widget = self.build_export_name(export_name)
         self.scene_path_widget = self.build_scene_path(scene_path)

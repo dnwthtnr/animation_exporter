@@ -64,7 +64,12 @@ class ExporterMainWindow(base_windows.Main_Window):
         -------
 
         """
-        return base_layouts.TabWidget()
+        _tab_widget = base_layouts.TabWidget()
+        _tab_widget.setStyleSheet(styles.maya_tab_widget)
+        _tab_widget.setElideMode(QtCore.Qt.ElideLeft)
+
+        # _tab_widget.tabBar().
+        return _tab_widget
 
     @QtCore.Slot()
     def addFocalPanel(self, panel, title):

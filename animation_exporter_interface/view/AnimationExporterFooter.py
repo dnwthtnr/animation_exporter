@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 from PySide2 import QtCore, QtWidgets, QtGui
-from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants, line_edits
+from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants, line_edits, styles
 from functools import partial
 
 
@@ -25,8 +25,8 @@ class ExporterFooter(base_layouts.Horizontal_Layout):
         _export_path_holder = self.build_folder_selection_holder()
 
         self.output_location_selection = self.build_output_location_selector()
-        # self.addWidget(_export_path_holder)
         self.addWidget(_button_holder, alignment=constants.align_right)
+        self.setStyleSheet(styles.maya_tab_widget)
 
     @property
     def export_directory(self):
@@ -44,11 +44,13 @@ class ExporterFooter(base_layouts.Horizontal_Layout):
     def build_export_button(self):
         _button = base_widgets.Button(text="Export")
         _button.clicked.connect(self.emit_export_signal)
+        _button.setStyleSheet(styles.maya_button)
         return _button
 
     def build_close_button(self):
         _button = base_widgets.Button(text="Close")
         _button.clicked.connect(self.CloseButtonClicked.emit)
+        _button.setStyleSheet(styles.maya_button)
         return _button
 
     def build_folder_selection_holder(self):
