@@ -37,8 +37,7 @@ class _uiuThread(threading.Thread):
         return
 
 
-
-if __name__ == "__main__":
+def main():
 
     _app = QtWidgets.QApplication(sys.argv)
 
@@ -52,3 +51,7 @@ if __name__ == "__main__":
     # _win.start()
 
     sys.exit(_app.exec_())
+
+print('run')
+
+main()
