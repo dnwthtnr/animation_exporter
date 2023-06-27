@@ -17,7 +17,7 @@ _attrs = [
     proceadural_displays.LineEditAttributeEditor,
     proceadural_displays.FilepathDisplayAttributeEditor,
     proceadural_displays.ChooseDirectoryAttributeEditor,
-    proceadural_displays.LargeListAttributeEditor
+    proceadural_displays.LargeListTooltipAttributeEditor
 ]
 
 
@@ -84,6 +84,5 @@ class ItemDetailedView(base_layouts.Vertical_Layout):
         return _button
 
     def emit_add_to_queue(self):
-        print('exports')
         self.AddToQueueButtonClicked.emit(self.attribute_holder.attribute_dictionary())
         return

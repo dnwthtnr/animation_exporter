@@ -3,7 +3,7 @@ from animation_exporter import (
 )
 
 from PySide2 import QtWidgets, QtCore
-import sys
+import sys, multiprocessing
 
 from animation_exporter import animation_exporter_interface, utility_resources
 
