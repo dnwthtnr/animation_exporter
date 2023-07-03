@@ -386,7 +386,7 @@ class Scene_Controller(QtCore.QObject):
             logger.debug(f'Populating detail dictionary for object: {object_name}')
             try:
                 _item_data_dict = {}
-                _item_data_dict[    keys.animation_partitions_key   ] = f"{_animation_partitions}"
+                _item_data_dict[    keys.animation_partitions_key   ] = _animation_partitions
                 _item_data_dict[    keys.animation_range_key        ] = _animation_range
                 _item_data_dict[    keys.scene_path_key             ] = _scene_path
                 _item_data_dict[    keys.item_export_name_key       ] = _item_export_name

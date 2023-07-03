@@ -13,11 +13,12 @@ _attr_map_dict = {
 }
 
 _attrs = [
+    proceadural_displays.RangeCheckboxArrayAttributeEditor,
     proceadural_displays.TwoDimentionalLineEditAttributeEditor,
     proceadural_displays.LineEditAttributeEditor,
     proceadural_displays.FilepathDisplayAttributeEditor,
     proceadural_displays.ChooseDirectoryAttributeEditor,
-    proceadural_displays.LargeListTooltipAttributeEditor
+    proceadural_displays.LargeListTooltipAttributeEditor,
 ]
 
 

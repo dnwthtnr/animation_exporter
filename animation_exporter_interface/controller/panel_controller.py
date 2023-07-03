@@ -1,4 +1,5 @@
 import logging
+import multiprocessing
 import threading
 
 logger = logging.getLogger(__name__)
@@ -124,25 +125,35 @@ class PanelController(QtCore.QObject):
         scene_path = export_data_dictionary.get(keys.scene_path_key)
         export_name = export_data_dictionary.get(keys.item_export_name_key)
         scene_objects = export_data_dictionary.get(keys.export_objects_key)
-        animation_range = export_data_dictionary.get(keys.animation_range_key)
+        _selected_animation_ranges = export_data_dictionary.get(keys.animation_partitions_key)
         export_directory = export_data_dictionary.get(keys.export_directory_key)
 
-        logger.debug(f'New export queue item data: {scene_path, export_name, scene_objects, animation_range, export_directory}')
-        try:
-            _queue_item_identifier = queue_controller.add_to_export_queue(scene_path, export_name, scene_objects, animation_range, export_directory)
-            logger.info(f'Successfully emitted AddToExportQueue')
-        except Exception as e:
-            logger.warning(f'Encountered exception while attempting to emit AddToExportQueue with queue item data. Aborting')
-            logger.exception(e)
-            return
+        for animation_range in _selected_animation_ranges:
+            if len(_selected_animation_ranges) > 1:
+                _range_export_name = export_name + f"[{animation_range[0]}_{animation_range[1]}]"
 
-        self.QueueItemAdded.emit(
-            _queue_item_identifier,
-            export_name,
-            scene_path,
-            animation_range,
-            export_directory
-        )
+            logger.debug(f'New export queue item data: {scene_path, _range_export_name, scene_objects, animation_range, export_directory}')
+            try:
+                _queue_item_identifier = queue_controller.add_to_export_queue(
+                    scene_path,
+                    _range_export_name,
+                    scene_objects,
+                    animation_range,
+                    export_directory
+                )
+                logger.info(f'Successfully emitted AddToExportQueue')
+            except Exception as e:
+                logger.warning(f'Encountered exception while attempting to emit AddToExportQueue with queue item data. Aborting')
+                logger.exception(e)
+                return
+
+            self.QueueItemAdded.emit(
+                _queue_item_identifier,
+                _range_export_name,
+                scene_path,
+                animation_range,
+                export_directory
+            )
     # endregion
 
 
@@ -151,9 +162,7 @@ class PanelController(QtCore.QObject):
     def build_scene_view(self):
         logger.debug(f'Building scene view panel and controller')
         try:
-
-            import time
-            time.sleep(1)
+            multiprocessing.Process(target=)
             _scene_controller = scene_controller.Scene_Controller()
             # _scene_controller.moveToThread(self.worker_thread)
 
