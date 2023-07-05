@@ -14,7 +14,7 @@ from pyqt_interface_elements import (
     model_view_delegate,
     icons,
     styles,
-proceadural_displays
+    proceadural_displays
 )
 from functools import partial
 from animation_exporter.utility_resources import  keys
@@ -104,7 +104,7 @@ class QueueItem(base_layouts.ExpandWhenClicked):
         self.ExportFrameRangeChanged.emit(self.item_identifier, self.frame_range)
 
 
-class QueueItemHolder(base_layouts.Vertical_Layout):
+class QueueItemHolder(base_layouts.VerticalLayout):
     RemoveQueueItem = QtCore.Signal(object)
 
     UpdateQueueItemName = QtCore.Signal(object, str)
@@ -119,7 +119,7 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
     queue_items = []
 
     def finish_initialization(self):
-        self.queue_item_layout = base_layouts.Vertical_Layout()
+        self.queue_item_layout = base_layouts.VerticalScrollArea()
         self.populate_with_empty_view()
 
         self.export_button = self.build_start_button()
@@ -148,7 +148,10 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
         self.queues_combo = base_widgets.ComboBox()
         self.queues_combo.currentTextChanged.connect(self.QueueSelected.emit)
 
-        _layout = base_layouts.Horizontal_Layout(spacing=5)
+        self.save_queue_button = base_widgets.Tool_Button()
+        self.save_queue_button.setIcon(icons.save)
+
+        _layout = base_layouts.HorizontalLayout(spacing=5)
         _layout.addWidget(_label)
         _layout.addWidget(self.queues_combo, stretch=1)
         return _layout
@@ -162,11 +165,6 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
     @QtCore.Slot()
     def add_queue(self, queue):
         self.queues_combo.addItem(queue)
-
-    # @QtCore.Slot()
-    # def remove_queue(self, queue):
-    #     self.queues_combo.index
-    #     self.queues_combo.removeItem(queue)
 
     ###########################
 
@@ -203,7 +201,7 @@ class QueueItemHolder(base_layouts.Vertical_Layout):
 
     def populate_with_empty_view(self):
         self.queue_item_layout.clear_layout()
-        _layout = base_layouts.Vertical_Layout()
+        _layout = base_layouts.VerticalLayout()
 
         _label = base_widgets.Label(f'Queue is Currently Empty')
 

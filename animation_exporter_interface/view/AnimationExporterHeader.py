@@ -3,7 +3,7 @@ from PySide2 import QtCore, QtWidgets, QtGui
 from pyqt_interface_elements import base_widgets, base_layouts, base_windows, line_edits
 
 
-class ExporterHeader(base_layouts.Horizontal_Layout):
+class ExporterHeader(base_layouts.HorizontalLayout):
     SceneSelected = QtCore.Signal(object)
 
     def __init__(self):

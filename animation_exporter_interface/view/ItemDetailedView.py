@@ -48,7 +48,7 @@ class ItemDetailAttributeHolder(proceadural_displays.AbstractEntryHolder):
         return None
 
 
-class ItemDetailedView(base_layouts.Vertical_Layout):
+class ItemDetailedView(base_layouts.VerticalLayout):
     AddToQueueButtonClicked = QtCore.Signal(dict)
     ExportButtonClicked = QtCore.Signal(dict)
 

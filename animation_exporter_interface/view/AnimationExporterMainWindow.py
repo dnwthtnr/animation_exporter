@@ -38,7 +38,7 @@ class ExporterMainWindow(base_windows.Main_Window):
 
         logger.info(f'Building central widget and adding holders')
         try:
-            central_layout = base_layouts.Vertical_Layout()
+            central_layout = base_layouts.VerticalLayout()
 
             central_layout.addWidget(self.header, alignment=constants.align_top)
             central_layout.addWidget(self.focal_tab_widget)
@@ -112,7 +112,7 @@ class ExporterMainWindow(base_windows.Main_Window):
         -------
 
         """
-        return base_layouts.Vertical_Layout()
+        return base_layouts.VerticalLayout()
 
     @QtCore.Slot()
     def addHeader(self, panel):
@@ -129,7 +129,7 @@ class ExporterMainWindow(base_windows.Main_Window):
         -------
 
         """
-        return base_layouts.Vertical_Layout()
+        return base_layouts.VerticalLayout()
 
     @QtCore.Slot()
     def addFooter(self, panel):

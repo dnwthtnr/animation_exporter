@@ -129,6 +129,7 @@ class PanelController(QtCore.QObject):
         export_directory = export_data_dictionary.get(keys.export_directory_key)
 
         for animation_range in _selected_animation_ranges:
+            _range_export_name = export_name
             if len(_selected_animation_ranges) > 1:
                 _range_export_name = export_name + f"[{animation_range[0]}_{animation_range[1]}]"
 
@@ -162,7 +163,7 @@ class PanelController(QtCore.QObject):
     def build_scene_view(self):
         logger.debug(f'Building scene view panel and controller')
         try:
-            multiprocessing.Process(target=)
+            # multiprocessing.Process(target=)
             _scene_controller = scene_controller.Scene_Controller()
             # _scene_controller.moveToThread(self.worker_thread)
 
@@ -216,7 +217,7 @@ class PanelController(QtCore.QObject):
 
     def build_empty_detail_panel(self):
         _empty = base_widgets.Label("No Details Yet")
-        _widget = base_layouts.Vertical_Layout()
+        _widget = base_layouts.VerticalLayout()
         _widget.addWidget(_empty, alignment=constants.align_center)
         _widget.setStyleSheet(styles.maya_detail_view)
         return _widget

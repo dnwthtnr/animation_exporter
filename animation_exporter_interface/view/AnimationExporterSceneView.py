@@ -2,7 +2,7 @@ from PySide2 import QtCore, QtWidgets, QtGui
 from pyqt_interface_elements import base_widgets, base_layouts, base_windows, line_edits, model_view_delegate, constants, styles
 
 
-class ExporterSceneView(base_layouts.Vertical_Layout):
+class ExporterSceneView(base_layouts.VerticalLayout):
     SceneSelected = QtCore.Signal(object)
     ItemSelected = QtCore.Signal(object)
 
@@ -13,9 +13,9 @@ class ExporterSceneView(base_layouts.Vertical_Layout):
 
     def finish_initialization(self):
         _current_scene_widget = self.build_current_scene_widget()
-        self.content_panel = base_layouts.Vertical_Layout()
+        self.content_panel = base_layouts.VerticalLayout()
 
-        _central = base_layouts.Vertical_Layout()
+        _central = base_layouts.VerticalLayout()
         _central.addWidget(_current_scene_widget, alignment=constants.align_top)
         _central.addWidget(self.content_panel, stretch=1)
 
@@ -29,7 +29,7 @@ class ExporterSceneView(base_layouts.Vertical_Layout):
         _label = self.build_file_label()
         _file_picker = self.build_file_picker()
 
-        _layout = base_layouts.Horizontal_Layout()
+        _layout = base_layouts.HorizontalLayout()
         _layout.addWidgets([_label, _file_picker])
 
         return _layout
@@ -46,7 +46,7 @@ class ExporterSceneView(base_layouts.Vertical_Layout):
 
     def populate_with_empty_view(self):
         self.content_panel.clear_layout()
-        _layout = base_layouts.Vertical_Layout()
+        _layout = base_layouts.VerticalLayout()
 
         _label = base_widgets.Label(f'Nothing to Display. Please Select File')
 

@@ -10,7 +10,7 @@ from pyqt_interface_elements import base_widgets, base_layouts, base_windows, co
 from functools import partial
 
 
-class ExporterFooter(base_layouts.Horizontal_Layout):
+class ExporterFooter(base_layouts.HorizontalLayout):
     ExportButtonClicked = QtCore.Signal(str)
     CloseButtonClicked = QtCore.Signal()
 
@@ -43,7 +43,7 @@ class ExporterFooter(base_layouts.Horizontal_Layout):
         self.export_button = self.build_export_button()
         self.close_button = self.build_close_button()
 
-        _layout = base_layouts.Horizontal_Layout()
+        _layout = base_layouts.HorizontalLayout()
         _layout.addWidget(self.close_button)
         return _layout
 
@@ -63,7 +63,7 @@ class ExporterFooter(base_layouts.Horizontal_Layout):
         self.folder_picker = self.build_output_location_selector()
         _folder_picker_title_label = self.build_folder_selection_label()
 
-        _layout = base_layouts.Horizontal_Layout()
+        _layout = base_layouts.HorizontalLayout()
         _layout.addWidget(_folder_picker_title_label)
         _layout.addWidget(self.folder_picker)
         return _layout
