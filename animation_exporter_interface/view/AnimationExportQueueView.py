@@ -14,7 +14,7 @@ from pyqt_interface_elements import (
     model_view_delegate,
     icons,
     styles,
-    proceadural_displays
+    proceadural_displays,
 )
 from functools import partial
 from animation_exporter.utility_resources import  keys
@@ -134,6 +134,15 @@ class QueueItemHolder(base_layouts.VerticalLayout):
         self.setStyleSheet(styles.queue_view)
 
     def build_start_button(self):
+        """
+        Builds button to start export queue
+
+        Returns
+        -------
+        base_widgets.Button
+            The new button
+
+        """
         _button = base_widgets.Button(text='Start Queue')
         _button.setMinimumSize(105, 25)
         _button.clicked.connect(self.StartQueueButtonClicked.emit)
@@ -143,6 +152,15 @@ class QueueItemHolder(base_layouts.VerticalLayout):
     #######################################################
 
     def build_queue_selection_combobox(self):
+        """
+        Builds the combobox to hold different export queue selections
+
+        Returns
+        -------
+        base_layouts.HorizontalLayout
+            The new selection combobox
+
+        """
         _label = base_widgets.Label(text="Current Export Queue:")
 
         self.queues_combo = base_widgets.ComboBox()
@@ -150,14 +168,29 @@ class QueueItemHolder(base_layouts.VerticalLayout):
 
         self.save_queue_button = base_widgets.Tool_Button()
         self.save_queue_button.setIcon(icons.save)
+        self.save_queue_button.clicked.connect(self.save_current_export_queue)
 
         _layout = base_layouts.HorizontalLayout(spacing=5)
         _layout.addWidget(_label)
         _layout.addWidget(self.queues_combo, stretch=1)
+        _layout.addWidget(self.save_queue_button)
         return _layout
 
     @QtCore.Slot()
+    def save_current_export_queue(self):
+        return
+
+    @QtCore.Slot()
     def populate_queues_combobox(self, queues):
+        """
+        Populates the queue selection combobox with the given dictionary of queue items
+
+        Parameters
+        ----------
+        queues : dict of dict
+            The queues
+
+        """
         self.queues_combo.clear()
         self.queues_combo.addItems(queues)
         self.queues_combo.setCurrentIndex(0)
