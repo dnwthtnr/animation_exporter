@@ -10,8 +10,12 @@ from PySide2 import QtCore, QtWidgets
 from functools import partial
 from system_allocation import thread
 import subprocess
+import multiprocessing
 
 from animation_exporter.utility_resources import settings, keys
+
+# TODO: communicate to start a process that will write an output file to a place on disk. Just read that instead of
+#  running it in the same process. This should fix the whole tool freezing when doing data queries in file
 
 class Scene_Controller(QtCore.QObject):
     SceneContentDataResponse = QtCore.Signal(object)
@@ -31,9 +35,15 @@ class Scene_Controller(QtCore.QObject):
     def open_file(self, filepath):
         logger.info(f'Opening file: {filepath} on a separate thread ')
         try:
-            cmds.file(filepath, open=1, force=1)
+            _p = multiprocessing.Process(target=partial(cmds.file, filepath, open=1, force=1))
+            _p.start()
+            _p.join()
+            # cmds.file(filepath, open=1, force=1)
             logger.info(f'File successfully opened ')
-            thread.run_on_thread(self.emit_scene_contents)
+            _p = multiprocessing.Process(target=self.emit_scene_contents)
+            _p.start()
+            _p.join()
+            # thread.run_on_thread(self.emit_scene_contents)
             # self.emit_scene_contents()
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to open file {filepath}')
