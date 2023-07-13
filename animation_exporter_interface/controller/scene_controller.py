@@ -1,6 +1,8 @@
+import sys
 
 import logging
 import os.path
+import system_allocation.thread
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -13,6 +15,7 @@ import subprocess
 import multiprocessing
 
 from animation_exporter.utility_resources import settings, keys
+
 
 # TODO: communicate to start a process that will write an output file to a place on disk. Just read that instead of
 #  running it in the same process. This should fix the whole tool freezing when doing data queries in file
@@ -34,6 +37,7 @@ class Scene_Controller(QtCore.QObject):
     @QtCore.Slot()
     def open_file(self, filepath):
         logger.info(f'Opening file: {filepath} on a separate thread ')
+
         try:
             _p = multiprocessing.Process(target=partial(cmds.file, filepath, open=1, force=1))
             _p.start()
@@ -112,7 +116,6 @@ class Scene_Controller(QtCore.QObject):
 
         return False
 
-
     def get_top_level_objects(self):
         """
         Gets all the top level dag objects in the scene
@@ -127,7 +130,7 @@ class Scene_Controller(QtCore.QObject):
         logger.info(f'Scene contents queried and filtered to top level: {_top_level_scene_items}')
         return _top_level_scene_items
 
-    #endregion
+    # endregion
     ####################################################
 
     def author_scene_hierarchy_dict(self, objects, parent=None, hierarchy_dictionary=None, hierarchy_depth=0):
@@ -175,7 +178,6 @@ class Scene_Controller(QtCore.QObject):
                 )
 
         return _hierarchy_dictionary
-
 
     #############################################
 
@@ -313,7 +315,8 @@ class Scene_Controller(QtCore.QObject):
         _attribute_keyframe_count = cmds.keyframe(attribute, query=True, keyframeCount=True)
 
         if _attribute_keyframe_count > 0:
-            animation_times_list = cmds.keyframe(attribute, query=True, index=(0, _attribute_keyframe_count), timeChange=True)
+            animation_times_list = cmds.keyframe(attribute, query=True, index=(0, _attribute_keyframe_count),
+                                                 timeChange=True)
 
             return animation_times_list
 
@@ -338,7 +341,6 @@ class Scene_Controller(QtCore.QObject):
         if len(_animation_times_list) > 1:
             return [_animation_times_list[0], _animation_times_list[-1]]
 
-
     ####################################
     # region Exporting Stuff
 
@@ -348,16 +350,15 @@ class Scene_Controller(QtCore.QObject):
     def export(self):
         return
 
-    #endregion
+    # endregion
 
     ##########################################
 
-    #region Object stuff
+    # region Object stuff
 
     @QtCore.Slot()
     def emit_item_details_on_thread(self, item):
         _item_data_dict = self.emit_item_details_dictionary(item)
-
 
     def emit_item_details_dictionary(self, object_name):
         # TODO: Start caching this stuf somehow -- lags when requerying stuff
@@ -391,17 +392,15 @@ class Scene_Controller(QtCore.QObject):
                 logger.exception(e)
                 raise e
 
-
-
             logger.debug(f'Populating detail dictionary for object: {object_name}')
             try:
                 _item_data_dict = {}
-                _item_data_dict[    keys.animation_partitions_key   ] = _animation_partitions
-                _item_data_dict[    keys.animation_range_key        ] = _animation_range
-                _item_data_dict[    keys.scene_path_key             ] = _scene_path
-                _item_data_dict[    keys.item_export_name_key       ] = _item_export_name
-                _item_data_dict[    keys.export_objects_key         ] = _objects_to_export
-                _item_data_dict[    keys.export_directory_key       ] = _export_directory
+                _item_data_dict[keys.animation_partitions_key] = _animation_partitions
+                _item_data_dict[keys.animation_range_key] = _animation_range
+                _item_data_dict[keys.scene_path_key] = _scene_path
+                _item_data_dict[keys.item_export_name_key] = _item_export_name
+                _item_data_dict[keys.export_objects_key] = _objects_to_export
+                _item_data_dict[keys.export_directory_key] = _export_directory
                 logger.debug(f'Successfully populated detail dictionary for object: {object_name}')
             except Exception as e:
                 logger.error(f'Encountered exception while attempting to populate item data dictionary. Aborting')
@@ -411,3 +410,13 @@ class Scene_Controller(QtCore.QObject):
             logger.debug(f'Emitting ItemDetailDataResponse with dictionary')
             logger.debug(_item_data_dict)
             self.ItemDetailsDataResponse.emit(_item_data_dict)
+
+
+if __name__ == "__main__":
+    _partial = partial(
+        subprocess.Popen,
+        ["python", r"Q:\__packages\_GitHub\mayapy_interface\__init__.py", "arg1", "arg2"],
+        stdout=sys.stdout
+    )
+    system_allocation.thread.run_on_thread(_partial)
+    # subprocess.Popen(["python", r"Q:\__packages\_GitHub\mayapy_interface\__init__.py", "arg1", "arg2"],stdout=sys.stdout)

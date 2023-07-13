@@ -12,6 +12,10 @@ DEFAULTS_FOLDER = os.path.join(RESOURCES_FOLDER, "defaults")
 # TODO: replace with settings holders
 
 
+def mayapy_path():
+    _dict = file_management.read_json(os.path.join(DEFAULTS_FOLDER, "mayapy_path.json"))
+    return _dict.get("Path")
+
 
 def set_resource_value(json_path, name, value):
     _setting_resource_data = file_management.read_json(json_path)
