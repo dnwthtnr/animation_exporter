@@ -93,7 +93,8 @@ class ExporterSceneView(base_layouts.VerticalLayout):
 
     @QtCore.Slot()
     def emit_item_selection_changed(self, item):
-        self.ItemSelected.emit(item)
+        _node = self.item_model.get_node_for_display_name(item)
+        self.ItemSelected.emit(_node.data_dcitonary)
 
 
 if __name__ == "__main__":

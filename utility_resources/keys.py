@@ -5,3 +5,5 @@ animation_range_key = "Animation_Range"
 export_objects_key = "Objects_To_Export"
 export_directory_key = "Export_Directory"
 animation_partitions_key = "Animation_Partitions"
+
+current_scene_data_file = "CurrentSceneDataFile"

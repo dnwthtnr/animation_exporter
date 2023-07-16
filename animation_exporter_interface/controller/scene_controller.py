@@ -42,13 +42,13 @@ class Scene_Controller(QtCore.QObject):
         return self._current_scene_data
 
     @QtCore.Slot()
-    def open_file(self, filepath):
+    def open_file(self, filepath, output_filepath):
         logger.info(f'Opening file: {filepath} on a separate thread ')
 
         try:
             cmds.file(filepath, open=1, force=1)
             logger.info(f'File successfully opened')
-            _output_directory = self.write_scene_contents()
+            _output_directory = self.write_scene_contents(output_filepath)
             return 0, _output_directory
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to open file {filepath}')
@@ -56,14 +56,14 @@ class Scene_Controller(QtCore.QObject):
             return 1, None
 
     @QtCore.Slot()
-    def write_scene_contents(self):
+    def write_scene_contents(self, output_filepath):
         _top_level_scene_items = self.get_top_level_objects()
         logger.info(f'Emitting SceneContentDataResponse with queried items organized in dictionary')
         _object_data_dict = self.author_scene_hierarchy_dict(objects=_top_level_scene_items)
         self._current_scene_data = _object_data_dict
         logger.debug(f'Dictionary: {_object_data_dict}')
 
-        _output_directory = r"Q:\__packages\_GitHub\animation_exporter\cache\export_data.json"
+        _output_directory = output_filepath
 
         write_json(_output_directory, _object_data_dict)
         return _output_directory
@@ -166,14 +166,17 @@ class Scene_Controller(QtCore.QObject):
 
             _children = cmds.listRelatives(_object, children=True, fullPath=True)
 
-            _object_data_dictionary = {
-                "Object Name": _object,
-                "Parent": parent,
-                "Children": _children,
-                "Has_Or_Holds_Animation": self.object_has_or_holds_animation(_object),
-                # "Type": cmds.objectType(_object),
-                "Absolute Animation Range": f"{self.get_descendant_animation_range(_object)}"
-            }
+            # _object_data_dictionary = {
+            #     "Object Name": _object,
+            #     "Parent": parent,
+            #     "Children": _children,
+            #     "Has_Or_Holds_Animation": self.object_has_or_holds_animation(_object),
+            #     # "Type": cmds.objectType(_object),
+            #     "Absolute Animation Range": f"{self.get_descendant_animation_range(_object)}"
+            # }
+            _object_data_dictionary = self.emit_item_details_dictionary(_object)
+            # _object_data_dictionary["Parent"] = parent
+            # _object_data_dictionary["Children"] = _children
             _hierarchy_dictionary[_object] = _object_data_dictionary
 
             if _children is not None:
@@ -222,7 +225,7 @@ class Scene_Controller(QtCore.QObject):
                 if _current_partition_start_point != _previous_frame:
                     animation_partitions_list.append(_partition)
 
-        return animation_partitions_list
+        return _descendant_animation_times_list
 
     def get_descendant_animation_times_list(self, object):
         """
@@ -351,12 +354,6 @@ class Scene_Controller(QtCore.QObject):
     ####################################
     # region Exporting Stuff
 
-    def bake_animation(self, object):
-        cmds.bakeSimulation(object, animation='keysOrObjects', hierarchy='below')
-
-    def export(self):
-        return
-
     # endregion
 
     ##########################################
@@ -416,7 +413,9 @@ class Scene_Controller(QtCore.QObject):
 
             logger.debug(f'Emitting ItemDetailDataResponse with dictionary')
             logger.debug(_item_data_dict)
-            self.ItemDetailsDataResponse.emit(_item_data_dict)
+            # self.ItemDetailsDataResponse.emit(_item_data_dict)
+
+            return _item_data_dict
 
 
 
@@ -424,8 +423,29 @@ if __name__ == "__main__":
     scene_controller = Scene_Controller()
 
     _args = sys.argv
-    print(_args)
-    input(f'File?')
+    print('args', _args)
+
+    _filepath = os.path.abspath(_args[-2])
+    _output_filepath = os.path.abspath(_args[-1])
+
+    _out = scene_controller.open_file(_filepath, _output_filepath)
+    print(_out)
+    # input(f'File?')
+    # loop = True
+    #
+    # while loop is True:
+    #     sys.stdin.flush()
+    #     _input = input("input:")
+    #     print(_input)
+    #     if _input == "exit":
+    #         loop = False
+    #         continue
+    #
+    #     else:
+    #         if hasattr(scene_controller, _input):
+    #             print(f'hasattr: {_input}')
+    #             _string = f"scene_controller.{_input}"
+    #             _return = eval(_string)
 
     # scene_controller.open_file(filepath=)
 
