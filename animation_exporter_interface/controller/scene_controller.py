@@ -175,8 +175,11 @@ class Scene_Controller(QtCore.QObject):
             #     "Absolute Animation Range": f"{self.get_descendant_animation_range(_object)}"
             # }
             _object_data_dictionary = self.emit_item_details_dictionary(_object)
-            # _object_data_dictionary["Parent"] = parent
-            # _object_data_dictionary["Children"] = _children
+            if _object_data_dictionary is None:
+                _object_data_dictionary = {}
+            _object_data_dictionary["Object Name"] = _object
+            _object_data_dictionary["Parent"] = parent
+            _object_data_dictionary["Children"] = _children
             _hierarchy_dictionary[_object] = _object_data_dictionary
 
             if _children is not None:
@@ -360,9 +363,9 @@ class Scene_Controller(QtCore.QObject):
 
     # region Object stuff
 
-    @QtCore.Slot()
-    def emit_item_details_on_thread(self, item):
-        _item_data_dict = self.emit_item_details_dictionary(item)
+    # @QtCore.Slot()
+    # def emit_item_details_on_thread(self, item):
+    #     _item_data_dict = self.emit_item_details_dictionary(item)
 
     def emit_item_details_dictionary(self, object_name):
         # TODO: Start caching this stuf somehow -- lags when requerying stuff
@@ -397,8 +400,8 @@ class Scene_Controller(QtCore.QObject):
                 raise e
 
             logger.debug(f'Populating detail dictionary for object: {object_name}')
+            _item_data_dict = {}
             try:
-                _item_data_dict = {}
                 _item_data_dict[keys.animation_partitions_key] = _animation_partitions
                 _item_data_dict[keys.animation_range_key] = _animation_range
                 _item_data_dict[keys.scene_path_key] = _scene_path

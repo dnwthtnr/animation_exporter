@@ -10,11 +10,11 @@ class MayaProcessDelegator(QtCore.QObject):
     def __init__(self):
         super().__init__()
 
-    def open_file_write_scene_data(self, filepath, output_path):
-        _rv = self.doit(filepath, output_path)
-        self.sceneDataWritten.emit()
+    # def open_file_write_scene_data(self, filepath, output_path):
+    #     _rv = self.doit(filepath, output_path)
+    #     self.sceneDataWritten.emit()
 
-    def doit(self, filepath, output_path):
+    def open_file_write_scene_data(self, filepath, output_path):
         _p = subprocess.Popen(
             [
                 "python",
@@ -28,6 +28,7 @@ class MayaProcessDelegator(QtCore.QObject):
             encoding="utf"
         )
         print(_p.communicate())
+        self.sceneDataWritten.emit()
         return 0
 
 
