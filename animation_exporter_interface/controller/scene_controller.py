@@ -12,10 +12,10 @@ logger.setLevel(logging.DEBUG)
 from maya import cmds, standalone, utils
 from PySide2 import QtCore, QtWidgets
 from functools import partial
-import subprocess, json
-import multiprocessing
+import json
 
 from animation_exporter.utility_resources import settings, keys
+import math_operations
 
 
 def write_json(path, data):
@@ -194,7 +194,7 @@ class Scene_Controller(QtCore.QObject):
 
     #############################################
 
-    def separate_animation_partitions(self, object):
+    def get_keyframe_times(self, object):
         """
         Separates the animation times for the given object and its descendants into chunks based on a threshold.
         Threshold determines how many empty frames there should be before separating a piece of animation
@@ -212,23 +212,9 @@ class Scene_Controller(QtCore.QObject):
         """
         _descendant_animation_times_list = self.get_descendant_animation_times_list(object)
 
-        animation_partitions_list = []
+        _reduced_keyframe_list = math_operations.kill_duplicate_list_elements(_descendant_animation_times_list)
 
-        _current_partition_start_point = _descendant_animation_times_list[0]
-        for i, frame in enumerate(_descendant_animation_times_list):
-            _previous_frame = _descendant_animation_times_list[i - 1] if i > 0 else frame
-            _current_frame = frame
-
-            _partition_frame_cutoff = _previous_frame + settings.animation_frame_gap_threshold()
-
-            if _current_frame >= _partition_frame_cutoff or _current_frame == _descendant_animation_times_list[-1]:
-                _partition = [_current_partition_start_point, _previous_frame]
-                _current_partition_start_point = _current_frame
-
-                if _current_partition_start_point != _previous_frame:
-                    animation_partitions_list.append(_partition)
-
-        return _descendant_animation_times_list
+        return _reduced_keyframe_list
 
     def get_descendant_animation_times_list(self, object):
         """
@@ -374,8 +360,8 @@ class Scene_Controller(QtCore.QObject):
             logger.debug(f'Getting details for object: {object_name}')
 
             try:
-                _animation_partitions = self.separate_animation_partitions(object_name)
-                logger.debug(f'_animation_partitions for object: {object_name} :: {_animation_partitions}')
+                _animation_times = self.get_keyframe_times(object_name)
+                logger.debug(f'_animation_partitions for object: {object_name} :: {_animation_times}')
 
                 _animation_range = self.get_descendant_animation_range(object_name)
                 logger.debug(f'_animation_range for object: {object_name} :: {_animation_range}')
@@ -402,7 +388,7 @@ class Scene_Controller(QtCore.QObject):
             logger.debug(f'Populating detail dictionary for object: {object_name}')
             _item_data_dict = {}
             try:
-                _item_data_dict[keys.animation_partitions_key] = _animation_partitions
+                _item_data_dict[keys.animation_times] = _animation_times
                 _item_data_dict[keys.animation_range_key] = _animation_range
                 _item_data_dict[keys.scene_path_key] = _scene_path
                 _item_data_dict[keys.item_export_name_key] = _item_export_name

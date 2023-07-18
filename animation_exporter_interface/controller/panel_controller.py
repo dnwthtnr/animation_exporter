@@ -24,7 +24,8 @@ from animation_exporter.animation_exporter_interface.view import (
 )
 from animation_exporter.animation_exporter_interface.controller import (
     queue_controller,
-maya_process_delegator
+maya_process_delegator,
+item_detail_controller
 )
 from animation_exporter.utility_resources import keys, settings, cache
 
@@ -47,6 +48,7 @@ class PanelController(QtCore.QObject):
 
     writeSceneData = QtCore.Signal(str, str)
     populateSceneDataView = QtCore.Signal(object)
+    startQueue = QtCore.Signal()
 
     # endregion
 
@@ -72,6 +74,7 @@ class PanelController(QtCore.QObject):
         logger.debug(f'Building queue panel and controller')
         try:
             _queue_runner = queue_controller.QueueRunner()
+            _queue_runner.moveToThread(self.worker_thread)
             _queue_view = AnimationExportQueueView.QueueItemHolder()
             _queue_view._controller = _queue_runner
             logger.info(f'Queue panel successfully built')
@@ -82,6 +85,7 @@ class PanelController(QtCore.QObject):
 
         logger.debug(f'Connecting signals between queue_runner, queue_view and panel_controller')
         try:
+            # self.startQueue.connect(_queue_runner.start_queue)
             _queue_runner.QueueItemRemoved.connect(_queue_view.remove_queue_item)
 
             _queue_view.QueueSelected.connect(self.queue_selected)
@@ -91,7 +95,7 @@ class PanelController(QtCore.QObject):
             _queue_view.UpdateQueueItemName.connect(queue_controller.update_queue_item_export_name)
             _queue_view.UpdateQueueItemExportDirectory.connect(queue_controller.update_queue_item_export_directory)
             _queue_view.UpdateQueueItemFrameRange.connect(queue_controller.update_queue_item_export_frame_range)
-            _queue_view.StartQueueButtonClicked.connect(_queue_runner.start_queue)
+            _queue_view.StartQueueButtonClicked.connect(queue_controller.start_queue)
 
             self.QueueItemAdded.connect(_queue_view.add_queue_item)
             self.QueueDataResponse.connect(_queue_view.populate_queue_view)
@@ -249,9 +253,23 @@ class PanelController(QtCore.QObject):
     @QtCore.Slot()
     def generate_scene_detail_panel(self, item_detail_dictionary):
         logger.info(f'Signal caught to build scene detail view for dict: {item_detail_dictionary}')
-        _item_view = ItemDetailedView.ItemDetailedView(item_detail_dictionary)
+
+        _item_detail_controller = item_detail_controller.ItemDetailController(
+            item_detail_dictionary=item_detail_dictionary
+        )
+        _item_view = ItemDetailedView.ItemDetailedView()
+
+        _item_detail_controller.dataResponse.connect(_item_view.populate_detail_view)
+        _item_detail_controller.addToQueue.connect(self.emit_add_to_export_queue)
+        from functools import partial
+
+        _item_view.dataRequest.connect(_item_detail_controller.emit_data_response)
+        _item_view.valueChanged.connect(_item_detail_controller.update_value)
+        _item_view.AddToQueueButtonClicked.connect(partial(_item_detail_controller.emit_queue_data))
+        _item_view.AddToQueueButtonClicked.connect(partial(print, "yes"))
+
         _item_view.finish_initialization()
-        _item_view.AddToQueueButtonClicked.connect(self.emit_add_to_export_queue)
+
         self.SceneDetailPanelBuilt.emit(_item_view)
     # endregion
 
