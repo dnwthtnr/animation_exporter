@@ -95,7 +95,7 @@ class PanelController(QtCore.QObject):
             _queue_view.UpdateQueueItemName.connect(queue_controller.update_queue_item_export_name)
             _queue_view.UpdateQueueItemExportDirectory.connect(queue_controller.update_queue_item_export_directory)
             _queue_view.UpdateQueueItemFrameRange.connect(queue_controller.update_queue_item_export_frame_range)
-            _queue_view.StartQueueButtonClicked.connect(queue_controller.start_queue)
+            _queue_view.StartQueueButtonClicked.connect(_queue_runner.start_queue)
 
             self.QueueItemAdded.connect(_queue_view.add_queue_item)
             self.QueueDataResponse.connect(_queue_view.populate_queue_view)

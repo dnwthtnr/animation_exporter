@@ -1,5 +1,6 @@
 import sys, os
 
+import file_management
 import logging
 
 logger = logging.getLogger(__name__)
@@ -41,7 +42,7 @@ def bake_animation_range(start_frame, end_frame):
 
 def export_animation(objects, export_path):
     logger.info(f'Attempting to export to: {export_path} -- Set  log level DEBUG to get output displaying objects')
-    logger.debug(f'Exporting objects: {objects}')
+    # logger.debug(f'Exporting objects: {objects}')
     try:
         cmds.select(objects)
         print(cmds.ls(), objects)
@@ -106,7 +107,7 @@ def export_queue_item(queue, queue_item_identifier):
             value_key=keys.scene_path_key
         )
         logger.info(f'Successfully queried data for queue item {queue_item_identifier}:{_export_name}')
-        logger.debug(f'\n\nQueue item ID: {queue_item_identifier}\nexport name: {_export_name}, export directory: {_export_directory}, export range: {_export_range}, scene_path: {_scene_path}, objects: {_object}')
+        # logger.debug(f'\n\nQueue item ID: {queue_item_identifier}\nexport name: {_export_name}, export directory: {_export_directory}, export range: {_export_range}, scene_path: {_scene_path}, objects: {_object}')
     except Exception as e:
         logger.warning(f'Encountered exception while attempting to get data for queue item ID: {queue_item_identifier}')
         logger.exception(e)
@@ -138,8 +139,11 @@ def export_queue_item(queue, queue_item_identifier):
 
 @QtCore.Slot()
 def start_queue(queue):
-    for _queue_item_id in queue:
-        _outcome = export_queue_item(queue, _queue_item_id)
+
+    standalone.initialize()
+    _queue = file_management.read_json(queue)
+    for _queue_item_id in _queue:
+        _outcome = export_queue_item(_queue, _queue_item_id)
         return 1
 
 
@@ -147,7 +151,6 @@ if __name__ == "__main__":
     _args = sys.argv
     _queue_path = _args[-1]
 
-    standalone.initialize()
 
     start_queue(_queue_path)
 
