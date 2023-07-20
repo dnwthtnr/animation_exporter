@@ -11,10 +11,6 @@ class MayaProcessDelegator(QtCore.QObject):
     def __init__(self):
         super().__init__()
 
-    # def open_file_write_scene_data(self, filepath, output_path):
-    #     _rv = self.doit(filepath, output_path)
-    #     self.sceneDataWritten.emit()
-
     def open_file_write_scene_data(self, filepath, output_path):
         _p = subprocess.Popen(
             [
@@ -32,17 +28,13 @@ class MayaProcessDelegator(QtCore.QObject):
         self.sceneDataWritten.emit()
         return 0
 
-    def export_from_scene(self, item_id, scene_path, objects, frame_range, export_directory, export_name):
+    def export_from_scene(self, item_id, argument_file_path):
         _p = subprocess.Popen(
             [
                 "python",
                 os.path.join(CURRENT_FOLDER, "export_controller.py"),
-                scene_path,
-                objects,
-                f"{frame_range[0]}",
-                f"{frame_range[1]}",
-                export_directory,
-                export_name
+                "--i",
+                argument_file_path
             ],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,

@@ -2,7 +2,7 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 import os, subprocess
-from animation_exporter.utility_resources import settings, keys
+from animation_exporter.utility_resources import settings, keys, cache
 from animation_exporter.animation_exporter_interface.controller import maya_process_delegator
 from PySide2 import QtCore
 from functools import partial
@@ -165,6 +165,56 @@ def clear_export_queue():
         remove_export_queue_item(_queue_id)
 
 
+###################################
+
+def get_queue_item_data(queue, queue_item_identifier, value_key):
+    _queue_item_data = queue.get(queue_item_identifier)
+
+    return _queue_item_data.get(value_key)
+
+
+def get_queue_item_export_args(queue, queue_item_identifier):
+    print('item stuff')
+    logger.info(f'Getting queue item data for ID: {queue_item_identifier}')
+    try:
+        _export_name = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.item_export_name_key
+        )
+        _export_directory = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.export_directory_key
+        )
+        _export_range = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.animation_range_key
+        )
+
+        _object = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.export_objects_key
+        )
+        _scene_path = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.scene_path_key
+        )
+
+        _export_path = os.path.join(_export_directory, f"{_export_name}.fbx")
+        print('more', _scene_path, _export_range, _export_path)
+        logger.info(f'Successfully queried data for queue item {queue_item_identifier}:{_export_name}')
+        return [_scene_path, _object, _export_range, _export_path]
+        # logger.debug(f'\n\nQueue item ID: {queue_item_identifier}\nexport name: {_export_name}, export directory: {_export_directory}, export range: {_export_range}, scene_path: {_scene_path}, objects: {_object}')
+    except Exception as e:
+        logger.warning(f'Encountered exception while attempting to get data for queue item ID: {queue_item_identifier}')
+        logger.exception(e)
+
+
+
 ######################################
 
 _maya_delegator = maya_process_delegator.MayaProcessDelegator()
@@ -228,22 +278,37 @@ class QueueRunner(QtCore.QObject):
     def __int__(self):
 
         _maya_delegator.itemExported.connect(self.itemFinished.emit)
+        _maya_delegator.itemExported.connect(partial(print))
         super().__init__()
 
-    def start_queue(self):
-        _maya_delegator.export_queue(current_queue_path())
-#     @QtCore.Slot()
-#     def start_queue(self, clear_on_completion=False):
-#         logger.info(f'Starting export queue. Clearing on completion: "{clear_on_completion}"')
-#         _queue = current_export_queue()
-#         for _queue_item_id in _queue:
-#             _outcome = export_queue_item(_queue_item_id)
-#             if _outcome == 0:
-#                 self.itemFinished.emit(_queue_item_id)
-#             if clear_on_completion is True:
-#                 remove_export_queue_item(_queue_item_id)
-#                 self.QueueItemRemoved.emit(_queue_item_id)
-#         return 1
+    # def start_queue(self):
+    #     _maya_delegator.export_queue(current_queue_path())
+
+
+    @QtCore.Slot()
+    def start_queue(self, clear_on_completion=False):
+        print('start')
+        logger.info(f'Starting export queue. Clearing on completion: "{clear_on_completion}"')
+        _queue = current_export_queue()
+        print(_queue)
+        for _queue_item_id in _queue:
+
+            _args = get_queue_item_export_args(queue=_queue, queue_item_identifier=_queue_item_id)
+
+            print('no')
+            _export_args_file = cache.get_unique_file_name("_export_args.json")
+
+            print('yes', _export_args_file)
+            file_management.write_json(_export_args_file, _args)
+
+
+            _maya_delegator.export_from_scene(_queue_item_id, _export_args_file)
+
+
+            if clear_on_completion is True:
+                remove_export_queue_item(_queue_item_id)
+                self.QueueItemRemoved.emit(_queue_item_id)
+        return 1
 
 
 

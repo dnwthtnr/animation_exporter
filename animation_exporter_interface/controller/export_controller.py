@@ -8,10 +8,8 @@ logger.setLevel(logging.DEBUG)
 
 from maya import cmds, mel, standalone
 from animation_exporter.utility_resources import keys
-from PySide2 import QtCore, QtWidgets
 
-from animation_exporter.utility_resources import settings
-
+# region: Export Stuff
 
 def set_animation_start(frame):
     logger.info(f'Attempting to set animation bake start to {frame}')
@@ -60,18 +58,14 @@ def export_animation_range(objects, start_frame, end_frame, export_path):
     export_animation(objects, export_path)
 
 
-def export_animation_range_from_scene(scene_path, objects, start_frame, end_frame, export_path):
+def export_animation_range_from_scene(scene_path, objects, frame_range, export_path):
     cmds.file(scene_path, open=True, force=True)
-    export_animation_range(objects, start_frame, end_frame, export_path)
+    export_animation_range(objects, frame_range[0], frame_range[-1], export_path)
 
-
-
-
-
+# endregion
 
 
 def get_queue_item_data(queue, queue_item_identifier, value_key):
-
     _queue_item_data = queue.get(queue_item_identifier)
 
     return _queue_item_data.get(value_key)
@@ -114,79 +108,41 @@ def export_queue_item(queue, queue_item_identifier):
 
     logger.info(f'Attempting to export for queue item ID: {queue_item_identifier}')
     try:
-        # _maya_delegator.export_from_scene(
-        #     item_id=queue_item_identifier,
-        #     scene_path=_scene_path,
-        #     objects=_object,
-        #     frame_range=_export_range,
-        #     export_directory=_export_directory,
-        #     export_name=_export_name
-        # )
         export_animation_range_from_scene(
             scene_path=_scene_path,
             objects=_object,
-            start_frame=_export_range[0],
-            end_frame=_export_range[1],
+            frame_range=_export_range,
             export_path=os.path.join(_export_directory, f"{_export_name}.fbx")
         )
+
+        print(_export_name)
         logger.info(f'Successfully exported queue item ID: {queue_item_identifier}')
         return 0
     except Exception as e:
-        logger.warning(f'Encountered exception while attempting to begin export for for queue item ID: {queue_item_identifier}')
+        logger.warning(
+            f'Encountered exception while attempting to begin export for for queue item ID: {queue_item_identifier}')
         logger.exception(e)
         return 1
 
 
-@QtCore.Slot()
-def start_queue(queue):
-
-    standalone.initialize()
-    _queue = file_management.read_json(queue)
-    for _queue_item_id in _queue:
-        _outcome = export_queue_item(_queue, _queue_item_id)
-        return 1
+def export_queue_items(queue):
+    # _queue = file_management.read_json(queue)
+    for _queue_item_id in queue.keys():
+        _outcome = export_queue_item(queue, _queue_item_id)
 
 
 if __name__ == "__main__":
     _args = sys.argv
-    _queue_path = _args[-1]
+    _oparg = _args[1]
+    _filepath = _args[-1]
+    print(_args)
 
 
-    start_queue(_queue_path)
-
-    # _scene_path = _args[-6]
-    # _object = _args[-5]
-    # _frame_start = float(_args[-4]),
-    # _frame_end = float(_args[-3]),
-    # _export_directory = _args[-2]
-    # _export_name = _args[-1]
-    #
-    # standalone.initialize()
-    #
-    # export_animation_range_from_scene(
-    #     scene_path=_scene_path,
-    #     objects=_object,
-    #     start_frame=_frame_start,
-    #     end_frame=_frame_end,
-    #     export_path=os.path.join(_export_directory, f"{_export_name}.fbx")
-    # )
-
-    # def tst_scene_01():
-    #     cmds.file(new=True, force=True)
-    #
-    #     _cube = "cube"
-    #     cmds.polyCube(name=_cube)
-    #
-    #     _childCube = "childcube"
-    #
-    #     cmds.polyCube(name=_childCube)
-    #
-    #     cmds.parent(_childCube, _cube)
-    #
-    #     cmds.file(r'Q:\__packages\_GitHub\testfile.ma', rename=True)
-    #
-    #     cmds.file(save=True, force=True)
-    #
-    # tst_scene_01()
-    #
-    # export_animation_range(objects="cube", start_frame=0, end_frame=10, export_path=r'Q:\__packages\_GitHub\fileexport.fbx')
+    standalone.initialize()
+    if _oparg == "--i":
+        _export_data = file_management.read_json(_filepath)
+        _outcome = export_animation_range_from_scene(*_export_data)
+    else:
+        # _queue_path = r"C:\Users\Tanner - Work\Documents\Settings\default_export_queue.json"
+        _queue_data = file_management.read_json(_filepath)
+        export_queue_items(_queue_data)
