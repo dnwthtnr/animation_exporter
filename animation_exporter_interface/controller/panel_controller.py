@@ -1,6 +1,7 @@
 import file_management
 import logging
 import multiprocessing
+import os.path
 import threading
 
 logger = logging.getLogger(__name__)
@@ -238,10 +239,10 @@ class PanelController(QtCore.QObject):
     @QtCore.Slot()
     def populate_scene_view(self):
         _scene_data_filepath = settings.cache_values.get_setting(keys.current_scene_data_file)
-        _data = file_management.read_json(_scene_data_filepath)
 
-        self.populateSceneDataView.emit(_data)
-        return
+        if os.path.exists(_scene_data_filepath):
+            _data = file_management.read_json(_scene_data_filepath)
+            self.populateSceneDataView.emit(_data)
 
     def build_empty_detail_panel(self):
         _empty = base_widgets.Label("No Details Yet")

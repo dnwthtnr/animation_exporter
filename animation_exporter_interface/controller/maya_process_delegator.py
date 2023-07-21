@@ -5,13 +5,25 @@ CURRENT_FOLDER = os.path.dirname(__file__)
 
 class MayaProcessDelegator(QtCore.QObject):
     sceneDataWritten = QtCore.Signal()
-    itemExported = QtCore.Signal(str)
+    itemExported = QtCore.Signal(object)
 
 
     def __init__(self):
         super().__init__()
 
     def open_file_write_scene_data(self, filepath, output_path):
+        """
+        Opens the given file and gets the scene data
+
+        Parameters
+        ----------
+        filepath
+        output_path
+
+        Returns
+        -------
+
+        """
         _p = subprocess.Popen(
             [
                 "python",
@@ -46,21 +58,21 @@ class MayaProcessDelegator(QtCore.QObject):
         return 0
 
 
-    def export_queue(self, filepath):
-        _p = subprocess.Popen(
-            [
-                "python",
-                os.path.join(CURRENT_FOLDER, "export_controller.py"),
-                filepath
-            ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            stdin=subprocess.PIPE,
-            encoding="utf"
-        )
-        print(_p.communicate())
-        # self.itemExported.emit(item_id)
-        return 0
+    # def export_queue(self, filepath):
+    #     _p = subprocess.Popen(
+    #         [
+    #             "python",
+    #             os.path.join(CURRENT_FOLDER, "export_controller.py"),
+    #             filepath
+    #         ],
+    #         stdout=subprocess.PIPE,
+    #         stderr=subprocess.PIPE,
+    #         stdin=subprocess.PIPE,
+    #         encoding="utf"
+    #     )
+    #     print(_p.communicate())
+    #     # self.itemExported.emit(item_id)
+    #     return 0
 
 
 if __name__ == "__main__":
