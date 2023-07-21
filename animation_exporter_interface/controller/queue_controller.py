@@ -277,31 +277,47 @@ class QueueRunner(QtCore.QObject):
 
     def __int__(self):
 
-        _maya_delegator.itemExported.connect(self.itemFinished.emit)
-        _maya_delegator.itemExported.connect(partial(print))
+        _maya_delegator.itemExported.connect(self.queue_item_exported)
+        self.export_argument_filepaths = {}
         super().__init__()
-
-    # def start_queue(self):
-    #     _maya_delegator.export_queue(current_queue_path())
 
 
     @QtCore.Slot()
     def start_queue(self, clear_on_completion=False):
-        print('start')
+        self.export_argument_filepaths = {}
+
         logger.info(f'Starting export queue. Clearing on completion: "{clear_on_completion}"')
+
         _queue = current_export_queue()
-        print(_queue)
+
         for _queue_item_id in _queue:
 
             _args = get_queue_item_export_args(queue=_queue, queue_item_identifier=_queue_item_id)
+            logger.debug(f'Generating temp file to hold export arguments for queue item: {_queue_item_id}')
+            try:
+                _export_args_file = cache.get_unique_file_name("_export_args.json")
 
-            print('no')
-            _export_args_file = cache.get_unique_file_name("_export_args.json")
+                logger.info(f'Successfully generated export argument temp file. "{_export_args_file}"')
+            except Exception as e:
+                logger.warning(f'Hit exception while attempting to get temp export arg file.')
+                logger.exception(e)
+                raise e
 
-            print('yes', _export_args_file)
-            file_management.write_json(_export_args_file, _args)
+
+            logger.debug(f'Writing export arguments to disk')
+            try:
+                file_management.write_json(_export_args_file, _args)
+
+                logger.info(f'Successfully wrote export argument temp file')
+            except Exception as e:
+                logger.warning(f'Hit exception while attempting to save temp export arg file.')
+                logger.exception(e)
+                raise e
+
+            self.export_argument_filepaths[_queue_item_id] = _export_args_file
 
 
+            logger.info(f'Sending export item and path to maya delegator')
             _maya_delegator.export_from_scene(_queue_item_id, _export_args_file)
 
 
@@ -309,6 +325,23 @@ class QueueRunner(QtCore.QObject):
                 remove_export_queue_item(_queue_item_id)
                 self.QueueItemRemoved.emit(_queue_item_id)
         return 1
+
+    @QtCore.Slot()
+    def queue_item_exported(self, queue_item_id):
+        logger.info(f'Slot: "queue_item_exporter" triggered')
+        logger.info(f'Queue item ID: {queue_item_id} passed to slot')
+
+        _maya_delegator.itemExported.connect(queue_item_id)
+
+
+    def delete_temp_argument_file(self, queue_item_id):
+        _filepath = self.export_argument_filepaths.get(queue_item_id)
+
+        if _filepath is None:
+            return
+
+        #shuttils.delete stupid file. Pop from dict
+
 
 
 

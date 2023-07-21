@@ -135,7 +135,7 @@ if __name__ == "__main__":
     _args = sys.argv
     _oparg = _args[1]
     _filepath = _args[-1]
-    print(_args)
+    # print(_args)
 
 
     standalone.initialize()
