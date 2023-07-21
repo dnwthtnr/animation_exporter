@@ -9,7 +9,10 @@ from functools import partial
 
 RESOURCES_FOLDER = os.path.dirname(__file__)
 DEFAULTS_FOLDER = os.path.join(RESOURCES_FOLDER, "defaults")
+CACHE_FOLDER = os.path.join(RESOURCES_FOLDER, "cache")
 # TODO: replace with settings holders
+
+cache_values = local_settings_manager.SettingsForModule(module_name=f'tempcache')
 
 
 def mayapy_path():
@@ -117,3 +120,4 @@ def set_animation_frame_gap_threshold(frame_gap):
 
     """
     set_animation_parser_resource_value("Animation_Frame_Gap_Threshold", frame_gap)
+

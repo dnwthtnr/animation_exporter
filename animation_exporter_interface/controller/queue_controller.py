@@ -1,16 +1,15 @@
 import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-
-import os
-
-from animation_exporter.utility_resources import settings, keys
-from animation_exporter.animation_exporter_interface.controller import export_controller
+import os, subprocess, shutil
+from animation_exporter.utility_resources import settings, keys, cache
+from animation_exporter.animation_exporter_interface.controller import maya_process_delegator
 from PySide2 import QtCore
 from functools import partial
 from system_allocation import thread
 import local_settings_manager
 import file_management
+
 
 default_queue_name = "export_queue"
 
@@ -55,9 +54,9 @@ def remove_queue_path(queue_path):
 _cache_queue = local_settings_manager.SettingsForModule("default_export_queue")
 _default_queue_path = _cache_queue.settings_path()
 _default_queue_path_name = "Default"
-print(_default_queue_path)
 if _default_queue_path not in queue_paths():
     add_queue_path(_default_queue_path, _default_queue_path_name)
+
 
 def current_queue_path():
     return _queue_settings.get_setting("Current_Queue")
@@ -67,30 +66,12 @@ def set_current_queue_path(queue_path_name):
     return _queue_settings.set_setting("Current_Queue", queue_paths().get(queue_path_name))
 
 
-
-
-
 if len(queue_paths()) == 1:
-    print('no')
     set_current_queue_path(_default_queue_path_name)
 
 
 
 # region ####################current queue manager###########################
-
-
-
-
-export_queue_json_path = os.path.join(settings.RESOURCES_FOLDER, "export_queue.json")
-queues_json_path = os.path.join(settings.RESOURCES_FOLDER, "export_queue.json")
-
-queue_item_identifier_key = "Queue_Item_Identifier"
-item_export_name_key = "Export_Name"
-scene_path_key = "Scene_Path"
-animation_range_key = "Animation_Range"
-export_objects_key = "Objects_To_Export"
-export_directory_key = "Export_Directory"
-animation_partitions_key = "Animation_Partitions"
 
 
 def current_export_queue():
@@ -124,12 +105,12 @@ def add_to_export_queue(scene_path, export_name, scene_objects, animation_range,
     _queue_item_identifier = get_new_queue_item_identifier()
 
     _scene_data_dict = {}
-    _scene_data_dict[queue_item_identifier_key] = _queue_item_identifier
-    _scene_data_dict[scene_path_key] = scene_path
-    _scene_data_dict[item_export_name_key] = export_name
-    _scene_data_dict[animation_range_key] = animation_range
-    _scene_data_dict[export_objects_key] = scene_objects
-    _scene_data_dict[export_directory_key] = export_directory
+    _scene_data_dict[keys.queue_item_identifier_key] = _queue_item_identifier
+    _scene_data_dict[keys.scene_path_key] = scene_path
+    _scene_data_dict[keys.item_export_name_key] = export_name
+    _scene_data_dict[keys.animation_range_key] = animation_range
+    _scene_data_dict[keys.export_objects_key] = scene_objects
+    _scene_data_dict[keys.export_directory_key] = export_directory
 
 
     settings.add_resource_value(json_path=current_queue_path(), name=_queue_item_identifier, value=_scene_data_dict)
@@ -140,6 +121,137 @@ def add_to_export_queue(scene_path, export_name, scene_objects, animation_range,
 def remove_export_queue_item(queue_item_identifier):
     settings.remove_resource_value(json_path=current_queue_path(), name=queue_item_identifier)
 
+
+def clear_export_queue():
+    for _queue_id in current_export_queue():
+        remove_export_queue_item(_queue_id)
+
+
+###################################
+
+def get_queue_item_data(queue, queue_item_identifier, value_key):
+    _queue_item_data = queue.get(queue_item_identifier)
+
+    return _queue_item_data.get(value_key)
+
+
+def get_queue_item_export_args(queue, queue_item_identifier):
+    print('item stuff')
+    logger.info(f'Getting queue item data for ID: {queue_item_identifier}')
+    try:
+        _export_name = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.item_export_name_key
+        )
+        _export_directory = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.export_directory_key
+        )
+        _export_range = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.animation_range_key
+        )
+
+        _object = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.export_objects_key
+        )
+        _scene_path = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.scene_path_key
+        )
+
+        _export_path = os.path.join(_export_directory, f"{_export_name}.fbx")
+        print('more', _scene_path, _export_range, _export_path)
+        logger.info(f'Successfully queried data for queue item {queue_item_identifier}:{_export_name}')
+        return [_scene_path, _object, _export_range, _export_path]
+        # logger.debug(f'\n\nQueue item ID: {queue_item_identifier}\nexport name: {_export_name}, export directory: {_export_directory}, export range: {_export_range}, scene_path: {_scene_path}, objects: {_object}')
+    except Exception as e:
+        logger.warning(f'Encountered exception while attempting to get data for queue item ID: {queue_item_identifier}')
+        logger.exception(e)
+
+
+class QueueRunner(QtCore.QObject):
+    QueueItemRemoved = QtCore.Signal(str)
+    itemFinished = QtCore.Signal(object)
+
+    def __int__(self):
+        super().__init__()
+        self.export_argument_filepaths = {}
+
+
+    @QtCore.Slot()
+    def start_queue(self):
+        _maya_delegator = maya_process_delegator.MayaProcessDelegator()
+        _maya_delegator.itemExported.connect(self.queue_item_exported)
+
+        self.export_argument_filepaths = {}
+
+        logger.info(f'Starting export queue')
+
+        _queue = current_export_queue()
+
+        for _queue_item_id in _queue:
+
+            _args = get_queue_item_export_args(queue=_queue, queue_item_identifier=_queue_item_id)
+            logger.info(f'Generating temp file to hold export arguments for queue item: {_queue_item_id}')
+            try:
+                _export_args_file = cache.get_unique_file_name("_export_args.json")
+
+                logger.info(f'Successfully generated export argument temp file. "{_export_args_file}"')
+            except Exception as e:
+                logger.warning(f'Hit exception while attempting to get temp export arg file.')
+                logger.exception(e)
+                raise e
+
+
+            logger.debug(f'Writing export arguments to disk')
+            try:
+                file_management.write_json(_export_args_file, _args)
+
+                logger.info(f'Successfully wrote export argument temp file')
+            except Exception as e:
+                logger.warning(f'Hit exception while attempting to save temp export arg file.')
+                logger.exception(e)
+                raise e
+
+            self.export_argument_filepaths[_queue_item_id] = _export_args_file
+
+
+            logger.info(f'Sending export item and path to maya delegator')
+            _maya_delegator.export_from_scene(_queue_item_id, _export_args_file)
+
+        return 0
+
+    @QtCore.Slot()
+    def queue_item_exported(self, queue_item_id):
+        logger.info(f'Slot: "queue_item_exporter" triggered')
+        logger.info(f'Queue item ID: {queue_item_id} passed to slot')
+
+        logger.info(f'Emitting signal: "itemFinished" with queue ID')
+        self.itemFinished.emit(queue_item_id)
+
+        self.delete_temp_argument_file(queue_item_id)
+        # _maya_delegator.itemExported.connect(queue_item_id)
+
+
+    def delete_temp_argument_file(self, queue_item_id):
+        print(self.export_argument_filepaths)
+        _filepath = self.export_argument_filepaths.get(queue_item_id)
+
+        if _filepath is not None:
+            os.remove(_filepath)
+            logger.info(f'Deleted file: {_filepath}')
+
+            del self.export_argument_filepaths[queue_item_id]
+
+
+# region ####################### FUNCTIONS TO EDIT EXPORT QUEUE ITEMS ################################
 
 def update_queue_item_data(queue_item_identifier, value_key, new_value):
     """
@@ -170,90 +282,6 @@ def update_queue_item_data(queue_item_identifier, value_key, new_value):
     )
 
 
-def get_queue_item_data(queue_item_identifier, value_key):
-    _queue = current_export_queue()
-
-    _queue_item_data = _queue.get(queue_item_identifier)
-
-    return _queue_item_data.get(value_key)
-
-
-def clear_export_queue():
-    for _queue_id in current_export_queue():
-        remove_export_queue_item(_queue_id)
-
-
-
-
-######################################
-
-
-def export_queue_item(queue_item_identifier):
-    logger.info(f'Getting queue item data for ID: {queue_item_identifier}')
-    try:
-        _export_name = get_queue_item_data(
-            queue_item_identifier=queue_item_identifier,
-            value_key=keys.item_export_name_key
-        )
-        _export_directory = get_queue_item_data(
-            queue_item_identifier=queue_item_identifier,
-            value_key=keys.export_directory_key
-        )
-        _export_range = get_queue_item_data(
-            queue_item_identifier=queue_item_identifier,
-            value_key=keys.animation_range_key
-        )
-
-        _object = get_queue_item_data(
-            queue_item_identifier=queue_item_identifier,
-            value_key=keys.export_objects_key
-        )
-        _scene_path = get_queue_item_data(
-            queue_item_identifier=queue_item_identifier,
-            value_key=keys.scene_path_key
-        )
-        logger.info(f'Successfully queried data for queue item {queue_item_identifier}:{_export_name}')
-        logger.debug(f'\n\nQueue item ID: {queue_item_identifier}\nexport name: {_export_name}, export directory: {_export_directory}, export range: {_export_range}, scene_path: {_scene_path}, objects: {_object}')
-    except Exception as e:
-        logger.warning(f'Encountered exception while attempting to get data for queue item ID: {queue_item_identifier}')
-        logger.exception(e)
-
-    logger.info(f'Attempting to export for queue item ID: {queue_item_identifier}')
-    try:
-        _export_partial = partial(
-            export_controller.export_animation_range_from_scene,
-            scene_path=_scene_path,
-            objects=_object,
-            start_frame=_export_range[0],
-            end_frame=_export_range[1],
-            export_path=os.path.join(_export_directory, f"{_export_name}.fbx")
-        )
-        thread.run_on_thread(_export_partial)
-        logger.info(f'Successfully exported queue item ID: {queue_item_identifier}')
-    except Exception as e:
-        logger.warning(f'Encountered exception while attempting to begin export for for queue item ID: {queue_item_identifier}')
-        logger.exception(e)
-
-
-class QueueRunner(QtCore.QObject):
-    QueueItemRemoved = QtCore.Signal(str)
-
-    def __int__(self, queue):
-        super().__init__()
-    @QtCore.Slot()
-    def start_queue(self, clear_on_completion=False):
-        logger.info(f'Starting export queue. Clearing on completion: "{clear_on_completion}"')
-        _queue = current_export_queue()
-        for _queue_item_id in _queue:
-            export_queue_item(_queue_item_id)
-            if clear_on_completion is True:
-                remove_export_queue_item(_queue_item_id)
-                self.QueueItemRemoved.emit(_queue_item_id)
-        return 1
-
-
-
-
 @QtCore.Slot()
 def update_queue_item_export_name(queue_item_identifier, new_name):
     update_queue_item_data(
@@ -261,6 +289,7 @@ def update_queue_item_export_name(queue_item_identifier, new_name):
         value_key=keys.item_export_name_key,
         new_value=new_name
     )
+
 
 @QtCore.Slot()
 def update_queue_item_export_directory(queue_item_identifier, new_directory):
@@ -270,6 +299,7 @@ def update_queue_item_export_directory(queue_item_identifier, new_directory):
         new_value=new_directory
     )
 
+
 @QtCore.Slot()
 def update_queue_item_export_frame_range(queue_item_identifier, new_range):
     update_queue_item_data(
@@ -277,6 +307,7 @@ def update_queue_item_export_frame_range(queue_item_identifier, new_range):
         value_key=keys.animation_range_key,
         new_value=new_range
     )
+# endregion
 
 if __name__ == "__main__":
     pass

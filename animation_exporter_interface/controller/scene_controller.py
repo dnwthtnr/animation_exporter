@@ -1,8 +1,10 @@
-import sys
+import sys, os
+
+sys.path.append( os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))) )
+
 
 import logging
 import os.path
-import system_allocation.thread
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -10,11 +12,16 @@ logger.setLevel(logging.DEBUG)
 from maya import cmds, standalone, utils
 from PySide2 import QtCore, QtWidgets
 from functools import partial
-from system_allocation import thread
-import subprocess
-import multiprocessing
+import json
 
 from animation_exporter.utility_resources import settings, keys
+import math_operations
+
+
+def write_json(path, data):
+    with open(path, 'w') as file:
+        file.write(json.dumps(data, indent=4, sort_keys=True))
+
 
 
 # TODO: communicate to start a process that will write an output file to a place on disk. Just read that instead of
@@ -35,33 +42,33 @@ class Scene_Controller(QtCore.QObject):
         return self._current_scene_data
 
     @QtCore.Slot()
-    def open_file(self, filepath):
+    def open_file(self, filepath, output_filepath):
         logger.info(f'Opening file: {filepath} on a separate thread ')
 
         try:
-            _p = multiprocessing.Process(target=partial(cmds.file, filepath, open=1, force=1))
-            _p.start()
-            _p.join()
-            # cmds.file(filepath, open=1, force=1)
-            logger.info(f'File successfully opened ')
-            _p = multiprocessing.Process(target=self.emit_scene_contents)
-            _p.start()
-            _p.join()
-            # thread.run_on_thread(self.emit_scene_contents)
-            # self.emit_scene_contents()
+            cmds.file(filepath, open=1, force=1)
+            logger.info(f'File successfully opened')
+            _output_directory = self.write_scene_contents(output_filepath)
+            return 0, _output_directory
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to open file {filepath}')
             logger.exception(e)
-            return
+            return 1, None
 
     @QtCore.Slot()
-    def emit_scene_contents(self):
+    def write_scene_contents(self, output_filepath):
         _top_level_scene_items = self.get_top_level_objects()
         logger.info(f'Emitting SceneContentDataResponse with queried items organized in dictionary')
         _object_data_dict = self.author_scene_hierarchy_dict(objects=_top_level_scene_items)
         self._current_scene_data = _object_data_dict
         logger.debug(f'Dictionary: {_object_data_dict}')
-        self.SceneContentDataResponse.emit(_object_data_dict)
+
+        _output_directory = output_filepath
+
+        write_json(_output_directory, _object_data_dict)
+        return _output_directory
+        # self.SceneContentDataResponse.emit(_object_data_dict)
+
 
     @property
     def current_file(self):
@@ -159,14 +166,20 @@ class Scene_Controller(QtCore.QObject):
 
             _children = cmds.listRelatives(_object, children=True, fullPath=True)
 
-            _object_data_dictionary = {
-                "Object Name": _object,
-                "Parent": parent,
-                "Children": _children,
-                "Has_Or_Holds_Animation": self.object_has_or_holds_animation(_object),
-                # "Type": cmds.objectType(_object),
-                "Absolute Animation Range": f"{self.get_descendant_animation_range(_object)}"
-            }
+            # _object_data_dictionary = {
+            #     "Object Name": _object,
+            #     "Parent": parent,
+            #     "Children": _children,
+            #     "Has_Or_Holds_Animation": self.object_has_or_holds_animation(_object),
+            #     # "Type": cmds.objectType(_object),
+            #     "Absolute Animation Range": f"{self.get_descendant_animation_range(_object)}"
+            # }
+            _object_data_dictionary = self.emit_item_details_dictionary(_object)
+            if _object_data_dictionary is None:
+                _object_data_dictionary = {}
+            _object_data_dictionary["Object Name"] = _object
+            _object_data_dictionary["Parent"] = parent
+            _object_data_dictionary["Children"] = _children
             _hierarchy_dictionary[_object] = _object_data_dictionary
 
             if _children is not None:
@@ -181,7 +194,7 @@ class Scene_Controller(QtCore.QObject):
 
     #############################################
 
-    def separate_animation_partitions(self, object):
+    def get_keyframe_times(self, object):
         """
         Separates the animation times for the given object and its descendants into chunks based on a threshold.
         Threshold determines how many empty frames there should be before separating a piece of animation
@@ -199,23 +212,9 @@ class Scene_Controller(QtCore.QObject):
         """
         _descendant_animation_times_list = self.get_descendant_animation_times_list(object)
 
-        animation_partitions_list = []
+        _reduced_keyframe_list = math_operations.kill_duplicate_list_elements(_descendant_animation_times_list)
 
-        _current_partition_start_point = _descendant_animation_times_list[0]
-        for i, frame in enumerate(_descendant_animation_times_list):
-            _previous_frame = _descendant_animation_times_list[i - 1] if i > 0 else frame
-            _current_frame = frame
-
-            _partition_frame_cutoff = _previous_frame + settings.animation_frame_gap_threshold()
-
-            if _current_frame >= _partition_frame_cutoff or _current_frame == _descendant_animation_times_list[-1]:
-                _partition = [_current_partition_start_point, _previous_frame]
-                _current_partition_start_point = _current_frame
-
-                if _current_partition_start_point != _previous_frame:
-                    animation_partitions_list.append(_partition)
-
-        return animation_partitions_list
+        return _reduced_keyframe_list
 
     def get_descendant_animation_times_list(self, object):
         """
@@ -344,21 +343,15 @@ class Scene_Controller(QtCore.QObject):
     ####################################
     # region Exporting Stuff
 
-    def bake_animation(self, object):
-        cmds.bakeSimulation(object, animation='keysOrObjects', hierarchy='below')
-
-    def export(self):
-        return
-
     # endregion
 
     ##########################################
 
     # region Object stuff
 
-    @QtCore.Slot()
-    def emit_item_details_on_thread(self, item):
-        _item_data_dict = self.emit_item_details_dictionary(item)
+    # @QtCore.Slot()
+    # def emit_item_details_on_thread(self, item):
+    #     _item_data_dict = self.emit_item_details_dictionary(item)
 
     def emit_item_details_dictionary(self, object_name):
         # TODO: Start caching this stuf somehow -- lags when requerying stuff
@@ -367,8 +360,8 @@ class Scene_Controller(QtCore.QObject):
             logger.debug(f'Getting details for object: {object_name}')
 
             try:
-                _animation_partitions = self.separate_animation_partitions(object_name)
-                logger.debug(f'_animation_partitions for object: {object_name} :: {_animation_partitions}')
+                _animation_times = self.get_keyframe_times(object_name)
+                logger.debug(f'_animation_partitions for object: {object_name} :: {_animation_times}')
 
                 _animation_range = self.get_descendant_animation_range(object_name)
                 logger.debug(f'_animation_range for object: {object_name} :: {_animation_range}')
@@ -393,9 +386,9 @@ class Scene_Controller(QtCore.QObject):
                 raise e
 
             logger.debug(f'Populating detail dictionary for object: {object_name}')
+            _item_data_dict = {}
             try:
-                _item_data_dict = {}
-                _item_data_dict[keys.animation_partitions_key] = _animation_partitions
+                _item_data_dict[keys.animation_times] = _animation_times
                 _item_data_dict[keys.animation_range_key] = _animation_range
                 _item_data_dict[keys.scene_path_key] = _scene_path
                 _item_data_dict[keys.item_export_name_key] = _item_export_name
@@ -409,14 +402,48 @@ class Scene_Controller(QtCore.QObject):
 
             logger.debug(f'Emitting ItemDetailDataResponse with dictionary')
             logger.debug(_item_data_dict)
-            self.ItemDetailsDataResponse.emit(_item_data_dict)
+            # self.ItemDetailsDataResponse.emit(_item_data_dict)
+
+            return _item_data_dict
+
 
 
 if __name__ == "__main__":
-    _partial = partial(
-        subprocess.Popen,
-        ["python", r"Q:\__packages\_GitHub\mayapy_interface\__init__.py", "arg1", "arg2"],
-        stdout=sys.stdout
-    )
-    system_allocation.thread.run_on_thread(_partial)
-    # subprocess.Popen(["python", r"Q:\__packages\_GitHub\mayapy_interface\__init__.py", "arg1", "arg2"],stdout=sys.stdout)
+    scene_controller = Scene_Controller()
+
+    _args = sys.argv
+    print('args', _args)
+
+    _filepath = os.path.abspath(_args[-2])
+    _output_filepath = os.path.abspath(_args[-1])
+
+    _out = scene_controller.open_file(_filepath, _output_filepath)
+    print(_out)
+    # input(f'File?')
+    # loop = True
+    #
+    # while loop is True:
+    #     sys.stdin.flush()
+    #     _input = input("input:")
+    #     print(_input)
+    #     if _input == "exit":
+    #         loop = False
+    #         continue
+    #
+    #     else:
+    #         if hasattr(scene_controller, _input):
+    #             print(f'hasattr: {_input}')
+    #             _string = f"scene_controller.{_input}"
+    #             _return = eval(_string)
+
+    # scene_controller.open_file(filepath=)
+
+    # TODO: either make this a command line operatable program or automate 
+
+    # _partial = partial(
+    #     subprocess.Popen,
+    #     ["python", r"Q:\__packages\_GitHub\mayapy_interface\__init__.py", "arg1", "arg2"],
+    #     stdout=sys.stdout
+    # )
+    # system_allocation.thread.run_on_thread(_partial)
+    # # subprocess.Popen(["python", r"Q:\__packages\_GitHub\mayapy_interface\__init__.py", "arg1", "arg2"],stdout=sys.stdout)

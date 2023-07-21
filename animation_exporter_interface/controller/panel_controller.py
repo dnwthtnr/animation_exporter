@@ -1,5 +1,7 @@
+import file_management
 import logging
 import multiprocessing
+import os.path
 import threading
 
 logger = logging.getLogger(__name__)
@@ -23,9 +25,10 @@ from animation_exporter.animation_exporter_interface.view import (
 )
 from animation_exporter.animation_exporter_interface.controller import (
     queue_controller,
-    scene_controller
+maya_process_delegator,
+item_detail_controller
 )
-from animation_exporter.utility_resources import keys
+from animation_exporter.utility_resources import keys, settings, cache
 
 
 class PanelController(QtCore.QObject):
@@ -44,6 +47,10 @@ class PanelController(QtCore.QObject):
     # SceneSelected = QtCore.Signal(str)
     SceneDetailPanelBuilt = QtCore.Signal(object)
 
+    writeSceneData = QtCore.Signal(str, str)
+    populateSceneDataView = QtCore.Signal(object)
+    startQueue = QtCore.Signal()
+
     # endregion
 
     @QtCore.Slot()
@@ -58,7 +65,7 @@ class PanelController(QtCore.QObject):
     def __init__(self, *args, **kwargs):
 
         super().__init__(*args, **kwargs)
-        self.worker_thread = threading.Thread(daemon=True)
+        self.worker_thread = QtCore.QThread()
         self.worker_thread.start()
 
 
@@ -68,6 +75,7 @@ class PanelController(QtCore.QObject):
         logger.debug(f'Building queue panel and controller')
         try:
             _queue_runner = queue_controller.QueueRunner()
+            _queue_runner.moveToThread(self.worker_thread)
             _queue_view = AnimationExportQueueView.QueueItemHolder()
             _queue_view._controller = _queue_runner
             logger.info(f'Queue panel successfully built')
@@ -78,6 +86,7 @@ class PanelController(QtCore.QObject):
 
         logger.debug(f'Connecting signals between queue_runner, queue_view and panel_controller')
         try:
+            # self.startQueue.connect(_queue_runner.start_queue)
             _queue_runner.QueueItemRemoved.connect(_queue_view.remove_queue_item)
 
             _queue_view.QueueSelected.connect(self.queue_selected)
@@ -164,11 +173,16 @@ class PanelController(QtCore.QObject):
         logger.debug(f'Building scene view panel and controller')
         try:
             # multiprocessing.Process(target=)
-            _scene_controller = scene_controller.Scene_Controller()
-            # _scene_controller.moveToThread(self.worker_thread)
+            _maya_delegator = maya_process_delegator.MayaProcessDelegator()
+
+            _maya_delegator.sceneDataWritten.connect(self.populate_scene_view)
+
+            self.writeSceneData.connect(_maya_delegator.open_file_write_scene_data)
+
+            _maya_delegator.moveToThread(self.worker_thread)
 
             _scene_view = AnimationExporterSceneView.ExporterSceneView()
-            _scene_view._controller = _scene_controller
+            _scene_view._controller = _maya_delegator
             logger.info(f'Scene panel successfully built')
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to build scene view. Aborting')
@@ -188,11 +202,11 @@ class PanelController(QtCore.QObject):
         logger.debug(f'Connecting signals between _scene_view, _scene_controller and panel_controller')
         try:
 
-            _scene_view.ItemSelected.connect(_scene_controller.emit_item_details_on_thread)
-            _scene_view.SceneSelected.connect(_scene_controller.open_file)
+            _scene_view.ItemSelected.connect(self.generate_scene_detail_panel)
+            _scene_view.SceneSelected.connect(self.get_scene_data)
 
-            _scene_controller.SceneContentDataResponse.connect(_scene_view.populate_item_view)
-            _scene_controller.ItemDetailsDataResponse.connect(self.generate_scene_detail_panel)
+            self.populateSceneDataView.connect(_scene_view.populate_item_view)
+            # _scene_controller.ItemDetailsDataResponse.connect(self.generate_scene_detail_panel)
 
             self.SceneDetailPanelBuilt.connect(_scene_detail_view.clearAndAddWidget)
             logger.info(f'Successfully connected scene view signals')
@@ -215,6 +229,21 @@ class PanelController(QtCore.QObject):
             logger.warning(f'Ecountered exception when attempting to emit FocalPanelBuilt with scene view')
             logger.exception(e)
 
+    @QtCore.Slot()
+    def get_scene_data(self, scene):
+        _scene_data_filepath = cache.get_unique_file_name(root_name="current_scene_data.json")
+        settings.cache_values.set_setting(setting=keys.current_scene_data_file, value=_scene_data_filepath)
+        self.writeSceneData.emit(scene, _scene_data_filepath)
+        return
+
+    @QtCore.Slot()
+    def populate_scene_view(self):
+        _scene_data_filepath = settings.cache_values.get_setting(keys.current_scene_data_file)
+
+        if os.path.exists(_scene_data_filepath):
+            _data = file_management.read_json(_scene_data_filepath)
+            self.populateSceneDataView.emit(_data)
+
     def build_empty_detail_panel(self):
         _empty = base_widgets.Label("No Details Yet")
         _widget = base_layouts.VerticalLayout()
@@ -225,9 +254,23 @@ class PanelController(QtCore.QObject):
     @QtCore.Slot()
     def generate_scene_detail_panel(self, item_detail_dictionary):
         logger.info(f'Signal caught to build scene detail view for dict: {item_detail_dictionary}')
-        _item_view = ItemDetailedView.ItemDetailedView(item_detail_dictionary)
+
+        _item_detail_controller = item_detail_controller.ItemDetailController(
+            item_detail_dictionary=item_detail_dictionary
+        )
+        _item_view = ItemDetailedView.ItemDetailedView()
+
+        _item_detail_controller.dataResponse.connect(_item_view.populate_detail_view)
+        _item_detail_controller.addToQueue.connect(self.emit_add_to_export_queue)
+        from functools import partial
+
+        _item_view.dataRequest.connect(_item_detail_controller.emit_data_response)
+        _item_view.valueChanged.connect(_item_detail_controller.update_value)
+        _item_view.AddToQueueButtonClicked.connect(partial(_item_detail_controller.emit_queue_data))
+        _item_view.AddToQueueButtonClicked.connect(partial(print, "yes"))
+
         _item_view.finish_initialization()
-        _item_view.AddToQueueButtonClicked.connect(self.emit_add_to_export_queue)
+
         self.SceneDetailPanelBuilt.emit(_item_view)
     # endregion
 
