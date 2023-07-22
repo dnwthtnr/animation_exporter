@@ -15,6 +15,7 @@ from pyqt_interface_elements import (
     icons,
     styles,
     proceadural_displays,
+    visuals
 )
 from functools import partial
 from animation_exporter.utility_resources import  keys
@@ -34,9 +35,11 @@ class QueueItem(base_layouts.ExpandWhenClicked):
         self.scene_path_widget = self.build_scene_path(scene_path)
         self.frame_range_widget = self.build_frane_range(frame_range)
         self.export_directory_widget = self.build_export_directory(export_directory)
+        self.status_icon = self.build_status_icon()
         _close_button = self.build_close_button()
 
         self.addCollapsedWidget(self.export_name_widget)
+        self.addCollapsedWidget(self.status_icon)
         self.addCollapsedWidget(_close_button, alignment=constants.align_right)
 
         self.addExpandedWidget(self.scene_path_widget)
@@ -84,6 +87,17 @@ class QueueItem(base_layouts.ExpandWhenClicked):
         _widget = proceadural_displays.ChooseDirectoryAttributeEditor(attribute_name="Export Directory:", attribute_value=directory)
         _widget.valueEdited.connect(self.emit_export_name_changed)
         return _widget
+
+    def build_status_icon(self):
+
+        _widget = base_layouts.HorizontalLayout()
+        return _widget
+
+
+    def addStatusIcon(self, widget):
+        self.status_icon.clear_layout()
+        self.status_icon.addWidget(widget)
+
 
     def build_close_button(self):
         _widget = base_widgets.Tool_Button()
@@ -146,8 +160,23 @@ class QueueItemHolder(base_layouts.VerticalLayout):
         _button = base_widgets.Button(text='Start Queue')
         _button.setMinimumSize(105, 25)
         _button.clicked.connect(self.StartQueueButtonClicked.emit)
+        _button.clicked.connect(self.startQueueItemLoads)
         _button.setStyleSheet(styles.maya_button)
         return _button
+
+
+    @QtCore.Slot()
+    def queueItemCompleted(self, item_id):
+        for _item in self.queue_items:
+            if _item.item_identifier == item_id:
+                _item.status_icon.clear_layout()
+                # _item.addStatusIcon(icons.checkbox_checked)
+        return
+
+    def startQueueItemLoads(self):
+        print('start')
+        for _item in self.queue_items:
+            _item.addStatusIcon(visuals.loading_wheel())
 
     #######################################################
 

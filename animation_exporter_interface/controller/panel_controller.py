@@ -89,6 +89,9 @@ class PanelController(QtCore.QObject):
             # self.startQueue.connect(_queue_runner.start_queue)
             _queue_runner.QueueItemRemoved.connect(_queue_view.remove_queue_item)
 
+            # TODO: seperate thsi out. Have runner emit signal that item has started to signal to queue view to start the loading instead of it doing it itself
+            _queue_runner.itemFinished.connect(_queue_view.queueItemCompleted)
+
             _queue_view.QueueSelected.connect(self.queue_selected)
             _queue_view.QueueSelectionListDataQuery.connect(self.emit_queue_paths)
 
