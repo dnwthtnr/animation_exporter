@@ -553,3 +553,248 @@
 2023-07-21 20:26:28,378 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Queue item ID: 5 passed to slot
 2023-07-21 20:26:28,378 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Emitting signal: "itemFinished" with queue ID
 2023-07-21 20:26:28,379 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Deleted file: Q:\__packages\_GitHub\animation_exporter\utility_resources\cache\_export_args_2.json
+2023-07-25 16:24:44,645 | animation_exporter.animation_exporter_interface.controller.queue_controller | WARNING -- Queue path already present in queue list
+2023-07-25 16:24:44,747 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Building menubar
+2023-07-25 16:24:44,911 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Successfully built and set menu bar
+2023-07-25 16:24:44,912 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Building holders for main widgets.
+2023-07-25 16:24:44,912 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.VerticalLayout(0x1cb7a7550b0) at 0x000001CB777AE788>, <pyqt_interface_elements.base_layouts.TabWidget(0x1cb7a755580) at 0x000001CB777BD7C8>, <pyqt_interface_elements.base_layouts.VerticalLayout(0x1cb7a7587d0) at 0x000001CB7BED56C8>)
+2023-07-25 16:24:44,912 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Building central widget and adding holders
+2023-07-25 16:24:44,913 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Successfully built central widget and added holders
+2023-07-25 16:24:44,913 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Setting central widget
+2023-07-25 16:24:44,913 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x1cb7a754e80) at 0x000001CB76716248>
+2023-07-25 16:24:44,913 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Emitting InitializationFinished signal
+2023-07-25 16:24:44,913 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Beginning construction of panels
+2023-07-25 16:24:44,913 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Building main window header
+2023-07-25 16:24:44,913 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully built header and connected signals
+2023-07-25 16:24:44,913 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x1cb7a757a40) at 0x000001CB7BED5A88>
+2023-07-25 16:24:44,914 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Building main window footer
+2023-07-25 16:24:44,915 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully built footer and connected signals
+2023-07-25 16:24:44,915 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x1cb7a7586f0) at 0x000001CB7BED5C88>
+2023-07-25 16:24:44,916 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Scene panel successfully built
+2023-07-25 16:24:44,917 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully connected scene view signals
+2023-07-25 16:24:44,918 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Emitting FocalPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterSceneView.ExporterSceneView(0x1cb7a758a00) at 0x000001CB7BEDB548>
+2023-07-25 16:24:44,920 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Queue panel successfully built
+2023-07-25 16:24:44,920 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully connected queue panel signals
+2023-07-25 16:24:44,921 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x1cb7a75d690) at 0x000001CB7BEDE8C8>
+2023-07-25 16:24:44,921 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully emitted queue panel on FocalPanelBuilt signal
+2023-07-25 16:24:44,931 | animation_exporter.animation_exporter_interface.view.AnimationExportQueueView | INFO -- Populating queue view from given queue.
+2023-07-25 16:24:44,941 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Construction of panels complete
+2023-07-25 16:24:49,818 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Starting export queue
+2023-07-25 16:24:49,819 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Getting queue item data for ID: 4
+2023-07-25 16:24:49,819 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully queried data for queue item 4:placeholder_name[224.94773741496599_229.21266275510203]
+2023-07-25 16:24:49,819 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Generating temp file to hold export arguments for queue item: 4
+2023-07-25 16:24:49,820 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully generated export argument temp file. "Q:\__packages\_GitHub\animation_exporter\utility_resources\cache\_export_args_2.json"
+2023-07-25 16:24:49,821 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully wrote export argument temp file
+2023-07-25 16:24:49,821 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Sending export item and path to maya delegator
+2023-07-25 16:24:50,562 | animation_exporter.animation_exporter_interface.controller.queue_controller | WARNING -- Queue path already present in queue list
+2023-07-25 16:25:06,852 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Slot: "queue_item_exporter" triggered
+2023-07-25 16:25:06,852 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Queue item ID: 4 passed to slot
+2023-07-25 16:25:06,852 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Emitting signal: "itemFinished" with queue ID
+2023-07-25 16:25:06,852 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Deleted file: Q:\__packages\_GitHub\animation_exporter\utility_resources\cache\_export_args_2.json
+2023-07-25 16:25:06,852 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Getting queue item data for ID: 5
+2023-07-25 16:25:06,853 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully queried data for queue item 5:placeholder_name[180.8768506802721_180.87685085034013]
+2023-07-25 16:25:06,853 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Generating temp file to hold export arguments for queue item: 5
+2023-07-25 16:25:06,853 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully generated export argument temp file. "Q:\__packages\_GitHub\animation_exporter\utility_resources\cache\_export_args_2.json"
+2023-07-25 16:25:06,855 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully wrote export argument temp file
+2023-07-25 16:25:06,855 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Sending export item and path to maya delegator
+2023-07-25 16:25:07,419 | animation_exporter.animation_exporter_interface.controller.queue_controller | WARNING -- Queue path already present in queue list
+2023-07-25 16:25:21,701 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Slot: "queue_item_exporter" triggered
+2023-07-25 16:25:21,701 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Queue item ID: 5 passed to slot
+2023-07-25 16:25:21,701 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Emitting signal: "itemFinished" with queue ID
+2023-07-25 16:25:21,701 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Deleted file: Q:\__packages\_GitHub\animation_exporter\utility_resources\cache\_export_args_2.json
+2023-07-25 16:43:41,402 | animation_exporter.animation_exporter_interface.controller.queue_controller | WARNING -- Queue path already present in queue list
+2023-07-25 16:43:41,414 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Building menubar
+2023-07-25 16:43:41,531 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Successfully built and set menu bar
+2023-07-25 16:43:41,532 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Building holders for main widgets.
+2023-07-25 16:43:41,532 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.VerticalLayout(0x1c3a50355e0) at 0x000001C3A20AD9C8>, <pyqt_interface_elements.base_layouts.TabWidget(0x1c3a5035ea0) at 0x000001C3A20BD9C8>, <pyqt_interface_elements.base_layouts.VerticalLayout(0x1c3a5037db0) at 0x000001C3A67C4748>)
+2023-07-25 16:43:41,532 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Building central widget and adding holders
+2023-07-25 16:43:41,532 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Successfully built central widget and added holders
+2023-07-25 16:43:41,532 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Setting central widget
+2023-07-25 16:43:41,533 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x1c3a5034540) at 0x000001C3A1016248>
+2023-07-25 16:43:41,533 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Emitting InitializationFinished signal
+2023-07-25 16:43:41,533 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Beginning construction of panels
+2023-07-25 16:43:41,533 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Building main window header
+2023-07-25 16:43:41,533 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully built header and connected signals
+2023-07-25 16:43:41,533 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x1c3a5036920) at 0x000001C3A2131708>
+2023-07-25 16:43:41,534 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Building main window footer
+2023-07-25 16:43:41,535 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully built footer and connected signals
+2023-07-25 16:43:41,535 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x1c3a50376b0) at 0x000001C3A1407848>
+2023-07-25 16:43:41,536 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Scene panel successfully built
+2023-07-25 16:43:41,537 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully connected scene view signals
+2023-07-25 16:43:41,538 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Emitting FocalPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterSceneView.ExporterSceneView(0x1c3a5038750) at 0x000001C3A67CB548>
+2023-07-25 16:43:41,540 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Queue panel successfully built
+2023-07-25 16:43:41,541 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully connected queue panel signals
+2023-07-25 16:43:41,541 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x1c3a502c2e0) at 0x000001C3A67CE8C8>
+2023-07-25 16:43:41,541 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully emitted queue panel on FocalPanelBuilt signal
+2023-07-25 16:43:41,546 | animation_exporter.animation_exporter_interface.view.AnimationExportQueueView | INFO -- Populating queue view from given queue.
+2023-07-25 16:43:41,555 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Construction of panels complete
+2023-07-25 16:43:44,337 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Starting export queue
+2023-07-25 16:43:44,338 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Getting queue item data for ID: 4
+2023-07-25 16:43:44,338 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully queried data for queue item 4:placeholder_name[224.94773741496599_229.21266275510203]
+2023-07-25 16:43:44,338 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Generating temp file to hold export arguments for queue item: 4
+2023-07-25 16:43:44,339 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully generated export argument temp file. "Q:\__packages\_GitHub\animation_exporter\utility_resources\cache\_export_args_2.json"
+2023-07-25 16:43:44,340 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully wrote export argument temp file
+2023-07-25 16:43:44,340 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Sending export item and path to maya delegator
+2023-07-25 16:43:45,128 | animation_exporter.animation_exporter_interface.controller.queue_controller | WARNING -- Queue path already present in queue list
+2023-07-25 16:44:23,622 | animation_exporter.animation_exporter_interface.controller.queue_controller | WARNING -- Queue path already present in queue list
+2023-07-25 16:44:23,633 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Building menubar
+2023-07-25 16:44:23,750 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Successfully built and set menu bar
+2023-07-25 16:44:23,750 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Building holders for main widgets.
+2023-07-25 16:44:23,750 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.VerticalLayout(0x1d445a88580) at 0x000001D442B0E688>, <pyqt_interface_elements.base_layouts.TabWidget(0x1d445a89850) at 0x000001D442B1D808>, <pyqt_interface_elements.base_layouts.VerticalLayout(0x1d445a8a340) at 0x000001D442B1D988>)
+2023-07-25 16:44:23,750 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Building central widget and adding holders
+2023-07-25 16:44:23,751 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Successfully built central widget and added holders
+2023-07-25 16:44:23,751 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Setting central widget
+2023-07-25 16:44:23,751 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x1d445a86f30) at 0x000001D441A76208>
+2023-07-25 16:44:23,751 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Emitting InitializationFinished signal
+2023-07-25 16:44:23,751 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Beginning construction of panels
+2023-07-25 16:44:23,751 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Building main window header
+2023-07-25 16:44:23,751 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully built header and connected signals
+2023-07-25 16:44:23,751 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x1d445a8ab90) at 0x000001D44720E408>
+2023-07-25 16:44:23,752 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Building main window footer
+2023-07-25 16:44:23,753 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully built footer and connected signals
+2023-07-25 16:44:23,753 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x1d445a8a2d0) at 0x000001D44720E608>
+2023-07-25 16:44:23,754 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Scene panel successfully built
+2023-07-25 16:44:23,754 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully connected scene view signals
+2023-07-25 16:44:23,756 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Emitting FocalPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterSceneView.ExporterSceneView(0x1d445a8c800) at 0x000001D44720E848>
+2023-07-25 16:44:23,758 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Queue panel successfully built
+2023-07-25 16:44:23,758 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully connected queue panel signals
+2023-07-25 16:44:23,758 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x1d445a80630) at 0x000001D447215248>
+2023-07-25 16:44:23,758 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully emitted queue panel on FocalPanelBuilt signal
+2023-07-25 16:44:23,764 | animation_exporter.animation_exporter_interface.view.AnimationExportQueueView | INFO -- Populating queue view from given queue.
+2023-07-25 16:44:23,772 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Construction of panels complete
+2023-07-25 16:44:27,200 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Starting export queue
+2023-07-25 16:44:27,202 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Getting queue item data for ID: 4
+2023-07-25 16:44:27,202 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully queried data for queue item 4:placeholder_name[224.94773741496599_229.21266275510203]
+2023-07-25 16:44:27,202 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Generating temp file to hold export arguments for queue item: 4
+2023-07-25 16:44:27,202 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully generated export argument temp file. "Q:\__packages\_GitHub\animation_exporter\utility_resources\cache\_export_args_3.json"
+2023-07-25 16:44:27,204 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully wrote export argument temp file
+2023-07-25 16:44:27,205 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Sending export item and path to maya delegator
+2023-07-25 16:44:27,738 | animation_exporter.animation_exporter_interface.controller.queue_controller | WARNING -- Queue path already present in queue list
+2023-07-25 16:44:42,020 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Slot: "queue_item_exporter" triggered
+2023-07-25 16:44:42,020 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Queue item ID: 4 passed to slot
+2023-07-25 16:44:42,020 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Emitting signal: "itemFinished" with queue ID
+2023-07-25 16:44:42,020 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Deleted file: Q:\__packages\_GitHub\animation_exporter\utility_resources\cache\_export_args_3.json
+2023-07-25 16:44:42,020 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Getting queue item data for ID: 5
+2023-07-25 16:44:42,024 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully queried data for queue item 5:placeholder_name[180.8768506802721_180.87685085034013]
+2023-07-25 16:44:42,024 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Generating temp file to hold export arguments for queue item: 5
+2023-07-25 16:44:42,024 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully generated export argument temp file. "Q:\__packages\_GitHub\animation_exporter\utility_resources\cache\_export_args_3.json"
+2023-07-25 16:44:42,026 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully wrote export argument temp file
+2023-07-25 16:44:42,026 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Sending export item and path to maya delegator
+2023-07-25 16:44:42,566 | animation_exporter.animation_exporter_interface.controller.queue_controller | WARNING -- Queue path already present in queue list
+2023-07-25 16:44:57,073 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Slot: "queue_item_exporter" triggered
+2023-07-25 16:44:57,073 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Queue item ID: 5 passed to slot
+2023-07-25 16:44:57,073 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Emitting signal: "itemFinished" with queue ID
+2023-07-25 16:44:57,073 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Deleted file: Q:\__packages\_GitHub\animation_exporter\utility_resources\cache\_export_args_3.json
+2023-07-25 16:46:21,381 | animation_exporter.animation_exporter_interface.controller.queue_controller | WARNING -- Queue path already present in queue list
+2023-07-25 16:46:21,393 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Building menubar
+2023-07-25 16:46:21,511 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Successfully built and set menu bar
+2023-07-25 16:46:21,511 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Building holders for main widgets.
+2023-07-25 16:46:21,511 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.VerticalLayout(0x25728b2e3a0) at 0x0000025725BBD7C8>, <pyqt_interface_elements.base_layouts.TabWidget(0x25728b2ea30) at 0x0000025725BCD808>, <pyqt_interface_elements.base_layouts.VerticalLayout(0x25728b30a90) at 0x000002572A2C4688>)
+2023-07-25 16:46:21,511 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Building central widget and adding holders
+2023-07-25 16:46:21,512 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Successfully built central widget and added holders
+2023-07-25 16:46:21,512 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Setting central widget
+2023-07-25 16:46:21,512 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x25728b2c730) at 0x0000025724B16208>
+2023-07-25 16:46:21,512 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Emitting InitializationFinished signal
+2023-07-25 16:46:21,512 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Beginning construction of panels
+2023-07-25 16:46:21,512 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Building main window header
+2023-07-25 16:46:21,512 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully built header and connected signals
+2023-07-25 16:46:21,512 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x25728b30ef0) at 0x000002572A2C4C48>
+2023-07-25 16:46:21,513 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Building main window footer
+2023-07-25 16:46:21,514 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully built footer and connected signals
+2023-07-25 16:46:21,514 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x25728b2ffa0) at 0x000002572A2C4E48>
+2023-07-25 16:46:21,515 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Scene panel successfully built
+2023-07-25 16:46:21,515 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully connected scene view signals
+2023-07-25 16:46:21,517 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Emitting FocalPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterSceneView.ExporterSceneView(0x25728b32310) at 0x000002572A2CB0C8>
+2023-07-25 16:46:21,519 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Queue panel successfully built
+2023-07-25 16:46:21,519 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully connected queue panel signals
+2023-07-25 16:46:21,519 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x25728b26a00) at 0x000002572A2CEA88>
+2023-07-25 16:46:21,519 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully emitted queue panel on FocalPanelBuilt signal
+2023-07-25 16:46:21,524 | animation_exporter.animation_exporter_interface.view.AnimationExportQueueView | INFO -- Populating queue view from given queue.
+2023-07-25 16:46:21,533 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Construction of panels complete
+2023-07-25 16:46:23,769 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Starting export queue
+2023-07-25 16:46:23,771 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Getting queue item data for ID: 4
+2023-07-25 16:46:23,771 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully queried data for queue item 4:placeholder_name[224.94773741496599_229.21266275510203]
+2023-07-25 16:46:23,771 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Generating temp file to hold export arguments for queue item: 4
+2023-07-25 16:46:23,771 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully generated export argument temp file. "Q:\__packages\_GitHub\animation_exporter\utility_resources\cache\_export_args_3.json"
+2023-07-25 16:46:23,773 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully wrote export argument temp file
+2023-07-25 16:46:23,773 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Sending export item and path to maya delegator
+2023-07-25 16:46:24,315 | animation_exporter.animation_exporter_interface.controller.queue_controller | WARNING -- Queue path already present in queue list
+2023-07-25 16:46:38,641 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Slot: "queue_item_exporter" triggered
+2023-07-25 16:46:38,641 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Queue item ID: 4 passed to slot
+2023-07-25 16:46:38,641 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Emitting signal: "itemFinished" with queue ID
+2023-07-25 16:46:38,641 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Deleted file: Q:\__packages\_GitHub\animation_exporter\utility_resources\cache\_export_args_3.json
+2023-07-25 16:46:38,641 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Getting queue item data for ID: 5
+2023-07-25 16:46:38,642 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully queried data for queue item 5:placeholder_name[180.8768506802721_180.87685085034013]
+2023-07-25 16:46:38,642 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Generating temp file to hold export arguments for queue item: 5
+2023-07-25 16:46:38,642 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully generated export argument temp file. "Q:\__packages\_GitHub\animation_exporter\utility_resources\cache\_export_args_3.json"
+2023-07-25 16:46:38,644 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully wrote export argument temp file
+2023-07-25 16:46:38,644 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Sending export item and path to maya delegator
+2023-07-25 16:46:39,187 | animation_exporter.animation_exporter_interface.controller.queue_controller | WARNING -- Queue path already present in queue list
+2023-07-25 16:47:21,773 | animation_exporter.animation_exporter_interface.controller.queue_controller | WARNING -- Queue path already present in queue list
+2023-07-25 16:47:21,786 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Building menubar
+2023-07-25 16:47:21,903 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Successfully built and set menu bar
+2023-07-25 16:47:21,903 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Building holders for main widgets.
+2023-07-25 16:47:21,903 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.VerticalLayout(0x22d4c8a6f70) at 0x0000022D4991D808>, <pyqt_interface_elements.base_layouts.TabWidget(0x22d4c8a5f40) at 0x0000022D4992D848>, <pyqt_interface_elements.base_layouts.VerticalLayout(0x22d4c8a8e80) at 0x0000022D4E014848>)
+2023-07-25 16:47:21,904 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Building central widget and adding holders
+2023-07-25 16:47:21,904 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Successfully built central widget and added holders
+2023-07-25 16:47:21,904 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Setting central widget
+2023-07-25 16:47:21,904 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x22d4c8a4420) at 0x0000022D48896208>
+2023-07-25 16:47:21,904 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Emitting InitializationFinished signal
+2023-07-25 16:47:21,905 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Beginning construction of panels
+2023-07-25 16:47:21,905 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Building main window header
+2023-07-25 16:47:21,905 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully built header and connected signals
+2023-07-25 16:47:21,905 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x22d4c8a8160) at 0x0000022D4E014C08>
+2023-07-25 16:47:21,905 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Building main window footer
+2023-07-25 16:47:21,906 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully built footer and connected signals
+2023-07-25 16:47:21,907 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x22d4c8a8080) at 0x0000022D4E014E08>
+2023-07-25 16:47:21,907 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Scene panel successfully built
+2023-07-25 16:47:21,908 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully connected scene view signals
+2023-07-25 16:47:21,910 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Emitting FocalPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterSceneView.ExporterSceneView(0x22d4c8aaa80) at 0x0000022D4E01B648>
+2023-07-25 16:47:21,912 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Queue panel successfully built
+2023-07-25 16:47:21,913 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully connected queue panel signals
+2023-07-25 16:47:21,913 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x22d4c89ddc0) at 0x0000022D4E01EA48>
+2023-07-25 16:47:21,913 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully emitted queue panel on FocalPanelBuilt signal
+2023-07-25 16:47:21,918 | animation_exporter.animation_exporter_interface.view.AnimationExportQueueView | INFO -- Populating queue view from given queue.
+2023-07-25 16:47:21,926 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Construction of panels complete
+2023-07-25 16:47:24,045 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Starting export queue
+2023-07-25 16:47:24,047 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Getting queue item data for ID: 4
+2023-07-25 16:47:24,047 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully queried data for queue item 4:placeholder_name[224.94773741496599_229.21266275510203]
+2023-07-25 16:47:24,047 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Generating temp file to hold export arguments for queue item: 4
+2023-07-25 16:47:24,047 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully generated export argument temp file. "Q:\__packages\_GitHub\animation_exporter\utility_resources\cache\_export_args_4.json"
+2023-07-25 16:47:24,049 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully wrote export argument temp file
+2023-07-25 16:47:24,049 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Sending export item and path to maya delegator
+2023-07-25 16:47:24,592 | animation_exporter.animation_exporter_interface.controller.queue_controller | WARNING -- Queue path already present in queue list
+2023-07-25 16:47:59,781 | animation_exporter.animation_exporter_interface.controller.queue_controller | WARNING -- Queue path already present in queue list
+2023-07-25 16:47:59,792 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Building menubar
+2023-07-25 16:47:59,910 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Successfully built and set menu bar
+2023-07-25 16:47:59,911 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Building holders for main widgets.
+2023-07-25 16:47:59,911 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Successfully built holders for (header, focal_tab_widget, footer) :: (<pyqt_interface_elements.base_layouts.VerticalLayout(0x12d59a76710) at 0x0000012D57E5E5C8>, <pyqt_interface_elements.base_layouts.TabWidget(0x12d59a751a0) at 0x0000012D57E6D688>, <pyqt_interface_elements.base_layouts.VerticalLayout(0x12d59a78230) at 0x0000012D57E6D8C8>)
+2023-07-25 16:47:59,911 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Building central widget and adding holders
+2023-07-25 16:47:59,911 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Successfully built central widget and added holders
+2023-07-25 16:47:59,912 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Setting central widget
+2023-07-25 16:47:59,912 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Resizing window: <animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow(0x12d59a73fb0) at 0x0000012D55169F88>
+2023-07-25 16:47:59,912 | animation_exporter.animation_exporter_interface.view.AnimationExporterMainWindow | INFO -- Emitting InitializationFinished signal
+2023-07-25 16:47:59,912 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Beginning construction of panels
+2023-07-25 16:47:59,912 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Building main window header
+2023-07-25 16:47:59,912 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully built header and connected signals
+2023-07-25 16:47:59,912 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterHeader.ExporterHeader(0x12d59a78460) at 0x0000012D5C555AC8>
+2023-07-25 16:47:59,912 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Building main window footer
+2023-07-25 16:47:59,914 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully built footer and connected signals
+2023-07-25 16:47:59,914 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Emitting HeaderPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterFooter.ExporterFooter(0x12d59a76fd0) at 0x0000012D5C555CC8>
+2023-07-25 16:47:59,914 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Scene panel successfully built
+2023-07-25 16:47:59,916 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully connected scene view signals
+2023-07-25 16:47:59,917 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Emitting FocalPanelBuilt with widget: <animation_exporter.animation_exporter_interface.view.AnimationExporterSceneView.ExporterSceneView(0x12d59a78d20) at 0x0000012D5C55C588>
+2023-07-25 16:47:59,919 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Queue panel successfully built
+2023-07-25 16:47:59,920 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully connected queue panel signals
+2023-07-25 16:47:59,920 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Attempting to emit queue panel on FocalPanelBuilt signal with widget: <animation_exporter.animation_exporter_interface.view.AnimationExportQueueView.QueueItemHolder(0x12d59a7d780) at 0x0000012D5C55F908>
+2023-07-25 16:47:59,920 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Successfully emitted queue panel on FocalPanelBuilt signal
+2023-07-25 16:47:59,924 | animation_exporter.animation_exporter_interface.view.AnimationExportQueueView | INFO -- Populating queue view from given queue.
+2023-07-25 16:47:59,933 | animation_exporter.animation_exporter_interface.controller.panel_controller | INFO -- Construction of panels complete
+2023-07-25 16:48:02,898 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Starting export queue
+2023-07-25 16:48:02,899 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Getting queue item data for ID: 4
+2023-07-25 16:48:02,900 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully queried data for queue item 4:placeholder_name[224.94773741496599_229.21266275510203]
+2023-07-25 16:48:02,900 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Generating temp file to hold export arguments for queue item: 4
+2023-07-25 16:48:02,900 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully generated export argument temp file. "Q:\__packages\_GitHub\animation_exporter\utility_resources\cache\_export_args_5.json"
+2023-07-25 16:48:02,901 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Successfully wrote export argument temp file
+2023-07-25 16:48:02,902 | animation_exporter.animation_exporter_interface.controller.queue_controller | INFO -- Sending export item and path to maya delegator
+2023-07-25 16:48:03,446 | animation_exporter.animation_exporter_interface.controller.queue_controller | WARNING -- Queue path already present in queue list

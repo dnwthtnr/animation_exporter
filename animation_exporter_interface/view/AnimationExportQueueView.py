@@ -160,7 +160,6 @@ class QueueItemHolder(base_layouts.VerticalLayout):
         _button = base_widgets.Button(text='Start Queue')
         _button.setMinimumSize(105, 25)
         _button.clicked.connect(self.StartQueueButtonClicked.emit)
-        _button.clicked.connect(self.startQueueItemLoads)
         _button.setStyleSheet(styles.maya_button)
         return _button
 
@@ -173,10 +172,13 @@ class QueueItemHolder(base_layouts.VerticalLayout):
                 # _item.addStatusIcon(icons.checkbox_checked)
         return
 
-    def startQueueItemLoads(self):
-        print('start')
+
+    @QtCore.Slot()
+    def queueItemStarted(self, item_id):
         for _item in self.queue_items:
-            _item.addStatusIcon(visuals.loading_wheel())
+            if _item.item_identifier == item_id:
+                _item.addStatusIcon(visuals.loading_wheel())
+                # _item.addStatusIcon(icons.checkbox_checked)
 
     #######################################################
 
