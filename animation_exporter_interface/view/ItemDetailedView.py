@@ -8,7 +8,7 @@ from PySide2 import QtCore
 from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants, proceadural_displays, styles
 
 _attrs = [
-    proceadural_displays.RangeCheckboxArrayAttributeEditor,
+    proceadural_displays.RangeSliderAttributeEditor,
     proceadural_displays.TwoDimentionalLineEditAttributeEditor,
     proceadural_displays.LineEditAttributeEditor,
     proceadural_displays.FilepathDisplayAttributeEditor,
