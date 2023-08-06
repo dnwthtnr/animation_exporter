@@ -15,6 +15,9 @@ class ItemDetailController(QtCore.QObject):
         _data[keys.export_objects_key] = item_detail_dictionary.get(keys.export_objects_key)
         _data[keys.scene_path_key] = item_detail_dictionary.get(keys.scene_path_key)
         _data[keys.item_export_name_key] = item_detail_dictionary.get(keys.item_export_name_key)
+
+        _data[keys.animation_times] = item_detail_dictionary.get(keys.animation_times)
+        _data[keys.animation_range_key] = item_detail_dictionary.get(keys.animation_range_key)
         self.item_detail_dictionary = _data
 
 
