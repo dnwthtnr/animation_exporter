@@ -178,6 +178,7 @@ def get_queue_item_export_args(queue, queue_item_identifier):
 
 class QueueRunner(QtCore.QObject):
     QueueItemRemoved = QtCore.Signal(str)
+    itemStarted = QtCore.Signal(object)
     itemFinished = QtCore.Signal(object)
 
     def __int__(self):
@@ -220,10 +221,13 @@ class QueueRunner(QtCore.QObject):
                 logger.exception(e)
                 raise e
 
+            # TODO: it's getting hung up here -- parallelize these actions
+
             self.export_argument_filepaths[_queue_item_id] = _export_args_file
 
 
             logger.info(f'Sending export item and path to maya delegator')
+            self.itemStarted.emit(_queue_item_id)
             _maya_delegator.export_from_scene(_queue_item_id, _export_args_file)
 
         return 0
