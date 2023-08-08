@@ -28,6 +28,7 @@ class ItemDetailAttributeHolder(proceadural_displays.AbstractEntryHolder):
     def __init__(self, attribute_dictionary, animation_times, animation_range):
         self.animation_times = animation_times
         self.animation_range = animation_range
+        print(attribute_dictionary)
         super().__init__(
             attribute_dictionary=attribute_dictionary,
             attribute_mapping_dictionary=_attrs,
@@ -40,10 +41,11 @@ class ItemDetailAttributeHolder(proceadural_displays.AbstractEntryHolder):
             if _entry_type.identifier(self, value=attribute_value) is True:
 
                 if _entry_type == proceadural_displays.RangeSliderAttributeEditor:
-                    # _reduced_feyframes = math_operations.reduce_float_list(self.animation_times, 1)
                     print('ma')
                     print(_entry_type)
                     _entry = _entry_type(attribute_name, [attribute_value, self.animation_range, self.animation_times])
+                    if len(self.animation_times) == 0:
+                        _entry.setEnabled(False)
                 else:
                     _entry = _entry_type(attribute_name, attribute_value)
 
@@ -82,6 +84,9 @@ class ItemDetailedView(base_layouts.VerticalLayout):
 
             _animation_keyframes = item_data.get(keys.animation_times)
             _animation_range = item_data.get(keys.animation_range_key)
+            if _animation_range is None:
+                _animation_range = [0, 100]
+                _animation_keyframes = []
 
             _holder = ItemDetailAttributeHolder(attribute_dictionary=item_data, animation_range=_animation_range, animation_times=_animation_keyframes)
             _holder.valueChanged.connect(self.valueChanged.emit)

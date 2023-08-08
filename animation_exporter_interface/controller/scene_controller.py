@@ -43,6 +43,18 @@ class Scene_Controller(QtCore.QObject):
 
     @QtCore.Slot()
     def open_file(self, filepath, output_filepath):
+        """
+        Opens file and gathers/writes scene data
+
+        Parameters
+        ----------
+        filepath
+        output_filepath
+
+        Returns
+        -------
+
+        """
         logger.info(f'Opening file: {filepath} on a separate thread ')
 
         try:
@@ -174,7 +186,7 @@ class Scene_Controller(QtCore.QObject):
             #     # "Type": cmds.objectType(_object),
             #     "Absolute Animation Range": f"{self.get_descendant_animation_range(_object)}"
             # }
-            _object_data_dictionary = self.emit_item_details_dictionary(_object)
+            _object_data_dictionary = self.item_details_dictionary(_object)
             if _object_data_dictionary is None:
                 _object_data_dictionary = {}
             _object_data_dictionary["Object Name"] = _object
@@ -264,7 +276,7 @@ class Scene_Controller(QtCore.QObject):
 
     def get_descendants(self, _object):
         if self.current_scene_dict != {}:
-            _object_dict = self.current_scene_dict.get(object)
+            _object_dict = self.current_scene_dict.get(_object)
             if _object_dict is not None:
                 return _object_dict.get("Children")
 
@@ -353,9 +365,7 @@ class Scene_Controller(QtCore.QObject):
     # def emit_item_details_on_thread(self, item):
     #     _item_data_dict = self.emit_item_details_dictionary(item)
 
-    def emit_item_details_dictionary(self, object_name):
-        # TODO: Start caching this stuf somehow -- lags when requerying stuff
-
+    def item_details_dictionary(self, object_name):
         if self.object_has_or_holds_animation(object_name):
             logger.debug(f'Getting details for object: {object_name}')
 
@@ -400,7 +410,7 @@ class Scene_Controller(QtCore.QObject):
                 logger.exception(e)
                 raise e
 
-            logger.debug(f'Emitting ItemDetailDataResponse with dictionary')
+
             logger.debug(_item_data_dict)
             # self.ItemDetailsDataResponse.emit(_item_data_dict)
 

@@ -60,6 +60,7 @@ class PanelController(QtCore.QObject):
         self.build_main_window_footer()
         self.build_scene_view()
         self.build_queue_view()
+        self.populate_scene_view()
         logger.info(f'Construction of panels complete')
 
     def __init__(self, *args, **kwargs):
@@ -176,7 +177,6 @@ class PanelController(QtCore.QObject):
     def build_scene_view(self):
         logger.debug(f'Building scene view panel and controller')
         try:
-            # multiprocessing.Process(target=)
             _maya_delegator = maya_process_delegator.MayaProcessDelegator()
 
             _maya_delegator.sceneDataWritten.connect(self.populate_scene_view)
@@ -196,7 +196,7 @@ class PanelController(QtCore.QObject):
 
         _scene_detail_view = self.build_empty_detail_panel()
 
-        _scene_view_splitter = base_layouts.Splitter()
+        _scene_view_splitter = base_layouts.Splitter(constants.vertical)
         _scene_view_splitter.setStyleSheet(styles.maya_splitter)
         _scene_view_splitter.addWidget(_scene_view)
         _scene_view_splitter.addWidget(_scene_detail_view)
@@ -242,6 +242,12 @@ class PanelController(QtCore.QObject):
 
     @QtCore.Slot()
     def populate_scene_view(self):
+        """
+        Gets the file containing scene data and builds a display for it
+        Returns
+        -------
+
+        """
         _scene_data_filepath = settings.cache_values.get_setting(keys.current_scene_data_file)
 
         if os.path.exists(_scene_data_filepath):
