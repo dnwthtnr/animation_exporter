@@ -7,4 +7,10 @@ export_directory_key = "ExportDirectory"
 animation_partitions_key = "Ranges To Export"
 animation_times = "AnimationTimes"
 
+object_data = "ObjectDataDictionary"
+
+object_name = "Object Name"
+object_parent = "Parent"
+object_children = "Children"
+
 current_scene_data_file = "CurrentSceneDataFile"
