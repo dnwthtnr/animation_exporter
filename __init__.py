@@ -37,8 +37,6 @@ def main():
     _window.moveToThread(_thread)
     _window.finish_initialization()
     _window.show()
-    # _win = _uiuThread()
-    # _win.start()
 
     sys.exit(_app.exec_())
 

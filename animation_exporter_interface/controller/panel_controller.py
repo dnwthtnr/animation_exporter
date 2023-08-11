@@ -149,10 +149,36 @@ class PanelController(QtCore.QObject):
         _selected_animation_ranges = export_data_dictionary.get(keys.animation_partitions_key)
         export_directory = export_data_dictionary.get(keys.export_directory_key)
 
+        if _selected_animation_ranges is None:
+
+            logger.debug(f'New export queue item data: {scene_path, scene_objects, export_directory}')
+            try:
+                _queue_item_identifier = queue_controller.add_to_export_queue(
+                    scene_path=scene_path,
+                    export_name=export_name,
+                    scene_objects=scene_objects,
+                    animation_range=_selected_animation_ranges,
+                    export_directory=export_directory
+                )
+                logger.info(f'Successfully emitted AddToExportQueue')
+            except Exception as e:
+                logger.warning(f'Encountered exception while attempting to emit AddToExportQueue with queue item data. Aborting')
+                logger.exception(e)
+                return
+
+
+            self.QueueItemAdded.emit(
+                _queue_item_identifier,
+                export_name,
+                scene_path,
+                None,
+                export_directory
+            )
+            return
+
         for animation_range in _selected_animation_ranges:
             _range_export_name = export_name
-            if len(_selected_animation_ranges) > 1:
-                _range_export_name = export_name + f"[{animation_range[0]}_{animation_range[1]}]"
+            _range_export_name = export_name + f"[{animation_range[0]}_{animation_range[1]}]"
 
             logger.debug(f'New export queue item data: {scene_path, _range_export_name, scene_objects, animation_range, export_directory}')
             try:

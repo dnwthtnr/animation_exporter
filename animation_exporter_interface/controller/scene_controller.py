@@ -263,7 +263,7 @@ class Scene_Controller(QtCore.QObject):
 
         """
         if self.object_has_or_holds_animation(object) is False:
-            return []
+            return None
         _descendant_animation_times_list = self.get_descendant_animation_times_list(object)
 
         _reduced_keyframe_list = math_operations.kill_duplicate_list_elements(_descendant_animation_times_list)
