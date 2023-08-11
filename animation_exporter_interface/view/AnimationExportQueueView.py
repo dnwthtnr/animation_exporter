@@ -30,10 +30,15 @@ class QueueItem(base_layouts.ExpandWhenClicked):
 
     def __init__(self, item_identifier, export_name, scene_path, frame_range, export_directory):
         super().__init__(margins=[5, 5, 0, 0], spacing=5)
+
+        self.title_width = 150
+
         self.item_identifier = item_identifier
         self.export_name_widget = self.build_export_name(export_name)
         self.scene_path_widget = self.build_scene_path(scene_path)
+
         self.frame_range_widget = self.build_frane_range(frame_range)
+
         self.export_directory_widget = self.build_export_directory(export_directory)
         self.status_icon = self.build_status_icon()
         _close_button = self.build_close_button()
@@ -65,26 +70,37 @@ class QueueItem(base_layouts.ExpandWhenClicked):
     def export_directory(self):
         return self.export_directory_widget.attribute_value
 
+
+    #########################
     def build_export_name(self, name):
         _widget = proceadural_displays.LineEditAttributeEditor(attribute_name="Export File Name:", attribute_value=name)
+        _widget.set_title_fixed_width(self.title_width)
         _widget.valueEdited.connect(self.emit_export_name_changed)
         return _widget
 
     def build_scene_path(self, path):
 
         _widget = proceadural_displays.LineEditAttributeEditor(attribute_name="Scene Path:", attribute_value=path)
+        _widget.set_title_fixed_width(self.title_width)
         _widget.valueEdited.connect(self.emit_export_name_changed)
         _widget.setReadOnly(True)
         return _widget
 
     def build_frane_range(self, range):
+        if range is None:
+            _widget = proceadural_displays.TwoDimentionalLineEditAttributeEditor(attribute_name="Export Range:", attribute_value=[0, 0])
+            _widget.hide()
+            return _widget
+
         _widget = proceadural_displays.TwoDimentionalLineEditAttributeEditor(attribute_name="Export Range:", attribute_value=range)
+        _widget.set_title_fixed_width(self.title_width)
         _widget.valueEdited.connect(self.emit_frame_range_changed)
         return _widget
 
     def build_export_directory(self, directory):
 
         _widget = proceadural_displays.ChooseDirectoryAttributeEditor(attribute_name="Export Directory:", attribute_value=directory)
+        _widget.set_title_fixed_width(self.title_width)
         _widget.valueEdited.connect(self.emit_export_name_changed)
         return _widget
 
@@ -104,6 +120,8 @@ class QueueItem(base_layouts.ExpandWhenClicked):
         _widget.setIcon(icons.close)
         _widget.clicked.connect(partial(self.CloseButtonClicked.emit, self))
         return _widget
+
+    #######
 
     @QtCore.Slot()
     def emit_export_name_changed(self, *args):

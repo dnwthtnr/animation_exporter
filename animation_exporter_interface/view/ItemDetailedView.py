@@ -28,7 +28,6 @@ class ItemDetailAttributeHolder(proceadural_displays.AbstractEntryHolder):
     def __init__(self, attribute_dictionary, animation_times, animation_range):
         self.animation_times = animation_times
         self.animation_range = animation_range
-        print(attribute_dictionary)
         super().__init__(
             attribute_dictionary=attribute_dictionary,
             attribute_mapping_dictionary=_attrs,
@@ -41,8 +40,6 @@ class ItemDetailAttributeHolder(proceadural_displays.AbstractEntryHolder):
             if _entry_type.identifier(self, value=attribute_value) is True:
 
                 if _entry_type == proceadural_displays.RangeSliderAttributeEditor:
-                    print('ma')
-                    print(_entry_type)
                     _entry = _entry_type(attribute_name, [attribute_value, self.animation_range, self.animation_times])
                     if len(self.animation_times) == 0:
                         _entry.setEnabled(False)

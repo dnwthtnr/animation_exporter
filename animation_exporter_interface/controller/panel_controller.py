@@ -48,7 +48,7 @@ class PanelController(QtCore.QObject):
     SceneDetailPanelBuilt = QtCore.Signal(object)
 
     writeSceneData = QtCore.Signal(str, str)
-    populateSceneDataView = QtCore.Signal(object)
+    populateSceneDataView = QtCore.Signal(str, dict)
     startQueue = QtCore.Signal()
 
     # endregion
@@ -56,11 +56,11 @@ class PanelController(QtCore.QObject):
     @QtCore.Slot()
     def start_construction(self):
         logger.info(f'Beginning construction of panels')
-        self.build_main_window_header()
-        self.build_main_window_footer()
-        self.build_scene_view()
+        self._build_header_panel()
+        self._build_footer_panel()
+        self._initialize_scene_view_components()
         self.build_queue_view()
-        self.populate_scene_view()
+        self.populate_scene_view_from_cached_scene_data()
         logger.info(f'Construction of panels complete')
 
     def __init__(self, *args, **kwargs):
@@ -68,6 +68,13 @@ class PanelController(QtCore.QObject):
         super().__init__(*args, **kwargs)
         self.worker_thread = QtCore.QThread()
         self.worker_thread.start()
+
+        self._maya_delegator = maya_process_delegator.MayaProcessDelegator()
+        self._maya_delegator.moveToThread(self.worker_thread)
+
+        self.writeSceneData.connect(self._maya_delegator.open_file_write_scene_data)
+
+        self._maya_delegator.sceneDataWritten.connect(self.populate_scene_view_from_cached_scene_data)
 
 
     # region #######################| QUEUE STUFF |##########################
@@ -142,10 +149,36 @@ class PanelController(QtCore.QObject):
         _selected_animation_ranges = export_data_dictionary.get(keys.animation_partitions_key)
         export_directory = export_data_dictionary.get(keys.export_directory_key)
 
+        if _selected_animation_ranges is None:
+
+            logger.debug(f'New export queue item data: {scene_path, scene_objects, export_directory}')
+            try:
+                _queue_item_identifier = queue_controller.add_to_export_queue(
+                    scene_path=scene_path,
+                    export_name=export_name,
+                    scene_objects=scene_objects,
+                    animation_range=_selected_animation_ranges,
+                    export_directory=export_directory
+                )
+                logger.info(f'Successfully emitted AddToExportQueue')
+            except Exception as e:
+                logger.warning(f'Encountered exception while attempting to emit AddToExportQueue with queue item data. Aborting')
+                logger.exception(e)
+                return
+
+
+            self.QueueItemAdded.emit(
+                _queue_item_identifier,
+                export_name,
+                scene_path,
+                None,
+                export_directory
+            )
+            return
+
         for animation_range in _selected_animation_ranges:
             _range_export_name = export_name
-            if len(_selected_animation_ranges) > 1:
-                _range_export_name = export_name + f"[{animation_range[0]}_{animation_range[1]}]"
+            _range_export_name = export_name + f"[{animation_range[0]}_{animation_range[1]}]"
 
             logger.debug(f'New export queue item data: {scene_path, _range_export_name, scene_objects, animation_range, export_directory}')
             try:
@@ -174,19 +207,17 @@ class PanelController(QtCore.QObject):
 
     # region #######################| SCENE STUFF |##########################
 
-    def build_scene_view(self):
+    def _initialize_scene_view_components(self):
+        """
+        Builds the scene view and item detail view widgets, instantiates the maya delegator
+        and connects signals before starting their event loops
+
+        """
         logger.debug(f'Building scene view panel and controller')
         try:
-            _maya_delegator = maya_process_delegator.MayaProcessDelegator()
 
-            _maya_delegator.sceneDataWritten.connect(self.populate_scene_view)
-
-            self.writeSceneData.connect(_maya_delegator.open_file_write_scene_data)
-
-            _maya_delegator.moveToThread(self.worker_thread)
 
             _scene_view = AnimationExporterSceneView.ExporterSceneView()
-            _scene_view._controller = _maya_delegator
             logger.info(f'Scene panel successfully built')
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to build scene view. Aborting')
@@ -194,7 +225,7 @@ class PanelController(QtCore.QObject):
             return
 
 
-        _scene_detail_view = self.build_empty_detail_panel()
+        _scene_detail_view = self._build_empty_item_detail_panel()
 
         _scene_view_splitter = base_layouts.Splitter(constants.vertical)
         _scene_view_splitter.setStyleSheet(styles.maya_splitter)
@@ -206,8 +237,8 @@ class PanelController(QtCore.QObject):
         logger.debug(f'Connecting signals between _scene_view, _scene_controller and panel_controller')
         try:
 
-            _scene_view.ItemSelected.connect(self.generate_scene_detail_panel)
-            _scene_view.SceneSelected.connect(self.get_scene_data)
+            _scene_view.ItemSelected.connect(self._build_then_add_item_detail_panel)
+            _scene_view.SceneSelected.connect(self._write_scene_object_data)
 
             self.populateSceneDataView.connect(_scene_view.populate_item_view)
             # _scene_controller.ItemDetailsDataResponse.connect(self.generate_scene_detail_panel)
@@ -234,27 +265,47 @@ class PanelController(QtCore.QObject):
             logger.exception(e)
 
     @QtCore.Slot()
-    def get_scene_data(self, scene):
+    def _write_scene_object_data(self, scene):
+        """
+        Passes the given scene path and an output path to the maya delegator to write to disk.
+
+        Parameters
+        ----------
+        scene : str
+            The filepath of the scene to write the data of
+
+        """
         _scene_data_filepath = cache.get_unique_file_name(root_name="current_scene_data.json")
         settings.cache_values.set_setting(setting=keys.current_scene_data_file, value=_scene_data_filepath)
+
         self.writeSceneData.emit(scene, _scene_data_filepath)
-        return
 
     @QtCore.Slot()
-    def populate_scene_view(self):
+    def populate_scene_view_from_cached_scene_data(self):
         """
         Gets the file containing scene data and builds a display for it
-        Returns
-        -------
 
         """
         _scene_data_filepath = settings.cache_values.get_setting(keys.current_scene_data_file)
 
         if os.path.exists(_scene_data_filepath):
             _data = file_management.read_json(_scene_data_filepath)
-            self.populateSceneDataView.emit(_data)
 
-    def build_empty_detail_panel(self):
+            _scene_path = _data.get(keys.scene_path_key)
+            _scene_data = _data.get(keys.object_data)
+
+            self.populateSceneDataView.emit(_scene_path, _scene_data)
+
+    def _build_empty_item_detail_panel(self):
+        """
+        Builds a widget to display when the item detail panel is empty
+
+        Returns
+        -------
+        base_layouts.VerticalLayout
+            The empty panel display
+
+        """
         _empty = base_widgets.Label("No Details Yet")
         _widget = base_layouts.VerticalLayout()
         _widget.addWidget(_empty, alignment=constants.align_center)
@@ -262,11 +313,21 @@ class PanelController(QtCore.QObject):
         return _widget
 
     @QtCore.Slot()
-    def generate_scene_detail_panel(self, item_detail_dictionary):
-        logger.info(f'Signal caught to build scene detail view for dict: {item_detail_dictionary}')
+    def _build_then_add_item_detail_panel(self, item_data):
+        """
+        Builds an item detail panel from the given dictionary and then emits it
+        on the SceneDetailPanelBuilt signal to be added to the UI
+
+        Parameters
+        ----------
+        item_data : dict
+            The item data to build the panel from
+
+        """
+        logger.info(f'Signal caught to build scene detail view for dict: {item_data}')
 
         _item_detail_controller = item_detail_controller.ItemDetailController(
-            item_detail_dictionary=item_detail_dictionary
+            item_detail_dictionary=item_data
         )
         _item_view = ItemDetailedView.ItemDetailedView()
 
@@ -288,7 +349,7 @@ class PanelController(QtCore.QObject):
     # region #######################| HEADER STUFF |##########################
 
 
-    def build_main_window_header(self):
+    def _build_header_panel(self):
         """
         Builds the header
 
@@ -314,7 +375,7 @@ class PanelController(QtCore.QObject):
     # region #######################| FOOTER STUFF |##########################
 
 
-    def build_main_window_footer(self):
+    def _build_footer_panel(self):
         """
         Builds the footer
         Returns

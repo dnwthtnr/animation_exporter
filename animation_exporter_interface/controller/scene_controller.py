@@ -29,7 +29,6 @@ def write_json(path, data):
 
 class Scene_Controller(QtCore.QObject):
     SceneContentDataResponse = QtCore.Signal(object)
-
     ItemDetailsDataResponse = QtCore.Signal(dict)
 
     def __init__(self):
@@ -37,56 +36,149 @@ class Scene_Controller(QtCore.QObject):
         super().__init__()
         self._current_scene_data = {}
 
+
     @property
     def current_scene_dict(self):
         return self._current_scene_data
 
-    @QtCore.Slot()
-    def open_file(self, filepath, output_filepath):
-        """
-        Opens file and gathers/writes scene data
-
-        Parameters
-        ----------
-        filepath
-        output_filepath
-
-        Returns
-        -------
-
-        """
+    def collect_and_write_scene_data(self, filepath, output_filepath):
         logger.info(f'Opening file: {filepath} on a separate thread ')
-
         try:
             cmds.file(filepath, open=1, force=1)
             logger.info(f'File successfully opened')
-            _output_directory = self.write_scene_contents(output_filepath)
-            return 0, _output_directory
+            # _output_directory = self.write_scene_contents(output_filepath)
+            # return 0, _output_directory
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to open file {filepath}')
             logger.exception(e)
             return 1, None
 
-    @QtCore.Slot()
-    def write_scene_contents(self, output_filepath):
-        _top_level_scene_items = self.get_top_level_objects()
-        logger.info(f'Emitting SceneContentDataResponse with queried items organized in dictionary')
-        _object_data_dict = self.author_scene_hierarchy_dict(objects=_top_level_scene_items)
-        self._current_scene_data = _object_data_dict
-        logger.debug(f'Dictionary: {_object_data_dict}')
+        try:
+            _scene_data_dict = {}
+            _scene_data_dict[keys.scene_path_key] = filepath
+            _scene_data_dict[keys.object_data] = self._get_all_object_data()
+        except Exception as e:
+            logger.warning(f'Encountered exception while attempting to collect scene data')
+            logger.exception(e)
+            return 1, None
 
-        _output_directory = output_filepath
-
-        write_json(_output_directory, _object_data_dict)
-        return _output_directory
-        # self.SceneContentDataResponse.emit(_object_data_dict)
-
+        try:
+            write_json(output_filepath, _scene_data_dict)
+            return 0
+        except Exception as e:
+            logger.warning(f'Encountered exception while attempting to write scene data to disk')
+            logger.exception(e)
+            return 1, None
 
     @property
     def current_file(self):
         return cmds.file(query=True, expandName=True)
 
     ####################################################
+
+    def _get_object_data(self, object_name, object_parent, object_children):
+        logger.debug(f'Getting details for object: {object_name}')
+
+        try:
+            _animation_times = self.get_keyframe_times(object_name)
+            logger.debug(f'_animation_partitions for object: {object_name} :: {_animation_times}')
+
+            _animation_range = self.get_descendant_animation_range(object_name)
+            logger.debug(f'_animation_range for object: {object_name} :: {_animation_range}')
+
+            _scene_path = self.current_file
+            logger.debug(f'_scene_path for object: {object_name} :: {_scene_path}')
+
+            _item_export_name = f'placeholder_name'
+            logger.debug(f'_item_export_name for object: {object_name} :: {_item_export_name}')
+
+            _objects_to_export = self.get_export_objects(object_name)
+            logger.debug(f'_objects_to_export for object: {object_name} :: {_objects_to_export}')
+
+            _export_directory = os.path.dirname(self.current_file)
+            logger.debug(f'_export_directory for object: {object_name} :: {_export_directory}')
+
+            logger.info(f'Successfully queried item details for : {object_name}')
+
+        except Exception as e:
+            logger.error(f'Encountered exception while attempting to query item detail data. Aborting')
+            logger.exception(e)
+
+        logger.debug(f'Populating detail dictionary for object: {object_name}')
+        _item_data_dict = {}
+        try:
+
+            _item_data_dict[    keys.animation_times        ] = _animation_times
+            _item_data_dict[    keys.animation_range_key    ] = _animation_range
+            _item_data_dict[    keys.scene_path_key         ] = _scene_path
+            _item_data_dict[    keys.item_export_name_key   ] = _item_export_name
+            _item_data_dict[    keys.export_objects_key     ] = _objects_to_export
+            _item_data_dict[    keys.export_directory_key   ] = _export_directory
+
+            logger.debug(f'Successfully populated detail dictionary for object: {object_name}')
+        except Exception as e:
+            logger.error(f'Encountered exception while attempting to populate item data dictionary. Aborting')
+            logger.exception(e)
+            # raise e
+
+
+        logger.debug(_item_data_dict)
+        _item_data_dict[keys.object_name] = object_name
+        _item_data_dict[keys.object_parent] = object_parent
+        _item_data_dict[keys.object_children] = object_children
+        # self.ItemDetailsDataResponse.emit(_item_data_dict)
+
+        return _item_data_dict
+
+    def _get_all_object_data(self, objects=None, parent=None, hierarchy_dictionary=None, hierarchy_depth=0):
+        """
+        Creates a flat dictionary with each scene object and its parent
+        Parameters
+        ----------
+        objects
+        parent
+        hierarchy_dictionary
+
+        Returns
+        -------
+
+        Examples
+
+        {
+            "object": {"Parent": None, "Object Name": "object"},
+            "nested_object": {"Parent": "object", "Object Name": "nested_object"}
+        }
+
+        """
+        _hierarchy_dictionary = {} if hierarchy_dictionary is None else hierarchy_dictionary
+        _objects = self.get_top_level_objects() if objects is None else objects
+
+        for _object in _objects:
+
+            _children = cmds.listRelatives(_object, children=True, fullPath=True)
+
+            _object_data_dictionary = self._get_object_data(
+                object_name=_object,
+                object_parent=parent,
+                object_children=_children
+            )
+            if _object_data_dictionary is None:
+                _object_data_dictionary = "lol"
+            _hierarchy_dictionary[_object] = _object_data_dictionary
+
+            if _children is not None:
+                self._get_all_object_data(
+                    objects=_children,
+                    parent=_object,
+                    hierarchy_dictionary=_hierarchy_dictionary,
+                    hierarchy_depth=hierarchy_depth + 1
+                )
+
+        return _hierarchy_dictionary
+
+
+
+    #############################################
     # region static
 
     def object_has_or_holds_animation(self, object):
@@ -141,6 +233,8 @@ class Scene_Controller(QtCore.QObject):
 
         Returns
         -------
+        list[str]
+            A list of the top level objects in the current scene
 
         """
         logger.info(f'Getting scene contests')
@@ -151,60 +245,6 @@ class Scene_Controller(QtCore.QObject):
 
     # endregion
     ####################################################
-
-    def author_scene_hierarchy_dict(self, objects, parent=None, hierarchy_dictionary=None, hierarchy_depth=0):
-        """
-        Creates a flat dictionary with each scene object and its parent
-        Parameters
-        ----------
-        objects
-        parent
-        hierarchy_dictionary
-
-        Returns
-        -------
-
-        Examples
-
-        {
-            "object": {"Parent": None, "Object Name": "object"},
-            "nested_object": {"Parent": "object", "Object Name": "nested_object"}
-        }
-
-        """
-        _hierarchy_dictionary = {} if hierarchy_dictionary is None else hierarchy_dictionary
-
-        for _object in objects:
-
-            _children = cmds.listRelatives(_object, children=True, fullPath=True)
-
-            # _object_data_dictionary = {
-            #     "Object Name": _object,
-            #     "Parent": parent,
-            #     "Children": _children,
-            #     "Has_Or_Holds_Animation": self.object_has_or_holds_animation(_object),
-            #     # "Type": cmds.objectType(_object),
-            #     "Absolute Animation Range": f"{self.get_descendant_animation_range(_object)}"
-            # }
-            _object_data_dictionary = self.item_details_dictionary(_object)
-            if _object_data_dictionary is None:
-                _object_data_dictionary = {}
-            _object_data_dictionary["Object Name"] = _object
-            _object_data_dictionary["Parent"] = parent
-            _object_data_dictionary["Children"] = _children
-            _hierarchy_dictionary[_object] = _object_data_dictionary
-
-            if _children is not None:
-                self.author_scene_hierarchy_dict(
-                    objects=_children,
-                    parent=_object,
-                    hierarchy_dictionary=_hierarchy_dictionary,
-                    hierarchy_depth=hierarchy_depth + 1
-                )
-
-        return _hierarchy_dictionary
-
-    #############################################
 
     def get_keyframe_times(self, object):
         """
@@ -222,6 +262,8 @@ class Scene_Controller(QtCore.QObject):
             A list holding lists of frame partition ranges
 
         """
+        if self.object_has_or_holds_animation(object) is False:
+            return None
         _descendant_animation_times_list = self.get_descendant_animation_times_list(object)
 
         _reduced_keyframe_list = math_operations.kill_duplicate_list_elements(_descendant_animation_times_list)
@@ -359,63 +401,6 @@ class Scene_Controller(QtCore.QObject):
 
     ##########################################
 
-    # region Object stuff
-
-    # @QtCore.Slot()
-    # def emit_item_details_on_thread(self, item):
-    #     _item_data_dict = self.emit_item_details_dictionary(item)
-
-    def item_details_dictionary(self, object_name):
-        if self.object_has_or_holds_animation(object_name):
-            logger.debug(f'Getting details for object: {object_name}')
-
-            try:
-                _animation_times = self.get_keyframe_times(object_name)
-                logger.debug(f'_animation_partitions for object: {object_name} :: {_animation_times}')
-
-                _animation_range = self.get_descendant_animation_range(object_name)
-                logger.debug(f'_animation_range for object: {object_name} :: {_animation_range}')
-
-                _scene_path = self.current_file
-                logger.debug(f'_scene_path for object: {object_name} :: {_scene_path}')
-
-                _item_export_name = f'placeholder_name'
-                logger.debug(f'_item_export_name for object: {object_name} :: {_item_export_name}')
-
-                _objects_to_export = self.get_export_objects(object_name)
-                logger.debug(f'_objects_to_export for object: {object_name} :: {_objects_to_export}')
-
-                _export_directory = os.path.dirname(self.current_file)
-                logger.debug(f'_export_directory for object: {object_name} :: {_export_directory}')
-
-                logger.info(f'Successfully queried item details for : {object_name}')
-
-            except Exception as e:
-                logger.error(f'Encountered exception while attempting to query item detail data. Aborting')
-                logger.exception(e)
-                raise e
-
-            logger.debug(f'Populating detail dictionary for object: {object_name}')
-            _item_data_dict = {}
-            try:
-                _item_data_dict[keys.animation_times] = _animation_times
-                _item_data_dict[keys.animation_range_key] = _animation_range
-                _item_data_dict[keys.scene_path_key] = _scene_path
-                _item_data_dict[keys.item_export_name_key] = _item_export_name
-                _item_data_dict[keys.export_objects_key] = _objects_to_export
-                _item_data_dict[keys.export_directory_key] = _export_directory
-                logger.debug(f'Successfully populated detail dictionary for object: {object_name}')
-            except Exception as e:
-                logger.error(f'Encountered exception while attempting to populate item data dictionary. Aborting')
-                logger.exception(e)
-                raise e
-
-
-            logger.debug(_item_data_dict)
-            # self.ItemDetailsDataResponse.emit(_item_data_dict)
-
-            return _item_data_dict
-
 
 
 if __name__ == "__main__":
@@ -427,7 +412,7 @@ if __name__ == "__main__":
     _filepath = os.path.abspath(_args[-2])
     _output_filepath = os.path.abspath(_args[-1])
 
-    _out = scene_controller.open_file(_filepath, _output_filepath)
+    _out = scene_controller.collect_and_write_scene_data(_filepath, _output_filepath)
     print(_out)
     # input(f'File?')
     # loop = True

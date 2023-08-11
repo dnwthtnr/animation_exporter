@@ -6,6 +6,8 @@ class ExporterSceneView(base_layouts.VerticalLayout):
     SceneSelected = QtCore.Signal(object)
     ItemSelected = QtCore.Signal(object)
 
+    _setScenePath = QtCore.Signal(object)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.item_view = None
@@ -40,6 +42,7 @@ class ExporterSceneView(base_layouts.VerticalLayout):
 
     def build_file_picker(self):
         _file_picker = line_edits.File_Selection_Line_Edit("")
+        self._setScenePath.connect(_file_picker.set_display_path)
         _file_picker.FileSelected.connect(self.SceneSelected.emit)
         return _file_picker
 
@@ -53,11 +56,18 @@ class ExporterSceneView(base_layouts.VerticalLayout):
         _layout.addWidget(_label)
         self.content_panel.addWidget(_layout, alignment=constants.align_center)
 
+    def set_scene_path(self, filepath):
+        self._setScenePath.emit(filepath)
+        return
+
     @QtCore.Slot()
-    def populate_item_view(self, content_dictionary):
+    def populate_item_view(self, scene_path, scene_data):
+        print(scene_path)
         self.content_panel.clear_layout()
 
-        self.item_model = model_view_delegate.Selection_Tree_Model(content_dictionary)
+        self.set_scene_path(scene_path)
+
+        self.item_model = model_view_delegate.Selection_Tree_Model(scene_data)
 
         self.item_view = self.build_item_view()
         self.item_view.setModel(self.item_model)

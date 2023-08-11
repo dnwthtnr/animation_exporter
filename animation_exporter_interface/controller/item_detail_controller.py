@@ -8,6 +8,13 @@ class ItemDetailController(QtCore.QObject):
     addToQueue = QtCore.Signal(dict)
 
     def __init__(self, item_detail_dictionary):
+        """
+
+
+        Parameters
+        ----------
+        item_detail_dictionary
+        """
         super().__init__()
         _data = {}
         _data[keys.animation_partitions_key] = self.animation_partitions(item_detail_dictionary.get(keys.animation_times, [0, 0]))
@@ -22,28 +29,50 @@ class ItemDetailController(QtCore.QObject):
 
 
     def animation_partitions(self, animation_times):
-        _animation_times = animation_times
+        if not isinstance(animation_times, list):
+            return animation_times
 
-        _partitions = math_operations.apply_sorted_numerical_threshold(
-            value_list=_animation_times,
-            threshhold=settings.animation_frame_gap_threshold()
-        )
-
-        return _partitions
+        return [
+            [
+                animation_times[0],
+                animation_times[-1]
+            ]
+        ]
 
     @QtCore.Slot()
     def update_value(self, name, value):
+        """
+        Updates a value within the item detail dictionary
+        Parameters
+        ----------
+        name
+        value
+
+        Returns
+        -------
+
+        """
         self.item_detail_dictionary[name] = value
 
     @QtCore.Slot()
     def emit_data_response(self):
+        """
+        Emits the detail dictionary on the dataResponse signal
+
+        """
         self.dataResponse.emit(self.item_detail_dictionary)
 
     @QtCore.Slot()
     def emit_queue_data(self, *args):
-        print('add')
+        """
+        Emits the detail dictionary on the addToQueue signal
+
+        Parameters
+        ----------
+        args
+
+        """
         self.addToQueue.emit(self.item_detail_dictionary)
-        return
 
 
 
