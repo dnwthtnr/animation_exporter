@@ -21,6 +21,82 @@ from functools import partial
 from animation_exporter.utility_resources import  keys
 
 
+
+class SaveQueueWindow(base_layouts.VerticalLayout):
+    saveQueue = QtCore.Signal(str)
+
+    def __init__(self):
+        super().__init__()
+        _label = self._build_label()
+
+        _save_directory = self._build_directory_selection()
+        self._directory_selector = self._build_directory_selection()
+        self._name_selector = self._build_name_selection(suggested_name="new_export_queue")
+        self._save_button = self._build_save_button()
+        _cancel_button = self._build_cancel_button()
+
+
+
+        _buttons = base_layouts.HorizontalLayout()
+        _buttons.addWidgets([self._save_button, _cancel_button])
+
+        # _layout = base_layouts.VerticalLayout()
+
+        self.addWidget(_label)
+        self.addWidget(self._directory_selector)
+        self.addWidget(self._name_selector)
+        self.addWidget(_buttons)
+
+        # self.setLayout(_layout)
+
+
+    def _build_label(self):
+        _label = base_widgets.Label(text="Save current export queue")
+        return _label
+
+    def _build_directory_selection(self):
+        _widget = proceadural_displays.ChooseDirectoryAttributeEditor(attribute_name="Save Directory", attribute_value="")
+        _widget.valueEdited.connect(self._directory_changed)
+        return _widget
+
+    def _build_name_selection(self, suggested_name):
+        _widget = proceadural_displays.LineEditAttributeEditor(attribute_name="Queue Name", attribute_value=suggested_name)
+        _widget.valueEdited.connect(self._directory_changed)
+        return _widget
+
+
+    def _build_save_button(self):
+        _widget = base_widgets.Button(text="Save")
+        _widget.clicked.connect(self._save_export_queue)
+        return _widget
+
+    def _build_cancel_button(self):
+        _widget = base_widgets.Button(text="Cancel")
+        _widget.clicked.connect(self.close)
+        return _widget
+
+
+
+    def _directory_changed(self, *args):
+        _dir = self._directory_selector.attribute_value
+        _name = self._directory_selector.attribute_value
+        _save_dir = os.path.join(_dir, f"{_name}.json")
+
+        if os.path.exists(_save_dir):
+            self._save_button.setEnabled(False)
+        else:
+            self._save_button.setEnabled(True)
+
+
+    def _save_export_queue(self):
+        _dir = self._directory_selector.attribute_value
+        _name = self._directory_selector.attribute_value
+        _save_dir = os.path.join(_dir, f"{_name}.json")
+
+        self.saveQueue.emit(_save_dir)
+
+
+
 class QueueItem(base_layouts.ExpandWhenClicked):
     CloseButtonClicked = QtCore.Signal(object)
 
@@ -148,6 +224,8 @@ class QueueItemHolder(base_layouts.VerticalLayout):
     QueueSelectionListDataQuery = QtCore.Signal()
     QueueSelected = QtCore.Signal(str)
 
+    saveCurrentQueue = QtCore.Signal(str)
+
     queue_items = []
 
     def finish_initialization(self):
@@ -227,6 +305,9 @@ class QueueItemHolder(base_layouts.VerticalLayout):
 
     @QtCore.Slot()
     def save_current_export_queue(self):
+        self.save_export_queue_window = SaveQueueWindow()
+        self.save_export_queue_window.show()
+        self.save_export_queue_window.saveQueue.connect(self.saveCurrentQueue.emit)
         return
 
     @QtCore.Slot()

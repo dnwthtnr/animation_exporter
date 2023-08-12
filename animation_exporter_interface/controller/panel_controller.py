@@ -110,6 +110,8 @@ class PanelController(QtCore.QObject):
             _queue_view.UpdateQueueItemFrameRange.connect(queue_controller.update_queue_item_export_frame_range)
             _queue_view.StartQueueButtonClicked.connect(_queue_runner.start_queue)
 
+            _queue_view.saveCurrentQueue.connect(self.save_current_queue)
+
             self.QueueItemAdded.connect(_queue_view.add_queue_item)
             self.QueueDataResponse.connect(_queue_view.populate_queue_view)
             self.QueuePathsDataResponse.connect(_queue_view.populate_queues_combobox)
@@ -129,6 +131,11 @@ class PanelController(QtCore.QObject):
             return
 
         _queue_view.finish_initialization()
+
+
+    def save_current_queue(self, new_queue_path):
+        queue_controller.duplicate_current_queue(new_queue_path)
+        self.emit_queue_paths()
 
     @QtCore.Slot()
     def queue_selected(self, queue_path):
@@ -150,6 +157,7 @@ class PanelController(QtCore.QObject):
         export_directory = export_data_dictionary.get(keys.export_directory_key)
 
         if _selected_animation_ranges is None:
+            print('addingnone')
 
             logger.debug(f'New export queue item data: {scene_path, scene_objects, export_directory}')
             try:
@@ -177,6 +185,7 @@ class PanelController(QtCore.QObject):
             return
 
         for animation_range in _selected_animation_ranges:
+            print('addingnone', animation_range, _selected_animation_ranges)
             _range_export_name = export_name
             _range_export_name = export_name + f"[{animation_range[0]}_{animation_range[1]}]"
 
@@ -192,6 +201,7 @@ class PanelController(QtCore.QObject):
                 logger.info(f'Successfully emitted AddToExportQueue')
             except Exception as e:
                 logger.warning(f'Encountered exception while attempting to emit AddToExportQueue with queue item data. Aborting')
+                print('error', e)
                 logger.exception(e)
                 return
 
