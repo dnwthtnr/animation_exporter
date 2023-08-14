@@ -90,7 +90,7 @@ class SaveQueueWindow(base_layouts.VerticalLayout):
 
     def _save_export_queue(self):
         _dir = self._directory_selector.attribute_value
-        _name = self._directory_selector.attribute_value
+        _name = self._name_selector.attribute_value
         _save_dir = os.path.join(_dir, f"{_name}.json")
 
         self.saveQueue.emit(_save_dir)
@@ -321,13 +321,25 @@ class QueueItemHolder(base_layouts.VerticalLayout):
             The queues
 
         """
+        _current = self.queues_combo.currentText()
         self.queues_combo.clear()
         self.queues_combo.addItems(queues)
+        if _current in queues:
+            self.queues_combo.setCurrentText(_current)
+            return
         self.queues_combo.setCurrentIndex(0)
 
     @QtCore.Slot()
     def add_queue(self, queue):
         self.queues_combo.addItem(queue)
+
+
+    def remove_queue(self, queue):
+        _index = self.queues_combo.findText(queue)
+        if _index == -1:
+            return
+
+        self.queues_combo.removeItem(_index)
 
     ###########################
 

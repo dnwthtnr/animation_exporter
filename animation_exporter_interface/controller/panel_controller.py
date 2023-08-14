@@ -84,8 +84,8 @@ class PanelController(QtCore.QObject):
         try:
             _queue_runner = queue_controller.QueueRunner()
             _queue_runner.moveToThread(self.worker_thread)
-            _queue_view = AnimationExportQueueView.QueueItemHolder()
-            _queue_view._controller = _queue_runner
+            self._queue_view = AnimationExportQueueView.QueueItemHolder()
+            self._queue_view._controller = _queue_runner
             logger.info(f'Queue panel successfully built')
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to build queue view. Aborting')
@@ -95,51 +95,56 @@ class PanelController(QtCore.QObject):
         logger.debug(f'Connecting signals between queue_runner, queue_view and panel_controller')
         try:
             # self.startQueue.connect(_queue_runner.start_queue)
-            _queue_runner.QueueItemRemoved.connect(_queue_view.remove_queue_item)
+            _queue_runner.QueueItemRemoved.connect(self._queue_view.remove_queue_item)
 
             # TODO: seperate thsi out. Have runner emit signal that item has started to signal to queue view to start the loading instead of it doing it itself
-            _queue_runner.itemFinished.connect(_queue_view.queueItemCompleted)
-            _queue_runner.itemStarted.connect(_queue_view.queueItemStarted)
+            _queue_runner.itemFinished.connect(self._queue_view.queueItemCompleted)
+            _queue_runner.itemStarted.connect(self._queue_view.queueItemStarted)
 
-            _queue_view.QueueSelected.connect(self.queue_selected)
-            _queue_view.QueueSelectionListDataQuery.connect(self.emit_queue_paths)
+            self._queue_view.QueueSelected.connect(self.queue_selected)
+            self._queue_view.QueueSelectionListDataQuery.connect(self.emit_queue_paths)
 
-            _queue_view.RemoveQueueItem.connect(queue_controller.remove_export_queue_item)
-            _queue_view.UpdateQueueItemName.connect(queue_controller.update_queue_item_export_name)
-            _queue_view.UpdateQueueItemExportDirectory.connect(queue_controller.update_queue_item_export_directory)
-            _queue_view.UpdateQueueItemFrameRange.connect(queue_controller.update_queue_item_export_frame_range)
-            _queue_view.StartQueueButtonClicked.connect(_queue_runner.start_queue)
+            self._queue_view.RemoveQueueItem.connect(queue_controller.remove_export_queue_item)
+            self._queue_view.UpdateQueueItemName.connect(queue_controller.update_queue_item_export_name)
+            self._queue_view.UpdateQueueItemExportDirectory.connect(queue_controller.update_queue_item_export_directory)
+            self._queue_view.UpdateQueueItemFrameRange.connect(queue_controller.update_queue_item_export_frame_range)
+            self._queue_view.StartQueueButtonClicked.connect(_queue_runner.start_queue)
 
-            _queue_view.saveCurrentQueue.connect(self.save_current_queue)
+            self._queue_view.saveCurrentQueue.connect(self.save_current_queue)
 
-            self.QueueItemAdded.connect(_queue_view.add_queue_item)
-            self.QueueDataResponse.connect(_queue_view.populate_queue_view)
-            self.QueuePathsDataResponse.connect(_queue_view.populate_queues_combobox)
+            self.QueueItemAdded.connect(self._queue_view.add_queue_item)
+            self.QueueDataResponse.connect(self._queue_view.populate_queue_view)
+            self.QueuePathsDataResponse.connect(self._queue_view.populate_queues_combobox)
             logger.info(f'Successfully connected queue panel signals')
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to connect queue view signals. Aborting')
             logger.exception(e)
             return
 
-        logger.info(f'Attempting to emit queue panel on FocalPanelBuilt signal with widget: {_queue_view}')
+        logger.info(f'Attempting to emit queue panel on FocalPanelBuilt signal with widget: {self._queue_view}')
         try:
-            self.FocalPanelBuilt.emit(_queue_view, "Export Queue")
+            self.FocalPanelBuilt.emit(self._queue_view, "Export Queue")
             logger.info(f'Successfully emitted queue panel on FocalPanelBuilt signal')
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to emit queue view on FocalPanelBuilt signal. Aborting')
             logger.exception(e)
             return
 
-        _queue_view.finish_initialization()
+        self._queue_view.finish_initialization()
 
 
     def save_current_queue(self, new_queue_path):
+        print(new_queue_path)
         queue_controller.duplicate_current_queue(new_queue_path)
         self.emit_queue_paths()
 
     @QtCore.Slot()
     def queue_selected(self, queue_path):
-        queue_controller.set_current_queue_path(queue_path)
+        _result = queue_controller.set_current_queue_path(queue_path)
+        if _result == -1:
+            logger.warning(f'Queue path: {queue_path} encountered error. Removing from combobox')
+            self._queue_view.remove_queue(queue_path)
+
         self.QueueDataResponse.emit(queue_controller.current_export_queue())
 
     @QtCore.Slot()

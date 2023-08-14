@@ -94,6 +94,10 @@ def current_queue_path():
     if isValidQueue(_queue) is False:
         logger.warning(f"queue file: {_queue} is invalid or has encountered an error. renaming and creating new")
 
+        if not os.path.exists(_queue):
+            remove_queue_path(_queue)
+            return
+
         _new_queue_path = file_management.add_suffix_to_filepath(_queue, "__BROKEN")
 
         _empty_queue = {}
@@ -104,6 +108,10 @@ def current_queue_path():
 
 
 def set_current_queue_path(queue_path_name):
+    _queue_path = queue_paths().get(queue_path_name)
+    if isValidQueue(_queue_path) is False:
+        logger.warning(f"queue file: {_queue_path} is invalid or has encountered an error. renaming and creating new")
+        return -1
     return _queue_settings.set_setting("Current_Queue", queue_paths().get(queue_path_name))
 
 
