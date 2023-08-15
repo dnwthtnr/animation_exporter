@@ -228,6 +228,9 @@ class ExportQueuesInterfaceController(object):
 
         self.write_queue_index_data(_queue_index_data)
 
+        if queue_index_key == _queue_settings.get_setting(keys.active_export_queue):
+            _queue_settings.set_setting(keys.active_export_queue, new_queue_index_key)
+
         self.queueIndexKeyChanged.emit(queue_index_key, new_queue_index_key)
 
     def reorder_queue_indices(self):
@@ -269,6 +272,8 @@ class ExportQueuesInterfaceController(object):
         self.write_queue_index_data(_return_queue_index_data)
     # endregion
 
+    # TODO: Figure out a better way of statelessly keeping track of and managing changes to the active queue when other
+    #  queue attributes are changed
     def set_active_export_queue(self, queue_index_key):
         _queue_settings.set_setting(keys.active_export_queue, queue_index_key)
 
