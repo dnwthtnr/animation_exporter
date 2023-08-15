@@ -2,6 +2,8 @@ queue_name = "QueueName"
 queue_path = "QueuePath"
 queue_index_key = "QueueIndexKey"
 
+active_export_queue = "ActiveExportQueue"
+
 
 queue_item_identifier_key = "QueueItemIdentifier"
 item_export_name_key = "ExportName"
