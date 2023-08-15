@@ -1,5 +1,6 @@
 queue_name = "QueueName"
 queue_path = "QueuePath"
+queue_index_key = "QueueIndexKey"
 
 
 queue_item_identifier_key = "QueueItemIdentifier"
