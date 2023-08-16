@@ -98,7 +98,7 @@ class QueueEditor(base_layouts.HorizontalLayout):
     changeQueueDirectory = QtCore.Signal(str, str)
     changeQueueIndex = QtCore.Signal(str, str)
 
-    currentQueueChanged = QtCore.Signal(str)
+    changeActiveQueue = QtCore.Signal(str)
 
     def finish_initialization(self):
         self.requestingExistingQueueIndex.emit()
@@ -179,7 +179,7 @@ class QueueEditor(base_layouts.HorizontalLayout):
     def _current_queue_selection_changed(self, *args):
         _new_selection = self._queue_selection_combo.currentText()
         _queue_item = self.get_queue_item_from_name(_new_selection)
-        self.currentQueueChanged.emit(_queue_item.queue_index_key())
+        self.changeActiveQueue.emit(_queue_item.queue_index_key())
 
     # endregion
 

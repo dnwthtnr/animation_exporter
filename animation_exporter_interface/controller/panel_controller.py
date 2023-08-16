@@ -18,13 +18,15 @@ from pyqt_interface_elements import (
 )
 from animation_exporter.animation_exporter_interface.view import (
     AnimationExporterFooter,
-    AnimationExportQueueView,
+    # AnimationExportQueueView,
+    QueueEditor,
     ItemDetailedView,
     AnimationExporterHeader,
     AnimationExporterSceneView
 )
 from animation_exporter.animation_exporter_interface.controller import (
-    queue_controller,
+ExportQueuesController,
+    # queue_controller,
 maya_process_delegator,
 item_detail_controller
 )
@@ -84,7 +86,8 @@ class PanelController(QtCore.QObject):
         try:
             _queue_runner = queue_controller.QueueRunner()
             _queue_runner.moveToThread(self.worker_thread)
-            self._queue_view = AnimationExportQueueView.QueueItemHolder()
+            self._queue_controller = ExportQueuesController.ExportQueuesInterfaceController()
+            self._queue_view = QueueEditor.QueueEditor()
             self._queue_view._controller = _queue_runner
             logger.info(f'Queue panel successfully built')
         except Exception as e:
@@ -101,20 +104,37 @@ class PanelController(QtCore.QObject):
             _queue_runner.itemFinished.connect(self._queue_view.queueItemCompleted)
             _queue_runner.itemStarted.connect(self._queue_view.queueItemStarted)
 
-            self._queue_view.QueueSelected.connect(self.queue_selected)
-            self._queue_view.QueueSelectionListDataQuery.connect(self.emit_queue_paths)
+            # self._queue_view.QueueSelected.connect(self.queue_selected)
+            # self._queue_view.QueueSelectionListDataQuery.connect(self.emit_queue_paths)
+            #
+            # self._queue_view.RemoveQueueItem.connect(queue_controller.remove_export_queue_item)
+            # self._queue_view.UpdateQueueItemName.connect(queue_controller.update_queue_item_export_name)
+            # self._queue_view.UpdateQueueItemExportDirectory.connect(queue_controller.update_queue_item_export_directory)
+            # self._queue_view.UpdateQueueItemFrameRange.connect(queue_controller.update_queue_item_export_frame_range)
+            # self._queue_view.StartQueueButtonClicked.connect(_queue_runner.start_queue)
+            #
+            # self._queue_view.saveCurrentQueue.connect(self.save_current_queue)
 
-            self._queue_view.RemoveQueueItem.connect(queue_controller.remove_export_queue_item)
-            self._queue_view.UpdateQueueItemName.connect(queue_controller.update_queue_item_export_name)
-            self._queue_view.UpdateQueueItemExportDirectory.connect(queue_controller.update_queue_item_export_directory)
-            self._queue_view.UpdateQueueItemFrameRange.connect(queue_controller.update_queue_item_export_frame_range)
-            self._queue_view.StartQueueButtonClicked.connect(_queue_runner.start_queue)
+            self._queue_view        .requestingExistingQueueIndex   .connect(   self._queue_controller      .finish_initialization          )
+            self._queue_view        .addNewQueue                    .connect(   self._queue_controller      .add_queue_to_index             )
+            self._queue_view        .duplicateQueue                 .connect(   self._queue_controller      .duplicate_queue                )
+            self._queue_view        .deleteQueue                    .connect(   self._queue_controller      .remove_queue_from_index        )
+            self._queue_view        .changeQueueName                .connect(   self._queue_controller      .change_queue_name              )
+            self._queue_view        .changeQueueDirectory           .connect(   self._queue_controller      .change_queue_path              )
+            self._queue_view        .changeQueueIndex               .connect(   self._queue_controller      .change_queue_index_position    )
+            self._queue_view        .changeActiveQueue              .connect(   self._queue_controller      .set_active_export_queue        )
 
-            self._queue_view.saveCurrentQueue.connect(self.save_current_queue)
 
-            self.QueueItemAdded.connect(self._queue_view.add_queue_item)
-            self.QueueDataResponse.connect(self._queue_view.populate_queue_view)
-            self.QueuePathsDataResponse.connect(self._queue_view.populate_queues_combobox)
+            self._queue_controller  .newQueueAdded                  .connect(   self._queue_view            .add_queue_index_item           )
+            self._queue_controller  .queueDeleted                   .connect(   self._queue_view            .delete_queue_index_item        )
+            self._queue_controller  .queueNameChanged               .connect(   self._queue_view            .change_queue_index_item_name   )
+            self._queue_controller  .queuePathChanged               .connect(   self._queue_view            .change_queue_index_item_path   )
+            self._queue_controller  .queueIndexKeyChanged           .connect(   self._queue_view            .change_queue_index_item_key    )
+            # self._queue_controller  .activeExportQueueChanged       .connect(   self._queue_view            .add_queue_index_item           )
+
+            # self.QueueItemAdded.connect(self._queue_view.add_queue_item)
+            # self.QueueDataResponse.connect(self._queue_view.populate_queue_view)
+            # self.QueuePathsDataResponse.connect(self._queue_view.populate_queues_combobox)
             logger.info(f'Successfully connected queue panel signals')
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to connect queue view signals. Aborting')
@@ -133,23 +153,23 @@ class PanelController(QtCore.QObject):
         self._queue_view.finish_initialization()
 
 
-    def save_current_queue(self, new_queue_path):
-        print(new_queue_path)
-        queue_controller.duplicate_current_queue(new_queue_path)
-        self.emit_queue_paths()
+    # def save_current_queue(self, new_queue_path):
+    #     print(new_queue_path)
+    #     queue_controller.duplicate_current_queue(new_queue_path)
+    #     self.emit_queue_paths()
 
-    @QtCore.Slot()
-    def queue_selected(self, queue_path):
-        _result = queue_controller.set_current_queue_path(queue_path)
-        if _result == -1:
-            logger.warning(f'Queue path: {queue_path} encountered error. Removing from combobox')
-            self._queue_view.remove_queue(queue_path)
+    # @QtCore.Slot()
+    # def queue_selected(self, queue_path):
+    #     _result = queue_controller.set_current_queue_path(queue_path)
+    #     if _result == -1:
+    #         logger.warning(f'Queue path: {queue_path} encountered error. Removing from combobox')
+    #         self._queue_view.remove_queue(queue_path)
+    #
+    #     self.QueueDataResponse.emit(queue_controller.current_export_queue())
 
-        self.QueueDataResponse.emit(queue_controller.current_export_queue())
-
-    @QtCore.Slot()
-    def emit_queue_paths(self):
-        self.QueuePathsDataResponse.emit(queue_controller.queue_paths())
+    # @QtCore.Slot()
+    # def emit_queue_paths(self):
+    #     self.QueuePathsDataResponse.emit(queue_controller.queue_paths())
 
     @QtCore.Slot()
     def emit_add_to_export_queue(self, export_data_dictionary):

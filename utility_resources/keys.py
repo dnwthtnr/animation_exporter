@@ -1,6 +1,7 @@
 queue_name = "QueueName"
 queue_path = "QueuePath"
 queue_index_key = "QueueIndexKey"
+queue_active_state = "QueueActiveState"
 
 active_export_queue = "ActiveExportQueue"
 
