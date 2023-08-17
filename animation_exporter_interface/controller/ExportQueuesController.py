@@ -86,6 +86,14 @@ class ExportQueuesInterfaceController(object):
     queuePathChanged = QtCore.Signal(str, str)
     queueIndexKeyChanged = QtCore.Signal(str, str)
 
+
+    newActiveQueueItemAdded = QtCore.Signal(str, str, str)
+    activeQueueItemDeleted = QtCore.Signal(str)
+
+    activeQueueItemNameChanged = QtCore.Signal(str, str)
+    activeQueueItemExportDirectoryChanged = QtCore.Signal(str, str)
+    activeQueueItemIndexKeyChanged = QtCore.Signal(str, str)
+
     activeExportQueueChanged = QtCore.Signal(str)
 
     def finish_initialization(self):
@@ -159,7 +167,7 @@ class ExportQueuesInterfaceController(object):
     # region Methods for Editing Export Queue Index Files
 
     def add_queue_to_index(self, queue_name, queue_path):
-        _queue_index_data = self.queue_index_data()
+        _queue_index_data = self.read_queue_index_data()
 
         queue_index_key = generate_new_queue_index_id(_queue_index_data)
 
@@ -185,7 +193,7 @@ class ExportQueuesInterfaceController(object):
             The queue index key to distinguish the necessary queue to remove
 
         """
-        _queue_index_data = self.queue_index_data()
+        _queue_index_data = self.read_queue_index_data()
 
         if queue_index_key not in _queue_index_data:
             raise IndexError(f'Queue index key: {queue_index_key} does not exist.')
@@ -197,7 +205,7 @@ class ExportQueuesInterfaceController(object):
         self.reorder_queue_indices()
 
     def duplicate_queue(self, queue_index_key):
-        _queue_index_data = self.queue_index_data()
+        _queue_index_data = self.read_queue_index_data()
 
         _queue_data = _queue_index_data.get(queue_index_key)
         _queue_path = _queue_data.get(keys.queue_path)
@@ -216,7 +224,7 @@ class ExportQueuesInterfaceController(object):
 
 
     def change_queue_name(self, queue_index_key, new_name):
-        _queue_index_data = self.queue_index_data()
+        _queue_index_data = self.read_queue_index_data()
 
         if queue_index_key not in _queue_index_data:
             raise IndexError(f'Queue index key: {queue_index_key} does not exist.')
@@ -229,7 +237,7 @@ class ExportQueuesInterfaceController(object):
         self.queueNameChanged.emit(queue_index_key, new_name)
 
     def change_queue_path(self, queue_index_key, new_path):
-        _queue_index_data = self.queue_index_data()
+        _queue_index_data = self.read_queue_index_data()
 
         if queue_index_key not in _queue_index_data:
             raise IndexError(f'Queue index key: {queue_index_key} does not exist.')
@@ -242,7 +250,7 @@ class ExportQueuesInterfaceController(object):
         self.queuePathChanged.emit(queue_index_key, new_path)
 
     def change_queue_index_position(self, queue_index_key, new_queue_index_key):
-        _queue_index_data = self.queue_index_data()
+        _queue_index_data = self.read_queue_index_data()
 
         if queue_index_key not in _queue_index_data:
             raise IndexError(f'Queue index key: {queue_index_key} does not exist.')
@@ -307,7 +315,7 @@ class ExportQueuesInterfaceController(object):
         _active_queue_value = _queue_settings.get_setting(keys.active_export_queue)
 
     def set_active_export_queue(self, queue_index_key):
-        _queue_index_data = self.queue_index_data()
+        _queue_index_data = self.read_queue_index_data()
         if queue_index_key not in _queue_index_data:
             raise IndexError(f'Queue index key: {queue_index_key} does not exist.')
 
@@ -322,15 +330,8 @@ class ExportQueuesInterfaceController(object):
 
         self.activeExportQueueChanged.emit(_queue_index_data[queue_index_key][keys.queue_path])
 
-    def active_export_queue_index_key(self):
-        _queue_index_data = self.queue_index_data()
-        for _queue_index_key, _queue_data in _queue_index_data.items():
-            _active_state = _queue_data.get(keys.queue_active_state)
-            if _active_state is True:
-                return _queue_index_key
-
-    def read_active_export_queue_data(self):
-        _queue_index_data = self.queue_index_data()
+    def active_export_queue_path(self):
+        _queue_index_data = self.read_queue_index_data()
 
         _active_queue_index_key = self.active_export_queue_index_key()
 
@@ -340,13 +341,171 @@ class ExportQueuesInterfaceController(object):
         _active_queue_data_dict = _queue_index_data.get(_active_queue_index_key)
         _active_queue_path = _active_queue_data_dict.get(keys.queue_path)
 
-        _data = file_management.read_json(_active_queue_path)
+        return _active_queue_path
 
+    def active_export_queue_index_key(self):
+        _queue_index_data = self.read_queue_index_data()
+        for _queue_index_key, _queue_data in _queue_index_data.items():
+            _active_state = _queue_data.get(keys.queue_active_state)
+            if _active_state is True:
+                return _queue_index_key
+
+    def read_active_export_queue_data(self):
+        _active_queue_path = self.active_export_queue_path()
+        _data = file_management.read_json(_active_queue_path)
         return _data
 
-    def add_to_active_export_queue(self, export_item_data_dict):
-        _queue_item_index_key = generate_new_queue_index_id()
-        export_item_data_dict[keys.queue_item_index_key] =
+    def write_active_export_queue_data(self, active_queue_data):
+        file_management.write_json(path=self.active_export_queue_path(), data=active_queue_data)
+
+    def add_item_to_active_queue(self, scene_data_dict):
+        """
+        Constructs and writes the export data dict to the active queue file.
+        Separate dict is sent via the newActiveQueueItemAdded signal.
+
+        Parameters
+        ----------
+        scene_data_dict : dict
+            The scene data needing to be added to the export queue
+
+        """
+        _active_queue_data = self.read_active_export_queue_data()
+
+        _queue_item_index_key           =   generate_new_queue_index_id(_active_queue_data)
+        _queue_item_scene_path          =   scene_data_dict[    keys.scene_path_key             ]
+        _queue_item_export_name         =   scene_data_dict[    keys.item_export_name_key       ]
+        _queue_item_scene_objects       =   scene_data_dict[    keys.animation_range_key        ]
+        _queue_item_animation_range     =   scene_data_dict[    keys.export_objects_key         ]
+        _queue_item_export_directory    =   scene_data_dict[    keys.export_directory_key       ]
+
+
+        # Export Data Dictionary -- Written into queue file on disk
+        queue_item_export_data_dict = {}
+        queue_item_export_data_dict[   keys.queue_item_identifier_key  ] = _queue_item_index_key
+        queue_item_export_data_dict[   keys.scene_path_key             ] = _queue_item_scene_path
+        queue_item_export_data_dict[   keys.item_export_name_key       ] = _queue_item_export_name
+        queue_item_export_data_dict[   keys.animation_range_key        ] = _queue_item_scene_objects
+        queue_item_export_data_dict[   keys.export_objects_key         ] = _queue_item_animation_range
+        queue_item_export_data_dict[   keys.export_directory_key       ] = _queue_item_export_directory
+
+
+        # Display Data Dictionary -- Serialized separately to reduce size of data being passed around (i.e. keys.export_objects_key)
+        queue_item_display_data_dict = {}
+        queue_item_display_data_dict[   keys.queue_item_identifier_key  ] = _queue_item_index_key
+        queue_item_display_data_dict[   keys.scene_path_key             ] = _queue_item_scene_path
+        queue_item_display_data_dict[   keys.item_export_name_key       ] = _queue_item_export_name
+        queue_item_display_data_dict[   keys.export_directory_key       ] = _queue_item_export_directory
+
+        _active_queue_data[_queue_item_index_key] = queue_item_export_data_dict
+
+        self.write_active_export_queue_data(_active_queue_data)
+
+        self.newActiveQueueItemAdded.emit(queue_item_display_data_dict)
+
+    def remove_item_from_active_queue(self, queue_item_index_key):
+        """
+        Deletes the queue distinguished by the given key and reorders the existing queue index keys
+
+        Parameters
+        ----------
+        queue_index_key : str
+            The queue index key to distinguish the necessary queue to remove
+
+        """
+        _active_queue_data = self.read_active_export_queue_data()
+
+        if queue_item_index_key not in _active_queue_data:
+            raise IndexError(f'Queue index key: {queue_item_index_key} does not exist.')
+
+        del _active_queue_data[queue_item_index_key]
+
+        self.write_active_export_queue_data(_active_queue_data)
+
+        self.activeQueueItemDeleted.emit(queue_item_index_key)
+
+        self.reorder_active_queue_item_indices()
+
+    def change_active_queue_item_name(self, queue_item_index_key, new_name):
+        _active_queue_data = self.read_active_export_queue_data()
+
+        if queue_item_index_key not in _active_queue_data:
+            raise IndexError(f'Queue index key: {queue_item_index_key} does not exist.')
+
+
+        _active_queue_data [queue_item_index_key] [keys.queue_item_export_name] = new_name
+
+        self.write_queue_index_data(_active_queue_data)
+
+        self.activeQueueItemNameChanged.emit(queue_item_index_key, new_name)
+
+    def change_active_queue_item_export_directory(self, queue_item_index_key, new_path):
+        _active_queue_data = self.read_active_export_queue_data()
+
+        if queue_item_index_key not in _active_queue_data:
+            raise IndexError(f'Queue index key: {queue_item_index_key} does not exist.')
+
+
+        _active_queue_data [queue_item_index_key] [keys.queue_item_export_directory] = new_path
+
+        self.write_queue_index_data(_active_queue_data)
+
+        self.activeQueueItemExportDirectoryChanged.emit(queue_item_index_key, new_path)
+
+    def change_active_queue_item_index_position(self, queue_item_index_key, new_queue_item_index_key):
+        _active_queue_data = self.read_active_export_queue_data()
+
+        if queue_item_index_key not in _active_queue_data:
+            raise IndexError(f'Queue index key: {queue_item_index_key} does not exist.')
+
+        _active_queue_data = change_queue_index_key(
+            queue_index_data=_active_queue_data,
+            oldIndex=queue_item_index_key,
+            newIndex=new_queue_item_index_key
+        )
+
+        self.write_queue_index_data(_active_queue_data)
+
+        if queue_item_index_key == _queue_settings.get_setting(keys.active_export_queue):
+            _queue_settings.set_setting(keys.active_export_queue, new_queue_item_index_key)
+
+        self.activeQueueItemIndexKeyChanged.emit(queue_item_index_key, new_queue_item_index_key)
+
+    def reorder_active_queue_item_indices(self):
+        """
+        Reorders the index values in the given queue index data.
+
+        Parameters
+        ----------
+        queue_index_data
+
+        Returns
+        -------
+
+        """
+        active_queue_data = self.read_active_export_queue_data()
+
+        if len(active_queue_data) == 0: pass
+
+        _active_queue_keys              =   list(active_queue_data.keys())
+        _active_queue_keys_int          =   [int(_key) for _key in _active_queue_keys]
+        _sorted_active_queue_keys_int   =   sorted(_active_queue_keys_int)
+
+        for _expected_key_int, _actual_key_int in enumerate(_sorted_active_queue_keys_int):
+            if _expected_key_int == _actual_key_int:
+                continue
+
+            expected_queue_item_index_key = str(_expected_key_int)
+            queue_item_index_key = str(_actual_key_int)
+
+            active_queue_data = change_queue_index_key(
+                queue_index_data=active_queue_data,
+                oldIndex=queue_item_index_key,
+                newIndex=expected_queue_item_index_key
+            )
+
+            self.activeQueueItemIndexKeyChanged.emit(queue_item_index_key, expected_queue_item_index_key)
+
+        self.write_queue_index_data(active_queue_data)
     # endregion
 
 

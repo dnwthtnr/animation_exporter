@@ -86,9 +86,9 @@ class PanelController(QtCore.QObject):
         try:
             _queue_runner = queue_controller.QueueRunner()
             _queue_runner.moveToThread(self.worker_thread)
-            self._queue_controller = ExportQueuesController.ExportQueuesInterfaceController()
-            self._queue_view = QueueEditor.QueueEditor()
-            self._queue_view._controller = _queue_runner
+            queue_controller = ExportQueuesController.ExportQueuesInterfaceController()
+            queue_view = QueueEditor.QueueEditor()
+            queue_view._controller = _queue_runner
             logger.info(f'Queue panel successfully built')
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to build queue view. Aborting')
@@ -98,11 +98,12 @@ class PanelController(QtCore.QObject):
         logger.debug(f'Connecting signals between queue_runner, queue_view and panel_controller')
         try:
             # self.startQueue.connect(_queue_runner.start_queue)
-            _queue_runner.QueueItemRemoved.connect(self._queue_view.remove_queue_item)
+
+            _queue_runner.QueueItemRemoved.connect(queue_view.remove_queue_item)
 
             # TODO: seperate thsi out. Have runner emit signal that item has started to signal to queue view to start the loading instead of it doing it itself
-            _queue_runner.itemFinished.connect(self._queue_view.queueItemCompleted)
-            _queue_runner.itemStarted.connect(self._queue_view.queueItemStarted)
+            _queue_runner.itemFinished.connect(queue_view.queueItemCompleted)
+            _queue_runner.itemStarted.connect(queue_view.queueItemStarted)
 
             # self._queue_view.QueueSelected.connect(self.queue_selected)
             # self._queue_view.QueueSelectionListDataQuery.connect(self.emit_queue_paths)
@@ -115,22 +116,33 @@ class PanelController(QtCore.QObject):
             #
             # self._queue_view.saveCurrentQueue.connect(self.save_current_queue)
 
-            self._queue_view        .requestingExistingQueueIndex   .connect(   self._queue_controller      .finish_initialization          )
-            self._queue_view        .addNewQueue                    .connect(   self._queue_controller      .add_queue_to_index             )
-            self._queue_view        .duplicateQueue                 .connect(   self._queue_controller      .duplicate_queue                )
-            self._queue_view        .deleteQueue                    .connect(   self._queue_controller      .remove_queue_from_index        )
-            self._queue_view        .changeQueueName                .connect(   self._queue_controller      .change_queue_name              )
-            self._queue_view        .changeQueueDirectory           .connect(   self._queue_controller      .change_queue_path              )
-            self._queue_view        .changeQueueIndex               .connect(   self._queue_controller      .change_queue_index_position    )
-            self._queue_view        .changeActiveQueue              .connect(   self._queue_controller      .set_active_export_queue        )
+            # TODO: Rework queue runner and way of hooking up to queue view to manage export states
+
+            queue_view        .requestingExistingQueueIndex   .connect(   queue_controller      .finish_initialization          )
+            queue_view        .addNewQueue                    .connect(   queue_controller      .add_queue_to_index             )
+            queue_view        .duplicateQueue                 .connect(   queue_controller      .duplicate_queue                )
+            queue_view        .deleteQueue                    .connect(   queue_controller      .remove_queue_from_index        )
+            queue_view        .changeQueueName                .connect(   queue_controller      .change_queue_name              )
+            queue_view        .changeQueueDirectory           .connect(   queue_controller      .change_queue_path              )
+            queue_view        .changeQueueIndex               .connect(   queue_controller      .change_queue_index_position    )
+            queue_view        .changeActiveQueue              .connect(   queue_controller      .set_active_export_queue        )
 
 
-            self._queue_controller  .newQueueAdded                  .connect(   self._queue_view            .add_queue_index_item           )
-            self._queue_controller  .queueDeleted                   .connect(   self._queue_view            .delete_queue_index_item        )
-            self._queue_controller  .queueNameChanged               .connect(   self._queue_view            .change_queue_index_item_name   )
-            self._queue_controller  .queuePathChanged               .connect(   self._queue_view            .change_queue_index_item_path   )
-            self._queue_controller  .queueIndexKeyChanged           .connect(   self._queue_view            .change_queue_index_item_key    )
-            # self._queue_controller  .activeExportQueueChanged       .connect(   self._queue_view            .add_queue_index_item           )
+            queue_controller  .newQueueAdded                  .connect(   queue_view            .add_queue_index_item           )
+            queue_controller  .queueDeleted                   .connect(   queue_view            .delete_queue_index_item        )
+            queue_controller  .queueNameChanged               .connect(   queue_view            .change_queue_index_item_name   )
+            queue_controller  .queuePathChanged               .connect(   queue_view            .change_queue_index_item_path   )
+            queue_controller  .queueIndexKeyChanged           .connect(   queue_view            .change_queue_index_item_key    )
+
+            queue_controller  .newActiveQueueItemAdded                  .connect(   queue_view            .add_queue_index_item           )
+            queue_controller  .activeQueueItemDeleted                   .connect(   queue_view            .delete_queue_index_item        )
+            queue_controller  .activeQueueItemNameChanged               .connect(   queue_view            .change_queue_index_item_name   )
+            queue_controller  .activeQueueItemExportDirectoryChanged    .connect(   queue_view            .change_queue_index_item_path   )
+            queue_controller  .activeQueueItemIndexKeyChanged           .connect(   queue_view            .change_queue_index_item_key    )
+
+
+
+            # queue_controller  .activeExportQueueChanged       .connect(   queue_view            .add_queue_index_item           )
 
             # self.QueueItemAdded.connect(self._queue_view.add_queue_item)
             # self.QueueDataResponse.connect(self._queue_view.populate_queue_view)
@@ -141,16 +153,16 @@ class PanelController(QtCore.QObject):
             logger.exception(e)
             return
 
-        logger.info(f'Attempting to emit queue panel on FocalPanelBuilt signal with widget: {self._queue_view}')
+        logger.info(f'Attempting to emit queue panel on FocalPanelBuilt signal with widget: {queue_view}')
         try:
-            self.FocalPanelBuilt.emit(self._queue_view, "Export Queue")
+            self.FocalPanelBuilt.emit(queue_view, "Export Queue")
             logger.info(f'Successfully emitted queue panel on FocalPanelBuilt signal')
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to emit queue view on FocalPanelBuilt signal. Aborting')
             logger.exception(e)
             return
 
-        self._queue_view.finish_initialization()
+        queue_view.finish_initialization()
 
 
     # def save_current_queue(self, new_queue_path):
