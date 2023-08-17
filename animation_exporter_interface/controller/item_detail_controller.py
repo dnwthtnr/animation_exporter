@@ -72,6 +72,7 @@ class ItemDetailController(QtCore.QObject):
         args
 
         """
+        print('addingemit')
         self.addToQueue.emit(self.item_detail_dictionary)
 
 

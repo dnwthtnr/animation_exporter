@@ -58,6 +58,7 @@ def export_animation_range_from_scene(scene_path, objects, frame_range, export_p
     cmds.loadPlugin('fbxmaya')
 
     if isinstance(frame_range, list) and len(frame_range) == 2:
+        cmds.select(objects)
         bake_animation_range(frame_range[0], frame_range[-1])
 
     export_animation(objects, export_path)

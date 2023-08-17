@@ -1,4 +1,6 @@
 import logging
+import pathlib
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 import os, subprocess, shutil
@@ -24,11 +26,31 @@ if _queue_settings.settings_size() < len(_default_queue_settings()):
     _queue_settings.overwrite_with_dictionary(_default_queue_settings())
 
 
+def isValidQueue(queue_filepath):
+    try:
+        _data = file_management.read_json(queue_filepath)
+        return True
+    except Exception as e:
+        return False
+
+
+
 def queue_paths():
     return _queue_settings.get_setting("Queues")
 
 
 def add_queue_path(queue_path, name=None):
+    """
+    Adds a new queue filepath
+    Parameters
+    ----------
+    queue_path
+    name
+
+    Returns
+    -------
+
+    """
     if name is None:
         name = queue_path
     _queue_dict = queue_paths()
@@ -59,11 +81,45 @@ if _default_queue_path not in queue_paths():
 
 
 def current_queue_path():
+    """
+    The current export queue. Performs some error checks
+
+    Returns
+    -------
+    str
+        The current export queue path
+
+    """
+    _queue = _queue_settings.get_setting("Current_Queue")
+    if isValidQueue(_queue) is False:
+        logger.warning(f"queue file: {_queue} is invalid or has encountered an error. renaming and creating new")
+
+        if not os.path.exists(_queue):
+            remove_queue_path(_queue)
+            return
+
+        _new_queue_path = file_management.add_suffix_to_filepath(_queue, "__BROKEN")
+
+        _empty_queue = {}
+        file_management.write_json(_queue, _empty_queue)
+
+        return
     return _queue_settings.get_setting("Current_Queue")
 
 
 def set_current_queue_path(queue_path_name):
+    _queue_path = queue_paths().get(queue_path_name)
+    if isValidQueue(_queue_path) is False:
+        logger.warning(f"queue file: {_queue_path} is invalid or has encountered an error. renaming and creating new")
+        return -1
     return _queue_settings.set_setting("Current_Queue", queue_paths().get(queue_path_name))
+
+
+def duplicate_current_queue(new_queue_path):
+    shutil.copy(current_queue_path(), new_queue_path)
+    _path = pathlib.Path(new_queue_path)
+    add_queue_path(new_queue_path, str(_path.stem))
+    return
 
 
 if len(queue_paths()) == 1:
@@ -103,6 +159,8 @@ def get_new_queue_item_identifier():
 @QtCore.Slot()
 def add_to_export_queue(scene_path, export_name, scene_objects, animation_range, export_directory):
     _queue_item_identifier = get_new_queue_item_identifier()
+
+    print('yeah')
 
     _scene_data_dict = {}
     _scene_data_dict[keys.queue_item_identifier_key] = _queue_item_identifier

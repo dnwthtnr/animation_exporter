@@ -306,7 +306,10 @@ class Scene_Controller(QtCore.QObject):
         logger.debug(f'Attempting to get all export objects for: {_object}')
         _object_export_list = []
         try:
-            _object_export_list = self.get_descendants(_object)
+            _children = self.get_descendants(_object)
+            if isinstance(_children, list):
+                _object_export_list = _children
+
             _object_export_list.append(_object)
             logger.debug(f'Successfully got export objects for : {_object}')
             logger.debug(f'Export objects: {_object_export_list}')
@@ -314,7 +317,26 @@ class Scene_Controller(QtCore.QObject):
             logger.error(f'Encountered exception whil attempting to get export objects for: {_object}. Aborting.')
             logger.exception(e)
             raise e
-        return _object_export_list
+
+        _filtered_list = [_obj for _obj in _object_export_list if self.isExportObjectType(_obj) is True]
+
+        if len(_filtered_list) == 0:
+            _filtered_list = _object_export_list
+
+        return _filtered_list
+
+
+    def isExportObjectType(self, object):
+        _type = cmds.objectType(object)
+        if _type == "joint":
+            return True
+        if _type == "transform":
+            _immediate_mesh_children = cmds.listRelatives(object, fullPath=True, type='mesh')
+            if _immediate_mesh_children is None:
+                return False
+            if len(_immediate_mesh_children) > 0:
+                return True
+        return False
 
     def get_descendants(self, _object):
         if self.current_scene_dict != {}:
