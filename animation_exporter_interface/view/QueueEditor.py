@@ -170,7 +170,7 @@ class QueueIndexItem(base_layouts.ExpandWhenClicked):
     def delete_queue(self):
         self.close()
 
-class QueueEditor(base_layouts.HorizontalLayout):
+class QueueEditor(base_layouts.VerticalLayout):
     requestingExistingQueueIndex = QtCore.Signal()
 
     addNewQueue = QtCore.Signal()
@@ -192,7 +192,10 @@ class QueueEditor(base_layouts.HorizontalLayout):
         self._queue_selection_combo = self._build_queue_selection_combo()
         queue_manager_toolbar = self._build_queue_management_toolbar(queue_selector=self._queue_selection_combo)
 
-        self.addWidget(queue_manager_toolbar, stretch=1)
+        self._active_queue_item_holder = self._build_active_queue_item_holder()
+
+        self.addWidget(queue_manager_toolbar, alignment=constants.align_top)
+        self.addWidget(self._active_queue_item_holder, stretch=1)
 
     # region Dialog
     def open_queue_editor_dialog(self):
@@ -331,32 +334,39 @@ class QueueEditor(base_layouts.HorizontalLayout):
 
 
     # region Active Queue
+    def _build_active_queue_item_holder(self):
+        _widget = base_layouts.VerticalScrollArea()
+        _widget.addStretch(1)
+        return _widget
+
+    def _clear_active_queue_items(self):
+        """
+        Removes all queue items from the queue item holder
+
+        """
+        self._active_queue_item_holder.clear_layout()
+
     def add_active_queue_item(self, queue_item_display_dict):
-        _item = QueueIndexItem(
-            queue_name=queue_name,
-            queue_path=queue_path,
-            queue_index_key=queue_index_key
-        )
+        _item = QueueItem(queue_item_display_dict)
         _item.changeQueueName.connect(self.changeQueueName.emit)
         _item.deleteQueue.connect(self.delete_queue_button_clicked())
-        self._queue_item_scroll_area.addWidget(_item)
 
-        self._queue_selection_combo.addItem(queue_name)
+        self._active_queue_item_holder.addWidget(_item)
 
-    def get_active_queue_item_from_index(self, queue_index_key):
-        for _widget in self._queue_item_scroll_area.layout.children:
-            if not isinstance(_widget, QueueIndexItem):
+    def get_active_queue_item_from_index(self, queue_item_index_key):
+        for _widget in self._queue_item_scroll_area.children():
+            if not isinstance(_widget, QueueItem):
                 continue
 
-            if _widget.queue_index_key() == queue_index_key:
+            if _widget.queue_index_key() == queue_item_index_key:
                 return _widget
 
-    def get_active_queue_item_from_name(self, queue_name):
-        for _widget in self._queue_item_scroll_area.layout.children:
-            if not isinstance(_widget, QueueIndexItem):
+    def get_active_queue_item_from_name(self, queue_item_name):
+        for _widget in self._queue_item_scroll_area.children():
+            if not isinstance(_widget, QueueItem):
                 continue
 
-            if _widget.queue_name() == queue_name:
+            if _widget.queue_name() == queue_item_name:
                 return _widget
 
     def delete_active_queue_item(self, queue_index_key):
@@ -371,20 +381,11 @@ class QueueEditor(base_layouts.HorizontalLayout):
         """
         _queue_item = self.get_queue_item_from_index(queue_index_key)
 
-        # remove from combo
-        _queue_combo_index = self._queue_selection_combo.findText(_queue_item.queue_name())
-        self._queue_selection_combo.removeItem(_queue_combo_index)
-
-        _queue_item.delete_queue()
+        self._active_queue_item_holder.disown_child(_queue_item)
 
     def change_active_queue_item_name(self, queue_index_key, new_name):
         _queue_item = self.get_queue_item_from_index(queue_index_key)
         _queue_item.set_queue_name(new_name)
-
-        # add to combo
-        _queue_combo_index = self._queue_selection_combo.findText(_queue_item.queue_name())
-        self._queue_selection_combo.removeItem(_queue_combo_index)
-        self._queue_selection_combo.addItem(new_name)
 
     def change_active_queue_item_export_directory(self, queue_index_key, new_path):
         _queue_item = self.get_queue_item_from_index(queue_index_key)
