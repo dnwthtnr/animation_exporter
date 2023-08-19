@@ -1,29 +1,65 @@
 from PySide2 import QtCore
 from functools import partial
+from animation_exporter.utility_resources import keys
 from pyqt_interface_elements import ( base_layouts, base_widgets,
                                       proceadural_displays, icons,
                                       constants, modal_dialog, styles )
 
 # TODO: Add widget stuff for active queue items
 
+_collapsed_attributes = [keys.queue_item_export_name]
+_attributes_to_hide = [keys.queue_item_index_key]
+_non_editable_attributes = []
+
+
+_attribute_display_classes = [
+    proceadural_displays.NameEditorAttributeEditor,
+    proceadural_displays.ChooseDirectoryAttributeEditor,
+    proceadural_displays.LineEditAttributeEditor
+]
+
 class QueueItem(base_layouts.ExpandWhenClicked):
     deleteQueueItem = QtCore.Signal(str)
+
     changeQueueItemName = QtCore.Signal(str, str)
+    changeQueueItemExportDirectory = QtCore.Signal(str, str)
+    changeQueueItemIndex = QtCore.Signal(str, str)
+
+    queueItemAttributeChanged = QtCore.Signal(str, object)
 
     def __init__(self, queue_item_display_dict):
         super().__init__(margins=[5, 5, 0, 0], spacing=5)
 
         _title_width = 150
 
+        _collapsed_display_attributes = {_attr: _value for _attr, _value in queue_item_display_dict.items() if
+                                         _attr in _collapsed_attributes}
+        _collapsed_attribute_holder = proceadural_displays.AttributeHolder(
+            attribute_dictionary=_collapsed_display_attributes,
+            attribute_mapper=_attribute_display_classes,
+            map_by_identity=True,
+            orientation=constants.horizontal
+        )
+
+        _expanded_display_attributes = {_attr: _value for _attr, _value in queue_item_display_dict.items() if
+                                         _attr not in _collapsed_attributes}
+        _expanded_attribute_holder = proceadural_displays.AttributeHolder(
+            attribute_dictionary=_expanded_display_attributes,
+            attribute_mapper=_attribute_display_classes,
+            map_by_identity=True,
+            orientation=constants.horizontal
+        )
+        _expanded_attribute_holder.valueChanged.connect(self.queueItemAttributeChanged.emit)
+
         self._queue_index_key = queue_index_key
         self._queue_name = self._build_queue_name(name=queue_name, width=_title_width)
         self._queue_path = self._build_queue_path(path=queue_path, width=_title_width)
         _delete_button = self._build_delete_button()
 
-        self.addCollapsedWidget(self._queue_name, stretch=1)
+        self.addCollapsedWidget(_collapsed_attribute_holder, stretch=1)
         self.addCollapsedWidget(_delete_button, alignment=constants.align_right)
 
-        self.addExpandedWidget(self._queue_path)
+        self.addExpandedWidget(_expanded_attribute_holder)
 
         self.set_expanded_stylesheet(styles.maya_expanded_collapsible_layout)
         self.set_collapsed_stylesheet(styles.maya_collapsed_layout)
@@ -171,17 +207,26 @@ class QueueIndexItem(base_layouts.ExpandWhenClicked):
         self.close()
 
 class QueueEditor(base_layouts.VerticalLayout):
+
     requestingExistingQueueIndex = QtCore.Signal()
 
-    addNewQueue = QtCore.Signal()
-    duplicateQueue = QtCore.Signal(str)
+    # region Queue Index Signals
+    addNewQueue             =   QtCore.Signal()
+    duplicateQueue          =   QtCore.Signal(str)
+    deleteQueue             =   QtCore.Signal(str)
+    changeQueueName         =   QtCore.Signal(str, str)
+    changeQueueDirectory    =   QtCore.Signal(str, str)
+    changeQueueIndex        =   QtCore.Signal(str, str)
 
-    deleteQueue = QtCore.Signal(str)
-    changeQueueName = QtCore.Signal(str, str)
-    changeQueueDirectory = QtCore.Signal(str, str)
-    changeQueueIndex = QtCore.Signal(str, str)
+    changeActiveQueue       =   QtCore.Signal(str)
+    # endregion
 
-    changeActiveQueue = QtCore.Signal(str)
+    # region Active Queue Items Signals
+    deleteActiveQueueItem                   =   QtCore.Signal(str)
+    changeActiveQueueItemName               =   QtCore.Signal(str, str)
+    changeActiveQueueItemExportDirectory    =   QtCore.Signal(str, str)
+    changeActiveQueueItemIndex              =   QtCore.Signal(str, str)
+    # endregion
 
     def finish_initialization(self):
         self.requestingExistingQueueIndex.emit()
@@ -275,7 +320,7 @@ class QueueEditor(base_layouts.VerticalLayout):
             queue_index_key=queue_index_key
         )
         _item.changeQueueName.connect(self.changeQueueName.emit)
-        _item.deleteQueue.connect(self.delete_queue_button_clicked())
+        _item.deleteQueue.connect(self.delete_queue_button_clicked)
         self._queue_item_scroll_area.addWidget(_item)
 
         self._queue_selection_combo.addItem(queue_name)
@@ -348,8 +393,11 @@ class QueueEditor(base_layouts.VerticalLayout):
 
     def add_active_queue_item(self, queue_item_display_dict):
         _item = QueueItem(queue_item_display_dict)
-        _item.changeQueueName.connect(self.changeQueueName.emit)
-        _item.deleteQueue.connect(self.delete_queue_button_clicked())
+
+        _item.  deleteQueueItem                   .connect( self.deleteActiveQueueItem.emit                  )
+        _item.  changeQueueItemName               .connect( self.changeActiveQueueItemName.emit              )
+        _item.  changeQueueItemExportDirectory    .connect( self.changeActiveQueueItemExportDirectory.emit   )
+        _item.  changeQueueItemIndex              .connect( self.changeActiveQueueItemIndex.emit             )
 
         self._active_queue_item_holder.addWidget(_item)
 

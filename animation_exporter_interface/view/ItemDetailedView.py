@@ -22,7 +22,7 @@ _attrs = [
 # TODO: Switch this all out and write these things to disk for the attribute display to read. something different
 # even being decoupled it is still too coupled
 
-class ItemDetailAttributeHolder(proceadural_displays.AbstractEntryHolder):
+class ItemDetailAttributeHolder(proceadural_displays.AttributeHolder):
 
 
     def __init__(self, attribute_dictionary, animation_times, animation_range):
@@ -30,13 +30,13 @@ class ItemDetailAttributeHolder(proceadural_displays.AbstractEntryHolder):
         self.animation_range = animation_range
         super().__init__(
             attribute_dictionary=attribute_dictionary,
-            attribute_mapping_dictionary=_attrs,
+            attribute_mapper=_attrs,
             map_by_type=False
         )
 
-    def create_attribute_entry(self, attribute_name, attribute_value, attribute_mapping_dictionary, map_by_type):
+    def create_attribute_entry(self, attribute_name, attribute_value, attribute_mapper, map_by_identity, map_by_type):
         # TODO: copy this into baseclass
-        for _entry_type in attribute_mapping_dictionary:
+        for _entry_type in attribute_mapper:
             if _entry_type.identifier(self, value=attribute_value) is True:
 
                 if _entry_type == proceadural_displays.RangeSliderAttributeEditor:
