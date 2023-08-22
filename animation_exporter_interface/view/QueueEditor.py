@@ -168,10 +168,10 @@ class QueueItem(base_layouts.ExpandWhenClicked):
 
     def _delete_button_clicked(self):
         self._confirmation_dialogue = modal_dialog.ConfirmDialogue(
-            display_text=f'Are you sure you want to delete the "{self.queue_name()}" queue item? \nThe file associated with this queue will also be deleted.',
+            display_text=f'Are you sure you want to delete the "{self.queue_item_name()}" queue item? \nThe file associated with this queue will also be deleted.',
             parent=self
         )
-        self._confirmation_dialogue.confirmed.connect(partial(self.deleteQueue.emit, self.queue_index_key()))
+        self._confirmation_dialogue.confirmed.connect(partial(self.deleteQueueItem.emit, self.queue_index()))
 
         self._confirmation_dialogue.show()
 
@@ -386,7 +386,7 @@ class QueueEditor(base_layouts.VerticalLayout):
 
     def active_queue_changed(self):
         self._clear_active_queue_items()
-        self.requestingActiveQueueItems.emit
+        self.requestingActiveQueueItems.emit()
 
     # endregion
 
@@ -405,15 +405,16 @@ class QueueEditor(base_layouts.VerticalLayout):
         self._queue_selection_combo.addItem(queue_name)
 
     def get_queue_item_from_index(self, queue_index_key):
-        for _widget in self._queue_item_scroll_area.layout.children:
+        for _widget in self._queue_item_scroll_area.children():
             if not isinstance(_widget, QueueIndexItem):
                 continue
+            # print('keys',_widget.queue_index())
 
             if _widget.queue_index_key() == queue_index_key:
                 return _widget
 
     def get_queue_item_from_name(self, queue_name):
-        for _widget in self._queue_item_scroll_area.layout.children:
+        for _widget in self._queue_item_scroll_area.children():
             if not isinstance(_widget, QueueIndexItem):
                 continue
 
@@ -494,12 +495,14 @@ class QueueEditor(base_layouts.VerticalLayout):
             The queue key that identifies the queue to delete
 
         """
-        _queue_item = self.get_queue_item_from_index(queue_index_key)
+        logger.info(f'Going to disown child queue item for index: {queue_index_key} in queue')
+        _queue_item = self.get_active_queue_item_from_index(queue_index_key)
+        logger.info(f'Child widget founnd: {_queue_item} going to disown')
 
         self._active_queue_item_holder.disown_child(_queue_item)
 
     def get_active_queue_item_from_index(self, queue_item_index_key):
-        for _widget in self._queue_item_scroll_area.children():
+        for _widget in self._active_queue_item_holder.children():
             if not isinstance(_widget, QueueItem):
                 continue
 
@@ -507,7 +510,7 @@ class QueueEditor(base_layouts.VerticalLayout):
                 return _widget
 
     def get_active_queue_item_from_name(self, queue_item_name):
-        for _widget in self._queue_item_scroll_area.children():
+        for _widget in self._active_queue_item_holder.children():
             if not isinstance(_widget, QueueItem):
                 continue
 
@@ -515,16 +518,18 @@ class QueueEditor(base_layouts.VerticalLayout):
                 return _widget
 
     def change_active_queue_item_name(self, queue_index_key, new_name):
-        _queue_item = self.get_queue_item_from_index(queue_index_key)
-        _queue_item.set_queue_name(new_name)
+        _queue_item = self.get_active_queue_item_from_index(queue_index_key)
+        _queue_item.set_queue_item_name(new_name)
 
     def change_active_queue_item_export_directory(self, queue_index_key, new_path):
-        _queue_item = self.get_queue_item_from_index(queue_index_key)
-        _queue_item.set_queue_path(new_path)
+        _queue_item = self.get_active_queue_item_from_index(queue_index_key)
+        _queue_item.set_queue_item_export_directory(new_path)
 
     def change_active_queue_item_key(self, queue_index_key, new_index_key):
-        _queue_item = self.get_queue_item_from_index(queue_index_key)
-        _queue_item.set_queue_index_key(new_index_key)
+        logger.info(f'Going to index for item: {queue_index_key} in queue to {new_index_key}')
+        _queue_item = self.get_active_queue_item_from_index(queue_index_key)
+        logger.info(f'Child widget found: {_queue_item} going to change')
+        _queue_item.set_queue_index(new_index_key)
 
 
 if __name__ == "__main__":

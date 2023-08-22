@@ -17,3 +17,5 @@ _file_handler.setLevel(logging.INFO)
 
 _ui_logger.addHandler(_file_handler)
 
+_ui_logger.warning(f"\n\nNEW SESSION\n\n")
+

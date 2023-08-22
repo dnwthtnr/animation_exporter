@@ -46,7 +46,9 @@ def change_queue_index_key(queue_index_data, oldIndex, newIndex):
 
     """
     _indexed_queue_data = queue_index_data.get(oldIndex)
-    del _indexed_queue_data[oldIndex]
+    print(queue_index_data)
+    print(_indexed_queue_data)
+    del queue_index_data[oldIndex]
     _indexed_queue_data[keys.queue_index_key] = newIndex
     return queue_index_data
 
@@ -81,6 +83,23 @@ def reorder_queue_indices(queue_index_data):
         )
 
     return _return_queue_index_data
+
+
+def make_queue_item_display_dict(item_dictionary):
+    _queue_item_index_key           =   item_dictionary.get(    keys.queue_item_index_key       )
+    _queue_item_scene_path          =   item_dictionary.get(    keys.scene_path_key             )
+    _queue_item_export_name         =   item_dictionary.get(    keys.item_export_name_key       )
+    _queue_item_animation_range     =   item_dictionary.get(    keys.animation_range_key        )
+    _queue_item_export_directory    =   item_dictionary.get(    keys.export_directory_key       )
+
+    queue_item_display_data_dict = {}
+    queue_item_display_data_dict[   keys.queue_item_identifier_key  ] = _queue_item_index_key
+    queue_item_display_data_dict[   keys.scene_path_key             ] = _queue_item_scene_path
+    queue_item_display_data_dict[   keys.item_export_name_key       ] = _queue_item_export_name
+    queue_item_display_data_dict[   keys.animation_range_key        ] = _queue_item_animation_range
+    queue_item_display_data_dict[   keys.export_directory_key       ] = _queue_item_export_directory
+
+    return queue_item_display_data_dict
 
 class ExportQueuesInterfaceController(QtCore.QObject):
     newQueueAdded = QtCore.Signal(str, str, str)
@@ -317,6 +336,8 @@ class ExportQueuesInterfaceController(QtCore.QObject):
                 newIndex=str(_expected_int_index_key)
             )
 
+            print(_int_index_key, _expected_int_index_key)
+
             self.queueIndexKeyChanged.emit(
                 str(_int_index_key),
                 str(_expected_int_index_key)
@@ -332,6 +353,17 @@ class ExportQueuesInterfaceController(QtCore.QObject):
         _active_queue_value = _queue_settings.get_setting(keys.active_export_queue)
 
     def set_active_export_queue(self, queue_index_key):
+        """
+        Sets the given queue index key as the active queue
+
+        Parameters
+        ----------
+        queue_index_key
+
+        Returns
+        -------
+
+        """
         _queue_index_data = self.read_queue_index_data()
         if queue_index_key not in _queue_index_data:
             raise IndexError(f'Queue index key: {queue_index_key} does not exist.')
@@ -342,6 +374,8 @@ class ExportQueuesInterfaceController(QtCore.QObject):
                 _queue_index_data[_queue_index_key][keys.queue_active_state] = False
 
         _queue_index_data[queue_index_key][keys.queue_active_state] = True
+
+        print('writing', _queue_index_data)
 
         self.write_queue_index_data(_queue_index_data)
 
@@ -378,13 +412,11 @@ class ExportQueuesInterfaceController(QtCore.QObject):
     def emit_active_queue_item_data_response(self):
         _active_queue_data = self.read_active_export_queue_data()
 
-        for _queue_item_key, _queue_item in _active_queue_data.items():
-            queue_item_display_data_dict = {}
-            # TODO: Finish emitting queue items whenever changing active queue
-            queue_item_display_data_dict[   keys.queue_item_identifier_key  ] = _queue_item_index_key
-            queue_item_display_data_dict[   keys.scene_path_key             ] = _queue_item_scene_path
-            queue_item_display_data_dict[   keys.item_export_name_key       ] = _queue_item_export_name
-            queue_item_display_data_dict[   keys.export_directory_key       ] = _queue_item_export_directory
+        for _queue_item_key, _queue_item_dict in _active_queue_data.items():
+
+            _queue_item_display_dict = make_queue_item_display_dict(_queue_item_dict)
+
+            self.newActiveQueueItemAdded.emit(_queue_item_display_dict)
 
         return
 
@@ -444,6 +476,8 @@ class ExportQueuesInterfaceController(QtCore.QObject):
             The queue index key to distinguish the necessary queue to remove
 
         """
+        logger.info(f'Recieved signal to delete queue item index: {queue_item_index_key}')
+        print(queue_item_index_key, self.read_active_export_queue_data().keys())
         _active_queue_data = self.read_active_export_queue_data()
 
         if queue_item_index_key not in _active_queue_data:
@@ -455,7 +489,7 @@ class ExportQueuesInterfaceController(QtCore.QObject):
 
         self.activeQueueItemDeleted.emit(queue_item_index_key)
 
-        self.reorder_active_queue_item_indices()
+        # self.reorder_active_queue_item_indices()
 
     def change_active_queue_item_name(self, queue_item_index_key, new_name):
         _active_queue_data = self.read_active_export_queue_data()
@@ -466,7 +500,7 @@ class ExportQueuesInterfaceController(QtCore.QObject):
 
         _active_queue_data [queue_item_index_key] [keys.queue_item_export_name] = new_name
 
-        self.write_queue_index_data(_active_queue_data)
+        self.write_active_export_queue_data(_active_queue_data)
 
         self.activeQueueItemNameChanged.emit(queue_item_index_key, new_name)
 
@@ -479,7 +513,7 @@ class ExportQueuesInterfaceController(QtCore.QObject):
 
         _active_queue_data [queue_item_index_key] [keys.queue_item_export_directory] = new_path
 
-        self.write_queue_index_data(_active_queue_data)
+        self.write_active_export_queue_data(_active_queue_data)
 
         self.activeQueueItemExportDirectoryChanged.emit(queue_item_index_key, new_path)
 
@@ -495,7 +529,7 @@ class ExportQueuesInterfaceController(QtCore.QObject):
             newIndex=new_queue_item_index_key
         )
 
-        self.write_queue_index_data(_active_queue_data)
+        self.write_active_export_queue_data(_active_queue_data)
 
         if queue_item_index_key == _queue_settings.get_setting(keys.active_export_queue):
             _queue_settings.set_setting(keys.active_export_queue, new_queue_item_index_key)
@@ -523,6 +557,7 @@ class ExportQueuesInterfaceController(QtCore.QObject):
         _sorted_active_queue_keys_int   =   sorted(_active_queue_keys_int)
 
         for _expected_key_int, _actual_key_int in enumerate(_sorted_active_queue_keys_int):
+            print(_expected_key_int, _actual_key_int)
             if _expected_key_int == _actual_key_int:
                 continue
 
@@ -537,7 +572,8 @@ class ExportQueuesInterfaceController(QtCore.QObject):
 
             self.activeQueueItemIndexKeyChanged.emit(queue_item_index_key, expected_queue_item_index_key)
 
-        self.write_queue_index_data(active_queue_data)
+        print(active_queue_data)
+        self.write_active_export_queue_data(active_queue_data)
     # endregion
 
 if __name__ == "__main__":

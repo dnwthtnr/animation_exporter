@@ -131,7 +131,6 @@ class PanelController(QtCore.QObject):
             queue_view        .addNewQueue                    .connect(   queue_controller.add_queue_to_index             )
             queue_view        .duplicateQueue                 .connect(   queue_controller      .duplicate_queue                )
             queue_view        .deleteQueue                    .connect(   queue_controller      .remove_queue_from_index        )
-            queue_view        .deleteQueue                    .connect(   partial(print, 'del')        )
             queue_view        .changeQueueName                .connect(   queue_controller      .change_queue_name              )
             queue_view        .changeQueueDirectory           .connect(   queue_controller      .change_queue_path              )
             queue_view        .changeQueueIndex               .connect(   queue_controller      .change_queue_index_position    )
@@ -151,7 +150,7 @@ class PanelController(QtCore.QObject):
             queue_controller  .queueNameChanged               .connect(   queue_view            .change_queue_index_item_name   )
             queue_controller  .queuePathChanged               .connect(   queue_view            .change_queue_index_item_path   )
             queue_controller  .queueIndexKeyChanged           .connect(   queue_view            .change_queue_index_item_key    )
-            queue_controller  .activeExportQueueChanged           .connect(   queue_view            .change_queue_index_item_key    )
+            queue_controller  .activeExportQueueChanged           .connect(   queue_view            .active_queue_changed    )
 
             queue_controller  .newActiveQueueItemAdded                  .connect(   queue_view            .add_active_queue_item                        )
             queue_controller  .activeQueueItemDeleted                   .connect(   queue_view            .delete_active_queue_item                     )
@@ -186,7 +185,6 @@ class PanelController(QtCore.QObject):
             logger.warning(f'Encountered exception while attempting to emit queue view on FocalPanelBuilt signal. Aborting')
             logger.exception(e)
             return
-        queue_controller.finish_initialization()
 
         queue_view.finish_initialization()
 
