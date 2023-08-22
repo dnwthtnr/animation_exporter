@@ -1,9 +1,13 @@
-from PySide2 import QtCore
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+from PySide2 import QtCore, QtWidgets
 from functools import partial
 from animation_exporter.utility_resources import keys
 from pyqt_interface_elements import ( base_layouts, base_widgets,
                                       proceadural_displays, icons,
-                                      constants, modal_dialog, styles )
+                                      constants, modal_dialog, styles, line_edits, base_windows )
 
 # TODO: Add widget stuff for active queue items
 
@@ -17,6 +21,48 @@ _attribute_display_classes = [
     proceadural_displays.ChooseDirectoryAttributeEditor,
     proceadural_displays.LineEditAttributeEditor
 ]
+
+# TODO: revise
+class NewQueueDialog(base_windows.Dialog):
+    accept = QtCore.Signal(str, str)
+
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
+
+        _layout = QtWidgets.QVBoxLayout()
+        self.setLayout(_layout)
+
+        self.name_widget = proceadural_displays.LineEditAttributeEditor(attribute_name="Queue Name",
+                                                                    attribute_value="newqueuename")
+        self.path_widget = proceadural_displays.LineEditAttributeEditor(attribute_name="Queue Path",
+                                                                          attribute_value="path")
+        _accept_button = base_widgets.Button(text="Accept")
+        _accept_button.clicked.connect(self._accept_button_clicked)
+        _cancel_button = base_widgets.Button(text="Cancel")
+        _cancel_button.clicked.connect(self.close)
+
+        _buttons = base_layouts.HorizontalLayout()
+        _buttons.addWidgets([_accept_button, _cancel_button])
+
+
+        _layout.addWidget(self.name_widget)
+        _layout.addWidget(self.path_widget)
+        _layout.addWidget(_buttons)
+
+        self.setLayout(_layout)
+        self.setWindowModality(QtCore.Qt.ApplicationModal)
+        self.setWindowFlag(QtCore.Qt.Tool, True)
+    def name(self):
+        return self.name_widget.attribute_value
+
+    def path(self):
+        return self.path_widget.attribute_value
+
+    def _accept_button_clicked(self):
+        self.accept.emit(self.name(), self.path())
+        self.close()
+
+
 
 class QueueItem(base_layouts.ExpandWhenClicked):
     deleteQueueItem = QtCore.Signal(str)
@@ -32,78 +78,86 @@ class QueueItem(base_layouts.ExpandWhenClicked):
 
         _title_width = 150
 
-        _collapsed_display_attributes = {_attr: _value for _attr, _value in queue_item_display_dict.items() if
-                                         _attr in _collapsed_attributes}
-        _collapsed_attribute_holder = proceadural_displays.AttributeHolder(
-            attribute_dictionary=_collapsed_display_attributes,
-            attribute_mapper=_attribute_display_classes,
-            map_by_identity=True,
-            orientation=constants.horizontal
+
+        _item_name = queue_item_display_dict.get(keys.queue_item_export_name)
+        _item_export_directory = queue_item_display_dict.get(keys.queue_item_export_directory)
+        _item_index = queue_item_display_dict.get(keys.queue_item_index_key)
+
+        self._queue_name_widget = proceadural_displays.NameEditorAttributeEditor(
+            attribute_name="Export Name",
+            attribute_value=_item_name
         )
+        self._queue_name_widget.valueEdited.connect(self._change_queue_item_name)
 
-        _expanded_display_attributes = {_attr: _value for _attr, _value in queue_item_display_dict.items() if
-                                         _attr not in _collapsed_attributes}
-        _expanded_attribute_holder = proceadural_displays.AttributeHolder(
-            attribute_dictionary=_expanded_display_attributes,
-            attribute_mapper=_attribute_display_classes,
-            map_by_identity=True,
-            orientation=constants.horizontal
+        self._queue_export_directory_widget = proceadural_displays.ChooseDirectoryAttributeEditor(
+            attribute_name="Export Directory",
+            attribute_value=_item_export_directory
         )
-        _expanded_attribute_holder.valueChanged.connect(self.queueItemAttributeChanged.emit)
+        self._queue_export_directory_widget.valueEdited.connect(self._change_queue_item_export_directory)
 
-        self._queue_index_key = queue_index_key
-        self._queue_name = self._build_queue_name(name=queue_name, width=_title_width)
-        self._queue_path = self._build_queue_path(path=queue_path, width=_title_width)
-        _delete_button = self._build_delete_button()
+        self._queue_index_widget = line_edits.IntLineEdit(value=_item_index)
 
-        self.addCollapsedWidget(_collapsed_attribute_holder, stretch=1)
-        self.addCollapsedWidget(_delete_button, alignment=constants.align_right)
 
-        self.addExpandedWidget(_expanded_attribute_holder)
+        # TODO: Make attribute holder for collapsed and expanded widgets. setup method of modularly calling to update
+        #  a queue item value and pass the keys.queueitemvaluename to be updated. Have good logging to make clear
+        #   _collapsed_display_attributes = {_attr: _value for _attr, _value in queue_item_display_dict.items() if
+        #                                    _attr in _collapsed_attributes}
+        #   _collapsed_attribute_holder = proceadural_displays.AttributeHolder(
+        #       attribute_dictionary=_collapsed_display_attributes,
+        #       attribute_mapper=_attribute_display_classes,
+        #       map_by_identity=True,
+        #       orientation=constants.horizontal
+        #   )
+        #   _expanded_display_attributes = {_attr: _value for _attr, _value in queue_item_display_dict.items() if
+        #                                    _attr not in _collapsed_attributes}
+        #   _expanded_attribute_holder = proceadural_displays.AttributeHolder(
+        #       attribute_dictionary=_expanded_display_attributes,
+        #       attribute_mapper=_attribute_display_classes,
+        #       map_by_identity=True,
+        #       orientation=constants.horizontal
+        #   )
+        #   _expanded_attribute_holder.valueChanged.connect(self.queueItemAttributeChanged.emit)
+        #   self.addCollapsedWidget(_collapsed_attribute_holder, stretch=1)
+        #   self.addCollapsedWidget(_delete_button, alignment=constants.align_right)
+        #   self.addExpandedWidget(_expanded_attribute_holder)
+        delete_button = self._build_delete_button()
+
+        self.addCollapsedWidget(self._queue_name_widget, stretch=1)
+        self.addCollapsedWidget(delete_button, alignment=constants.align_right)
+
+        self.addExpandedWidget(self._queue_export_directory_widget)
 
         self.set_expanded_stylesheet(styles.maya_expanded_collapsible_layout)
         self.set_collapsed_stylesheet(styles.maya_collapsed_layout)
 
-    def queue_index_key(self):
-        return self._queue_index_key
+    def _change_queue_item_name(self, new_name):
+        self.changeQueueItemName.emit(self.queue_index(), new_name)
+    def _change_queue_item_export_directory(self, new_directory):
+        self.changeQueueItemExportDirectory.emit(self.queue_index(), new_directory)
+    def _change_queue_index(self, new_index):
+        self.changeQueueItemIndex.emit(self.queue_index(), new_index)
 
-    def set_queue_index_key(self, queue_index_key):
-        self._queue_index_key = queue_index_key
 
-    def _build_queue_name(self, name, width=None):
-        _widget = proceadural_displays.NameEditorAttributeEditor(attribute_name="Export File Name:", attribute_value=name)
-        _widget.valueEdited.connect(self.change_queue_name)
+    def queue_item_name(self):
+        return self._queue_name_widget.attribute_value
 
-        if width is not None:
-            _widget.setMinimumWidth(width)
+    def set_queue_item_name(self, new_name):
+        self._queue_name_widget.setAttributeValue(new_name)
 
-        return _widget
 
-    def queue_name(self):
-        return self._queue_name.attribute_value
+    def queue_item_export_directory(self):
+        return self._queue_export_directory_widget.attribute_value
 
-    def set_queue_name(self, new_name):
-        self._queue_name.setAttributeValue(new_name)
+    def set_queue_item_export_directory(self, new_directory):
+        self._queue_export_directory_widget.setAttributeValue(new_directory)
 
-    def change_queue_name(self, new_name):
-        self.changeQueueName.emit(self.queue_index_key(), new_name)
 
-    def _build_queue_path(self, path, width=None):
+    def queue_index(self):
+        return self._queue_index_widget.text()
 
-        _widget = proceadural_displays.LineEditAttributeEditor(attribute_name="Scene Path:", attribute_value=path)
-        # _widget.valueEdited.connect(self.emit_export_name_changed)
-        _widget.setReadOnly(True)
+    def set_queue_index(self, new_index):
+        self._queue_index_widget.setText(new_index)
 
-        if width is not None:
-            _widget.setMinimumWidth(width)
-
-        return _widget
-
-    def queue_path(self):
-        return self._queue_path.attribute_value
-
-    def set_queue_path(self, new_queue_path):
-        self._queue_path.setAttributeValue(new_queue_path)
 
     def _build_delete_button(self):
         _widget = base_widgets.Tool_Button()
@@ -211,9 +265,9 @@ class QueueEditor(base_layouts.VerticalLayout):
     requestingExistingQueueIndex = QtCore.Signal()
 
     # region Queue Index Signals
-    addNewQueue             =   QtCore.Signal()
+    addNewQueue             =   QtCore.Signal(str, str)
     duplicateQueue          =   QtCore.Signal(str)
-    deleteQueue             =   QtCore.Signal(str)
+    deleteQueue             =   QtCore.Signal(object)
     changeQueueName         =   QtCore.Signal(str, str)
     changeQueueDirectory    =   QtCore.Signal(str, str)
     changeQueueIndex        =   QtCore.Signal(str, str)
@@ -222,6 +276,8 @@ class QueueEditor(base_layouts.VerticalLayout):
     # endregion
 
     # region Active Queue Items Signals
+    requestingActiveQueueItems              =   QtCore.Signal()
+
     deleteActiveQueueItem                   =   QtCore.Signal(str)
     changeActiveQueueItemName               =   QtCore.Signal(str, str)
     changeActiveQueueItemExportDirectory    =   QtCore.Signal(str, str)
@@ -266,23 +322,40 @@ class QueueEditor(base_layouts.VerticalLayout):
         _duplicate_queue_button = base_widgets.Tool_Button()
         _duplicate_queue_button.setToolTip(f'Duplicate queue')
         _duplicate_queue_button.setIcon(icons.open_file)
+        _duplicate_queue_button.clicked.connect(self.duplicate_queue_button_clicked)
 
         _add_queue_button = base_widgets.Tool_Button()
         _add_queue_button.setToolTip(f'Add new queue')
         _add_queue_button.setIcon(icons.checkbox_unchecked)
+        _add_queue_button.clicked.connect(self._build_new_queue_dialog)
 
 
         _widget = base_layouts.HorizontalLayout()
         _widget.addStretch(1)
         _widget.addWidget(_add_queue_button)
-        _widget.addWidget(_duplicate_queue_button)
+        # _widget.addWidget(_duplicate_queue_button)
         return _widget
 
+    def _build_new_queue_dialog(self):
+
+        _dialog = NewQueueDialog(parent=self)
+        _dialog.accept.connect(self.addNewQueue.emit)
+
+        _dialog.show()
+
     def add_queue_button_clicked(self):
+        logger.info(f'Add queue button clicked. Emitting addNewQueue')
         self.addNewQueue.emit()
 
-    def delete_queue_button_clicked(self):
-        self.addNewQueue.emit()
+    def delete_queue_button_clicked(self, queue_index_key):
+        logger.info(f'Delete queue button clicked. Emitting deleteQueue {queue_index_key}')
+        try:
+            self.deleteQueue.emit(queue_index_key)
+        except Exception as e:
+            raise e
+
+    def duplicate_queue_button_clicked(self):
+        self.duplicateQueue.emit()
     # endregion
 
     # region Combo
@@ -308,12 +381,18 @@ class QueueEditor(base_layouts.VerticalLayout):
     def _current_queue_selection_changed(self, *args):
         _new_selection = self._queue_selection_combo.currentText()
         _queue_item = self.get_queue_item_from_name(_new_selection)
+
         self.changeActiveQueue.emit(_queue_item.queue_index_key())
+
+    def active_queue_changed(self):
+        self._clear_active_queue_items()
+        self.requestingActiveQueueItems.emit
 
     # endregion
 
     # region Queue Editing Methods
     def add_queue_index_item(self, queue_name, queue_path, queue_index_key):
+        logger.info(f'Received signal to add queue. {queue_name, queue_path, queue_index_key}')
         _item = QueueIndexItem(
             queue_name=queue_name,
             queue_path=queue_path,
@@ -379,6 +458,10 @@ class QueueEditor(base_layouts.VerticalLayout):
 
 
     # region Active Queue
+
+
+
+
     def _build_active_queue_item_holder(self):
         _widget = base_layouts.VerticalScrollArea()
         _widget.addStretch(1)
@@ -401,22 +484,6 @@ class QueueEditor(base_layouts.VerticalLayout):
 
         self._active_queue_item_holder.addWidget(_item)
 
-    def get_active_queue_item_from_index(self, queue_item_index_key):
-        for _widget in self._queue_item_scroll_area.children():
-            if not isinstance(_widget, QueueItem):
-                continue
-
-            if _widget.queue_index_key() == queue_item_index_key:
-                return _widget
-
-    def get_active_queue_item_from_name(self, queue_item_name):
-        for _widget in self._queue_item_scroll_area.children():
-            if not isinstance(_widget, QueueItem):
-                continue
-
-            if _widget.queue_name() == queue_item_name:
-                return _widget
-
     def delete_active_queue_item(self, queue_index_key):
         """
         Removes the queue item with the given index key from the queue editor and selector
@@ -430,6 +497,22 @@ class QueueEditor(base_layouts.VerticalLayout):
         _queue_item = self.get_queue_item_from_index(queue_index_key)
 
         self._active_queue_item_holder.disown_child(_queue_item)
+
+    def get_active_queue_item_from_index(self, queue_item_index_key):
+        for _widget in self._queue_item_scroll_area.children():
+            if not isinstance(_widget, QueueItem):
+                continue
+
+            if _widget.queue_index() == queue_item_index_key:
+                return _widget
+
+    def get_active_queue_item_from_name(self, queue_item_name):
+        for _widget in self._queue_item_scroll_area.children():
+            if not isinstance(_widget, QueueItem):
+                continue
+
+            if _widget.queue_item_name() == queue_item_name:
+                return _widget
 
     def change_active_queue_item_name(self, queue_index_key, new_name):
         _queue_item = self.get_queue_item_from_index(queue_index_key)

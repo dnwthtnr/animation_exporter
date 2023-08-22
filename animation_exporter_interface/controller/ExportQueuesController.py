@@ -1,3 +1,7 @@
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
 import shutil
 from animation_exporter.utility_resources import keys, settings, cache
 import file_management, os, local_settings_manager
@@ -6,7 +10,7 @@ from PySide2 import QtCore
 _queue_settings = local_settings_manager.SettingsForModule(module_name="current_export_queue")
 
 def _create_queue_index_file(directory):
-    _file_path = file_management.generate_unique_file_name(directory=directory, root_name="ExportQueuesIndex")
+    _file_path = file_management.generate_unique_file_name(directory=directory, root_name="ExportQueuesIndex") +'.json'
     file_management.write_json(data={}, path=_file_path)
     return _file_path
 
@@ -78,7 +82,7 @@ def reorder_queue_indices(queue_index_data):
 
     return _return_queue_index_data
 
-class ExportQueuesInterfaceController(object):
+class ExportQueuesInterfaceController(QtCore.QObject):
     newQueueAdded = QtCore.Signal(str, str, str)
     queueDeleted = QtCore.Signal(str)
 
@@ -87,7 +91,7 @@ class ExportQueuesInterfaceController(object):
     queueIndexKeyChanged = QtCore.Signal(str, str)
 
 
-    newActiveQueueItemAdded = QtCore.Signal(str, str, str)
+    newActiveQueueItemAdded = QtCore.Signal(dict)
     activeQueueItemDeleted = QtCore.Signal(str)
 
     activeQueueItemNameChanged = QtCore.Signal(str, str)
@@ -99,14 +103,15 @@ class ExportQueuesInterfaceController(object):
     def finish_initialization(self):
         if self._export_queue_index_file is not None:
             _result = self._load_from_queue_index_file(self._export_queue_index_file)
+            print(_result)
             if _result != -1:
                 self.queue_index_file_path = self._export_queue_index_file
                 self._emit_queue_index_items()
-                pass
+                return
 
         if self._export_queue_index_save_directory is None:
             raise AttributeError(f'If an existing "export_queue_index_file" is not provided a "export_queue_index_save_directory" is required')
-        if os.path.exists(self._export_queue_index_save_directory):
+        if not os.path.exists(self._export_queue_index_save_directory):
             raise NotADirectoryError(f'The given export_queue_index_save_directory: {self._export_queue_index_save_directory} does not exist')
 
         self.queue_index_file_path = _create_queue_index_file(directory=self._export_queue_index_save_directory)
@@ -130,11 +135,21 @@ class ExportQueuesInterfaceController(object):
         try:
             _queue_index_data = file_management.read_json(export_queue_index_file)
         except Exception as e:
+            print(e)
             return -1
+
+        print(export_queue_index_file)
+
+        if not isinstance(_queue_index_data, dict):
+            return -1
+
+        if len(_queue_index_data.keys()) == 0:
+            return 0
 
         try:
             _keys = list(_queue_index_data.keys())
             _are_keys_digits = [int(_key) for _key in _keys]
+            print(_are_keys_digits)
         except ValueError as e:
             return -1
 
@@ -167,6 +182,7 @@ class ExportQueuesInterfaceController(object):
     # region Methods for Editing Export Queue Index Files
 
     def add_queue_to_index(self, queue_name, queue_path):
+        logger.info(f'Received signal to add queue to index. {queue_name, queue_path}')
         _queue_index_data = self.read_queue_index_data()
 
         queue_index_key = generate_new_queue_index_id(_queue_index_data)
@@ -193,6 +209,8 @@ class ExportQueuesInterfaceController(object):
             The queue index key to distinguish the necessary queue to remove
 
         """
+        logger.info(f'Received signal to remove queue to index. {queue_index_key}')
+
         _queue_index_data = self.read_queue_index_data()
 
         if queue_index_key not in _queue_index_data:
@@ -307,7 +325,6 @@ class ExportQueuesInterfaceController(object):
         self.write_queue_index_data(_return_queue_index_data)
     # endregion
 
-
     # region Active Export Queue
     # TODO: Figure out a better way of statelessly keeping track of and managing changes to the active queue when other
     #  queue attributes are changed
@@ -358,7 +375,20 @@ class ExportQueuesInterfaceController(object):
     def write_active_export_queue_data(self, active_queue_data):
         file_management.write_json(path=self.active_export_queue_path(), data=active_queue_data)
 
-    def add_item_to_active_queue(self, scene_data_dict):
+    def emit_active_queue_item_data_response(self):
+        _active_queue_data = self.read_active_export_queue_data()
+
+        for _queue_item_key, _queue_item in _active_queue_data.items():
+            queue_item_display_data_dict = {}
+            # TODO: Finish emitting queue items whenever changing active queue
+            queue_item_display_data_dict[   keys.queue_item_identifier_key  ] = _queue_item_index_key
+            queue_item_display_data_dict[   keys.scene_path_key             ] = _queue_item_scene_path
+            queue_item_display_data_dict[   keys.item_export_name_key       ] = _queue_item_export_name
+            queue_item_display_data_dict[   keys.export_directory_key       ] = _queue_item_export_directory
+
+        return
+
+    def add_item_to_active_queue(self, scene_data_dict, *args):
         """
         Constructs and writes the export data dict to the active queue file.
         Separate dict is sent via the newActiveQueueItemAdded signal.
@@ -369,6 +399,8 @@ class ExportQueuesInterfaceController(object):
             The scene data needing to be added to the export queue
 
         """
+
+        print('yeah')
         _active_queue_data = self.read_active_export_queue_data()
 
         _queue_item_index_key           =   generate_new_queue_index_id(_active_queue_data)
@@ -507,12 +539,6 @@ class ExportQueuesInterfaceController(object):
 
         self.write_queue_index_data(active_queue_data)
     # endregion
-
-
-class ActiveExportQueueInterfaceController(object):
-
-    def __init__(self):
-        super().__init__()
 
 if __name__ == "__main__":
     _p = ["0", "7", "2", "1", "2276"]

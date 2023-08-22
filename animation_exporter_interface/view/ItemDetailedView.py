@@ -31,6 +31,7 @@ class ItemDetailAttributeHolder(proceadural_displays.AttributeHolder):
         super().__init__(
             attribute_dictionary=attribute_dictionary,
             attribute_mapper=_attrs,
+            orientation=constants.vertical,
             map_by_type=False
         )
 
