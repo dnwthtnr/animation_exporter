@@ -1,3 +1,5 @@
+from functools import partial
+
 import file_management
 import logging
 import multiprocessing
@@ -45,7 +47,7 @@ class PanelController(QtCore.QObject):
     QueueDataResponse = QtCore.Signal(object)
     QueuePathsDataResponse = QtCore.Signal(object)
     QueueItemAdded = QtCore.Signal(object, object, object, object, object)
-    AddToQueueButtonClicked = QtCore.Signal(str, list)
+    addToActiveQueue = QtCore.Signal(dict)
     # SceneSelected = QtCore.Signal(str)
     SceneDetailPanelBuilt = QtCore.Signal(object)
 
@@ -84,11 +86,16 @@ class PanelController(QtCore.QObject):
     def build_queue_view(self):
         logger.debug(f'Building queue panel and controller')
         try:
-            _queue_runner = queue_controller.QueueRunner()
-            _queue_runner.moveToThread(self.worker_thread)
-            queue_controller = ExportQueuesController.ExportQueuesInterfaceController()
-            queue_view = QueueEditor.QueueEditor()
-            queue_view._controller = _queue_runner
+            # _queue_runner = queue_controller.QueueRunner()
+            # _queue_runner.moveToThread(self.worker_thread)
+            try:
+                queue_controller = ExportQueuesController.ExportQueuesInterfaceController(export_queue_index_file=r'C:\Users\Tanner - Work\Documents\Settings\ExportQueuesIndex.json')
+                # queue_controller.moveToThread(self.worker_thread)
+                queue_view = QueueEditor.QueueEditor()
+                queue_view.controller = queue_controller
+            except Exception as e:
+                raise e
+            # queue_view._controller = _queue_runner
             logger.info(f'Queue panel successfully built')
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to build queue view. Aborting')
@@ -99,11 +106,12 @@ class PanelController(QtCore.QObject):
         try:
             # self.startQueue.connect(_queue_runner.start_queue)
 
-            _queue_runner.QueueItemRemoved.connect(queue_view.remove_queue_item)
+            # _queue_runner.QueueItemRemoved.connect(queue_view.remove_queue_item)
 
-            # TODO: seperate thsi out. Have runner emit signal that item has started to signal to queue view to start the loading instead of it doing it itself
-            _queue_runner.itemFinished.connect(queue_view.queueItemCompleted)
-            _queue_runner.itemStarted.connect(queue_view.queueItemStarted)
+            # TODO: separate this out. Have runner emit signal that item has started to signal to queue view to start
+            #  the loading instead of it doing it itself
+            # _queue_runner.itemFinished.connect(queue_view.queueItemCompleted)
+            # _queue_runner.itemStarted.connect(queue_view.queueItemStarted)
 
             # self._queue_view.QueueSelected.connect(self.queue_selected)
             # self._queue_view.QueueSelectionListDataQuery.connect(self.emit_queue_paths)
@@ -118,14 +126,26 @@ class PanelController(QtCore.QObject):
 
             # TODO: Rework queue runner and way of hooking up to queue view to manage export states
 
+            # region Queues Hookup
             queue_view        .requestingExistingQueueIndex   .connect(   queue_controller      .finish_initialization          )
-            queue_view        .addNewQueue                    .connect(   queue_controller      .add_queue_to_index             )
+            queue_view        .addNewQueue                    .connect(   queue_controller.add_queue_to_index             )
             queue_view        .duplicateQueue                 .connect(   queue_controller      .duplicate_queue                )
             queue_view        .deleteQueue                    .connect(   queue_controller      .remove_queue_from_index        )
             queue_view        .changeQueueName                .connect(   queue_controller      .change_queue_name              )
             queue_view        .changeQueueDirectory           .connect(   queue_controller      .change_queue_path              )
             queue_view        .changeQueueIndex               .connect(   queue_controller      .change_queue_index_position    )
+
             queue_view        .changeActiveQueue              .connect(   queue_controller      .set_active_export_queue        )
+            queue_view        .requestingActiveQueueItems     .connect(   queue_controller      .emit_active_queue_item_data_response        )
+
+            # region Active Queue Hookup
+            queue_view        .deleteActiveQueueItem                    .connect(   queue_controller      .remove_item_from_active_queue                )
+            queue_view        .changeActiveQueueItemName                .connect(   queue_controller      .change_active_queue_item_name                )
+            queue_view        .changeActiveQueueItemExportDirectory     .connect(   queue_controller      .change_active_queue_item_export_directory    )
+            queue_view        .changeActiveQueueItemIndex               .connect(   queue_controller      .change_active_queue_item_index_position      )
+
+            queue_view.startActiveQueue.connect(queue_controller.start_queue)
+            queue_view.stopActiveQueue.connect(queue_controller.stop_queue)
 
 
             queue_controller  .newQueueAdded                  .connect(   queue_view            .add_queue_index_item           )
@@ -133,12 +153,20 @@ class PanelController(QtCore.QObject):
             queue_controller  .queueNameChanged               .connect(   queue_view            .change_queue_index_item_name   )
             queue_controller  .queuePathChanged               .connect(   queue_view            .change_queue_index_item_path   )
             queue_controller  .queueIndexKeyChanged           .connect(   queue_view            .change_queue_index_item_key    )
+            queue_controller  .activeExportQueueChanged           .connect(   queue_view            .active_queue_changed    )
 
-            queue_controller  .newActiveQueueItemAdded                  .connect(   queue_view            .add_queue_index_item           )
-            queue_controller  .activeQueueItemDeleted                   .connect(   queue_view            .delete_queue_index_item        )
-            queue_controller  .activeQueueItemNameChanged               .connect(   queue_view            .change_queue_index_item_name   )
-            queue_controller  .activeQueueItemExportDirectoryChanged    .connect(   queue_view            .change_queue_index_item_path   )
-            queue_controller  .activeQueueItemIndexKeyChanged           .connect(   queue_view            .change_queue_index_item_key    )
+            queue_controller  .newActiveQueueItemAdded                  .connect(   queue_view            .add_active_queue_item                        )
+            queue_controller  .activeQueueItemDeleted                   .connect(   queue_view            .delete_active_queue_item                     )
+            queue_controller  .activeQueueItemNameChanged               .connect(   queue_view            .change_active_queue_item_name                )
+            queue_controller  .activeQueueItemExportDirectoryChanged    .connect(   queue_view            .change_active_queue_item_export_directory    )
+            queue_controller  .activeQueueItemIndexKeyChanged           .connect(   queue_view            .change_active_queue_item_key                 )
+
+            queue_controller.activeExportQueueItemStarted.connect(   queue_view            .queue_item_export_started                        )
+            queue_controller.activeExportQueueItemFinished.connect(   queue_view            .queue_item_export_finished                     )
+            queue_controller.activeExportQueueFinished.connect(queue_view.queue_finished)
+
+
+            self              .addToActiveQueue                         .connect(   queue_controller.add_item_to_active_queue)
 
 
 
@@ -164,6 +192,8 @@ class PanelController(QtCore.QObject):
 
         queue_view.finish_initialization()
 
+        # queue_controller.add_queue_to_index('name', r'C:\Users\Tanner - Work\Documents\Settings\queuenew.json')
+
 
     # def save_current_queue(self, new_queue_path):
     #     print(new_queue_path)
@@ -184,71 +214,30 @@ class PanelController(QtCore.QObject):
     #     self.QueuePathsDataResponse.emit(queue_controller.queue_paths())
 
     @QtCore.Slot()
-    def emit_add_to_export_queue(self, export_data_dictionary):
-        logger.info(f'Caught signal to add item to export queue. Attempting to emit AddToExportQueue')
+    def add_to_active_export_queue(self, scene_data_dict):
+        logger.info(f'Caught signal to add item to export queue. Attempting to emit addToActiveQueue')
 
-        scene_path = export_data_dictionary.get(keys.scene_path_key)
-        export_name = export_data_dictionary.get(keys.item_export_name_key)
-        scene_objects = export_data_dictionary.get(keys.export_objects_key)
-        _selected_animation_ranges = export_data_dictionary.get(keys.animation_partitions_key)
-        export_directory = export_data_dictionary.get(keys.export_directory_key)
+        export_name = scene_data_dict.get(keys.item_export_name_key)
+        selected_animation_ranges = scene_data_dict.get(keys.animation_partitions_key)
 
-        if _selected_animation_ranges is None:
-            print('addingnone')
-
-            logger.debug(f'New export queue item data: {scene_path, scene_objects, export_directory}')
-            try:
-                _queue_item_identifier = queue_controller.add_to_export_queue(
-                    scene_path=scene_path,
-                    export_name=export_name,
-                    scene_objects=scene_objects,
-                    animation_range=_selected_animation_ranges,
-                    export_directory=export_directory
-                )
-                logger.info(f'Successfully emitted AddToExportQueue')
-            except Exception as e:
-                logger.warning(f'Encountered exception while attempting to emit AddToExportQueue with queue item data. Aborting')
-                logger.exception(e)
-                return
+        print('yaya', scene_data_dict)
 
 
-            self.QueueItemAdded.emit(
-                _queue_item_identifier,
-                export_name,
-                scene_path,
-                None,
-                export_directory
-            )
-            return
+        if not isinstance(selected_animation_ranges, list) or len(selected_animation_ranges) == 0:
+            self.addToActiveQueue.emit(scene_data_dict)
+            pass
 
-        for animation_range in _selected_animation_ranges:
-            print('addingnone', animation_range, _selected_animation_ranges)
+        for _animation_range in selected_animation_ranges:
             _range_export_name = export_name
-            _range_export_name = export_name + f"[{animation_range[0]}_{animation_range[1]}]"
+            _range_export_name = export_name + f"[{_animation_range[0]}_{_animation_range[1]}]"
 
-            logger.debug(f'New export queue item data: {scene_path, _range_export_name, scene_objects, animation_range, export_directory}')
+            # logger.debug(f'New export queue item data: {scene_path, _range_export_name, scene_objects, animation_range, export_directory}')
             try:
-                _queue_item_identifier = queue_controller.add_to_export_queue(
-                    scene_path,
-                    _range_export_name,
-                    scene_objects,
-                    animation_range,
-                    export_directory
-                )
-                logger.info(f'Successfully emitted AddToExportQueue')
+                self.addToActiveQueue.emit(scene_data_dict)
+                logger.info(f'Successfully emitted addToActiveQueue')
             except Exception as e:
-                logger.warning(f'Encountered exception while attempting to emit AddToExportQueue with queue item data. Aborting')
-                print('error', e)
+                logger.warning(f'Encountered exception while attempting to emit addToActiveQueue with queue item data. Aborting')
                 logger.exception(e)
-                return
-
-            self.QueueItemAdded.emit(
-                _queue_item_identifier,
-                _range_export_name,
-                scene_path,
-                animation_range,
-                export_directory
-            )
     # endregion
 
 
@@ -379,7 +368,7 @@ class PanelController(QtCore.QObject):
         _item_view = ItemDetailedView.ItemDetailedView()
 
         _item_detail_controller.dataResponse.connect(_item_view.populate_detail_view)
-        _item_detail_controller.addToQueue.connect(self.emit_add_to_export_queue)
+        _item_detail_controller.addToQueue.connect(self.add_to_active_export_queue)
         from functools import partial
 
         _item_view.dataRequest.connect(_item_detail_controller.emit_data_response)

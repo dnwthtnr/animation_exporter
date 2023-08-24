@@ -1,12 +1,17 @@
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
 import shutil
 from animation_exporter.utility_resources import keys, settings, cache
+from animation_exporter.animation_exporter_interface.controller import maya_process_delegator
 import file_management, os, local_settings_manager
 from PySide2 import QtCore
 
 _queue_settings = local_settings_manager.SettingsForModule(module_name="current_export_queue")
 
 def _create_queue_index_file(directory):
-    _file_path = file_management.generate_unique_file_name(directory=directory, root_name="ExportQueuesIndex")
+    _file_path = file_management.generate_unique_file_name(directory=directory, root_name="ExportQueuesIndex") +'.json'
     file_management.write_json(data={}, path=_file_path)
     return _file_path
 
@@ -42,7 +47,9 @@ def change_queue_index_key(queue_index_data, oldIndex, newIndex):
 
     """
     _indexed_queue_data = queue_index_data.get(oldIndex)
-    del _indexed_queue_data[oldIndex]
+    print(queue_index_data)
+    print(_indexed_queue_data)
+    del queue_index_data[oldIndex]
     _indexed_queue_data[keys.queue_index_key] = newIndex
     return queue_index_data
 
@@ -78,7 +85,70 @@ def reorder_queue_indices(queue_index_data):
 
     return _return_queue_index_data
 
-class ExportQueuesInterfaceController(object):
+
+def make_queue_item_display_dict(item_dictionary):
+    _queue_item_index_key           =   item_dictionary.get(    keys.queue_item_index_key       )
+    _queue_item_scene_path          =   item_dictionary.get(    keys.scene_path_key             )
+    _queue_item_export_name         =   item_dictionary.get(    keys.item_export_name_key       )
+    _queue_item_animation_range     =   item_dictionary.get(    keys.animation_range_key        )
+    _queue_item_export_directory    =   item_dictionary.get(    keys.export_directory_key       )
+
+    queue_item_display_data_dict = {}
+    queue_item_display_data_dict[   keys.queue_item_identifier_key  ] = _queue_item_index_key
+    queue_item_display_data_dict[   keys.scene_path_key             ] = _queue_item_scene_path
+    queue_item_display_data_dict[   keys.item_export_name_key       ] = _queue_item_export_name
+    queue_item_display_data_dict[   keys.animation_range_key        ] = _queue_item_animation_range
+    queue_item_display_data_dict[   keys.export_directory_key       ] = _queue_item_export_directory
+
+    return queue_item_display_data_dict
+
+
+def get_queue_item_data(queue, queue_item_identifier, value_key):
+    _queue_item_data = queue.get(queue_item_identifier)
+
+    return _queue_item_data.get(value_key)
+
+def get_queue_item_export_args(queue, queue_item_identifier):
+    print('item stuff')
+    logger.info(f'Getting queue item data for ID: {queue_item_identifier}')
+    try:
+        _export_name = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.item_export_name_key
+        )
+        _export_directory = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.export_directory_key
+        )
+        _export_range = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.animation_range_key
+        )
+
+        _object = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.export_objects_key
+        )
+        _scene_path = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.scene_path_key
+        )
+
+        _export_path = os.path.join(_export_directory, f"{_export_name}.fbx")
+        print('more', _scene_path, _export_range, _export_path)
+        logger.info(f'Successfully queried data for queue item {queue_item_identifier}:{_export_name}')
+        return [_scene_path, _object, _export_range, _export_path]
+        # logger.debug(f'\n\nQueue item ID: {queue_item_identifier}\nexport name: {_export_name}, export directory: {_export_directory}, export range: {_export_range}, scene_path: {_scene_path}, objects: {_object}')
+    except Exception as e:
+        logger.warning(f'Encountered exception while attempting to get data for queue item ID: {queue_item_identifier}')
+        logger.exception(e)
+
+class ExportQueuesInterfaceController(QtCore.QObject):
     newQueueAdded = QtCore.Signal(str, str, str)
     queueDeleted = QtCore.Signal(str)
 
@@ -87,7 +157,7 @@ class ExportQueuesInterfaceController(object):
     queueIndexKeyChanged = QtCore.Signal(str, str)
 
 
-    newActiveQueueItemAdded = QtCore.Signal(str, str, str)
+    newActiveQueueItemAdded = QtCore.Signal(dict)
     activeQueueItemDeleted = QtCore.Signal(str)
 
     activeQueueItemNameChanged = QtCore.Signal(str, str)
@@ -96,17 +166,25 @@ class ExportQueuesInterfaceController(object):
 
     activeExportQueueChanged = QtCore.Signal(str)
 
+    _startExportQueue = QtCore.Signal(dict)
+    _stopExportQueue = QtCore.Signal()
+
+    activeExportQueueItemStarted = QtCore.Signal(str)
+    activeExportQueueItemFinished = QtCore.Signal(str)
+    activeExportQueueFinished = QtCore.Signal()
+
     def finish_initialization(self):
         if self._export_queue_index_file is not None:
             _result = self._load_from_queue_index_file(self._export_queue_index_file)
+            print(_result)
             if _result != -1:
                 self.queue_index_file_path = self._export_queue_index_file
                 self._emit_queue_index_items()
-                pass
+                return
 
         if self._export_queue_index_save_directory is None:
             raise AttributeError(f'If an existing "export_queue_index_file" is not provided a "export_queue_index_save_directory" is required')
-        if os.path.exists(self._export_queue_index_save_directory):
+        if not os.path.exists(self._export_queue_index_save_directory):
             raise NotADirectoryError(f'The given export_queue_index_save_directory: {self._export_queue_index_save_directory} does not exist')
 
         self.queue_index_file_path = _create_queue_index_file(directory=self._export_queue_index_save_directory)
@@ -116,10 +194,25 @@ class ExportQueuesInterfaceController(object):
     def __init__(self, export_queue_index_file=None, export_queue_index_save_directory=None):
         self._export_queue_index_file = export_queue_index_file
         self._export_queue_index_save_directory = export_queue_index_save_directory
+
+        self._worker_thread = QtCore.QThread()
+        self._worker_thread.start()
+
         super().__init__()
+        self._queue_runner = self._build_queue_runner(thread=self._worker_thread)
 
     def read_queue_index_data(self):
         return file_management.read_json(self.queue_index_file_path)
+
+    def _build_queue_runner(self, thread):
+        _runner = QueueRunner()
+        _runner.queueItemStarted.connect(self.activeExportQueueItemStarted.emit)
+        _runner.queueItemFinished.connect(self.activeExportQueueItemFinished.emit)
+        _runner.queueFinished.connect(self.activeExportQueueFinished.emit)
+        self._startExportQueue.connect(_runner.start_export_queue)
+        self._stopExportQueue.connect(_runner.stop_export_queue)
+        _runner.moveToThread(thread)
+        return _runner
 
     def write_queue_index_data(self, queue_index_data):
         self._cached_queue_index_data_state = queue_index_data
@@ -130,11 +223,21 @@ class ExportQueuesInterfaceController(object):
         try:
             _queue_index_data = file_management.read_json(export_queue_index_file)
         except Exception as e:
+            print(e)
             return -1
+
+        print(export_queue_index_file)
+
+        if not isinstance(_queue_index_data, dict):
+            return -1
+
+        if len(_queue_index_data.keys()) == 0:
+            return 0
 
         try:
             _keys = list(_queue_index_data.keys())
             _are_keys_digits = [int(_key) for _key in _keys]
+            print(_are_keys_digits)
         except ValueError as e:
             return -1
 
@@ -167,6 +270,7 @@ class ExportQueuesInterfaceController(object):
     # region Methods for Editing Export Queue Index Files
 
     def add_queue_to_index(self, queue_name, queue_path):
+        logger.info(f'Received signal to add queue to index. {queue_name, queue_path}')
         _queue_index_data = self.read_queue_index_data()
 
         queue_index_key = generate_new_queue_index_id(_queue_index_data)
@@ -193,6 +297,8 @@ class ExportQueuesInterfaceController(object):
             The queue index key to distinguish the necessary queue to remove
 
         """
+        logger.info(f'Received signal to remove queue to index. {queue_index_key}')
+
         _queue_index_data = self.read_queue_index_data()
 
         if queue_index_key not in _queue_index_data:
@@ -299,6 +405,8 @@ class ExportQueuesInterfaceController(object):
                 newIndex=str(_expected_int_index_key)
             )
 
+            print(_int_index_key, _expected_int_index_key)
+
             self.queueIndexKeyChanged.emit(
                 str(_int_index_key),
                 str(_expected_int_index_key)
@@ -307,7 +415,6 @@ class ExportQueuesInterfaceController(object):
         self.write_queue_index_data(_return_queue_index_data)
     # endregion
 
-
     # region Active Export Queue
     # TODO: Figure out a better way of statelessly keeping track of and managing changes to the active queue when other
     #  queue attributes are changed
@@ -315,6 +422,17 @@ class ExportQueuesInterfaceController(object):
         _active_queue_value = _queue_settings.get_setting(keys.active_export_queue)
 
     def set_active_export_queue(self, queue_index_key):
+        """
+        Sets the given queue index key as the active queue
+
+        Parameters
+        ----------
+        queue_index_key
+
+        Returns
+        -------
+
+        """
         _queue_index_data = self.read_queue_index_data()
         if queue_index_key not in _queue_index_data:
             raise IndexError(f'Queue index key: {queue_index_key} does not exist.')
@@ -325,6 +443,8 @@ class ExportQueuesInterfaceController(object):
                 _queue_index_data[_queue_index_key][keys.queue_active_state] = False
 
         _queue_index_data[queue_index_key][keys.queue_active_state] = True
+
+        print('writing', _queue_index_data)
 
         self.write_queue_index_data(_queue_index_data)
 
@@ -358,7 +478,18 @@ class ExportQueuesInterfaceController(object):
     def write_active_export_queue_data(self, active_queue_data):
         file_management.write_json(path=self.active_export_queue_path(), data=active_queue_data)
 
-    def add_item_to_active_queue(self, scene_data_dict):
+    def emit_active_queue_item_data_response(self):
+        _active_queue_data = self.read_active_export_queue_data()
+
+        for _queue_item_key, _queue_item_dict in _active_queue_data.items():
+
+            _queue_item_display_dict = make_queue_item_display_dict(_queue_item_dict)
+
+            self.newActiveQueueItemAdded.emit(_queue_item_display_dict)
+
+        return
+
+    def add_item_to_active_queue(self, scene_data_dict, *args):
         """
         Constructs and writes the export data dict to the active queue file.
         Separate dict is sent via the newActiveQueueItemAdded signal.
@@ -369,6 +500,8 @@ class ExportQueuesInterfaceController(object):
             The scene data needing to be added to the export queue
 
         """
+
+        print('yeah')
         _active_queue_data = self.read_active_export_queue_data()
 
         _queue_item_index_key           =   generate_new_queue_index_id(_active_queue_data)
@@ -412,6 +545,8 @@ class ExportQueuesInterfaceController(object):
             The queue index key to distinguish the necessary queue to remove
 
         """
+        logger.info(f'Recieved signal to delete queue item index: {queue_item_index_key}')
+        print(queue_item_index_key, self.read_active_export_queue_data().keys())
         _active_queue_data = self.read_active_export_queue_data()
 
         if queue_item_index_key not in _active_queue_data:
@@ -423,7 +558,7 @@ class ExportQueuesInterfaceController(object):
 
         self.activeQueueItemDeleted.emit(queue_item_index_key)
 
-        self.reorder_active_queue_item_indices()
+        # self.reorder_active_queue_item_indices()
 
     def change_active_queue_item_name(self, queue_item_index_key, new_name):
         _active_queue_data = self.read_active_export_queue_data()
@@ -434,7 +569,7 @@ class ExportQueuesInterfaceController(object):
 
         _active_queue_data [queue_item_index_key] [keys.queue_item_export_name] = new_name
 
-        self.write_queue_index_data(_active_queue_data)
+        self.write_active_export_queue_data(_active_queue_data)
 
         self.activeQueueItemNameChanged.emit(queue_item_index_key, new_name)
 
@@ -447,7 +582,7 @@ class ExportQueuesInterfaceController(object):
 
         _active_queue_data [queue_item_index_key] [keys.queue_item_export_directory] = new_path
 
-        self.write_queue_index_data(_active_queue_data)
+        self.write_active_export_queue_data(_active_queue_data)
 
         self.activeQueueItemExportDirectoryChanged.emit(queue_item_index_key, new_path)
 
@@ -463,7 +598,7 @@ class ExportQueuesInterfaceController(object):
             newIndex=new_queue_item_index_key
         )
 
-        self.write_queue_index_data(_active_queue_data)
+        self.write_active_export_queue_data(_active_queue_data)
 
         if queue_item_index_key == _queue_settings.get_setting(keys.active_export_queue):
             _queue_settings.set_setting(keys.active_export_queue, new_queue_item_index_key)
@@ -491,6 +626,7 @@ class ExportQueuesInterfaceController(object):
         _sorted_active_queue_keys_int   =   sorted(_active_queue_keys_int)
 
         for _expected_key_int, _actual_key_int in enumerate(_sorted_active_queue_keys_int):
+            print(_expected_key_int, _actual_key_int)
             if _expected_key_int == _actual_key_int:
                 continue
 
@@ -505,14 +641,105 @@ class ExportQueuesInterfaceController(object):
 
             self.activeQueueItemIndexKeyChanged.emit(queue_item_index_key, expected_queue_item_index_key)
 
-        self.write_queue_index_data(active_queue_data)
+        print(active_queue_data)
+        self.write_active_export_queue_data(active_queue_data)
     # endregion
 
+    def start_queue(self):
+        print('start')
+        active_queue_data = self.read_active_export_queue_data()
+        self._startExportQueue.emit(active_queue_data)
 
-class ActiveExportQueueInterfaceController(object):
+    def stop_queue(self):
+        print('stop')
+        self._stopExportQueue.emit()
+
+class QueueRunner(QtCore.QObject):
+
+    queueItemStarted = QtCore.Signal(str)
+    queueItemFinished = QtCore.Signal(str)
+    queueFinished = QtCore.Signal()
 
     def __init__(self):
         super().__init__()
+        self._export_argument_tempfiles = {}
+
+    def start_export_queue(self, queue_data):
+        _maya_delegator = maya_process_delegator.MayaProcessDelegator()
+        _maya_delegator.itemExported.connect(self._queue_item_export_finished)
+
+        logger.info(f'Starting export queue')
+
+        _active_queue_keys              =   list(queue_data.keys())
+        _active_queue_keys_int          =   [int(_key) for _key in _active_queue_keys]
+        sorted_active_queue_keys_int   =   sorted(_active_queue_keys_int)
+
+        for _queue_item_key_int in sorted_active_queue_keys_int:
+            _queue_item_key = str(_queue_item_key_int)
+
+            _export_args = get_queue_item_export_args(queue=queue_data, queue_item_identifier=_queue_item_key)
+
+            ####
+
+            logger.info(f'Generating temp file to hold export arguments for queue item: {_queue_item_key}')
+            try:
+                _export_args_file = cache.get_unique_file_name("_export_args.json")
+
+                logger.info(f'Successfully generated export argument temp file. "{_export_args_file}"')
+            except Exception as e:
+                logger.warning(f'Hit exception while attempting to get temp export arg file.')
+                logger.exception(e)
+                raise e
+
+            #####
+
+            logger.debug(f'Writing export arguments to disk')
+            try:
+                file_management.write_json(_export_args_file, _export_args)
+
+                logger.info(f'Successfully wrote export argument temp file')
+            except Exception as e:
+                logger.warning(f'Hit exception while attempting to save temp export arg file.')
+                logger.exception(e)
+                raise e
+
+            # TODO: it's getting hung up here -- parallelize these actions
+
+            self._export_argument_tempfiles[_queue_item_key] = _export_args_file
+
+
+            logger.info(f'Sending export item and path to maya delegator')
+            self.queueItemStarted.emit(_queue_item_key)
+            _maya_delegator.export_from_scene(_queue_item_key, _export_args_file)
+
+    @QtCore.Slot()
+    def _queue_item_export_finished(self, queue_item_key):
+        logger.info(f'Queue item ID: {queue_item_key} passed to slot')
+
+        logger.info(f'Emitting signal: "itemFinished" with queue ID {queue_item_key}')
+        self.queueItemFinished.emit(queue_item_key)
+
+        self._delete_temp_argument_file(queue_item_key)
+
+        if len(self._export_argument_tempfiles) == 0:
+            self.queueFinished.emit()
+
+
+    def _delete_temp_argument_file(self, queue_item_key):
+        _filepath = self._export_argument_tempfiles.get(queue_item_key)
+
+        if _filepath is not None:
+            os.remove(_filepath)
+            logger.info(f'Deleted file: {_filepath}')
+
+            del self._export_argument_tempfiles[queue_item_key]
+
+
+    def stop_export_queue(self):
+        print('stopping export queue')
+
+
+
 
 if __name__ == "__main__":
     _p = ["0", "7", "2", "1", "2276"]
