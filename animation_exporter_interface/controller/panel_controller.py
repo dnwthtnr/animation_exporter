@@ -144,6 +144,9 @@ class PanelController(QtCore.QObject):
             queue_view        .changeActiveQueueItemExportDirectory     .connect(   queue_controller      .change_active_queue_item_export_directory    )
             queue_view        .changeActiveQueueItemIndex               .connect(   queue_controller      .change_active_queue_item_index_position      )
 
+            queue_view.startActiveQueue.connect(queue_controller.start_queue)
+            queue_view.stopActiveQueue.connect(queue_controller.stop_queue)
+
 
             queue_controller  .newQueueAdded                  .connect(   queue_view            .add_queue_index_item           )
             queue_controller  .queueDeleted                   .connect(   queue_view            .delete_queue_index_item        )
@@ -158,11 +161,12 @@ class PanelController(QtCore.QObject):
             queue_controller  .activeQueueItemExportDirectoryChanged    .connect(   queue_view            .change_active_queue_item_export_directory    )
             queue_controller  .activeQueueItemIndexKeyChanged           .connect(   queue_view            .change_active_queue_item_key                 )
 
+            queue_controller.activeExportQueueItemStarted.connect(   queue_view            .queue_item_export_started                        )
+            queue_controller.activeExportQueueItemFinished.connect(   queue_view            .queue_item_export_finished                     )
+            queue_controller.activeExportQueueFinished.connect(queue_view.queue_finished)
+
 
             self              .addToActiveQueue                         .connect(   queue_controller.add_item_to_active_queue)
-
-
-            self              .addToActiveQueue                         .connect(partial(print, 'yoyoyo'))
 
 
 

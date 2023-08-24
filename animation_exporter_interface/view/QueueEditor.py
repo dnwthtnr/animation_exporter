@@ -7,7 +7,7 @@ from functools import partial
 from animation_exporter.utility_resources import keys
 from pyqt_interface_elements import ( base_layouts, base_widgets,
                                       proceadural_displays, icons,
-                                      constants, modal_dialog, styles, line_edits, base_windows )
+                                      constants, modal_dialog, styles, line_edits, base_windows, buttons, visuals )
 
 # TODO: Add widget stuff for active queue items
 
@@ -63,7 +63,6 @@ class NewQueueDialog(base_windows.Dialog):
         self.close()
 
 
-
 class QueueItem(base_layouts.ExpandWhenClicked):
     deleteQueueItem = QtCore.Signal(str)
 
@@ -77,6 +76,7 @@ class QueueItem(base_layouts.ExpandWhenClicked):
         super().__init__(margins=[5, 5, 0, 0], spacing=5)
 
         _title_width = 150
+        _button_height = 50
 
 
         _item_name = queue_item_display_dict.get(keys.queue_item_export_name)
@@ -121,8 +121,10 @@ class QueueItem(base_layouts.ExpandWhenClicked):
         #   self.addCollapsedWidget(_delete_button, alignment=constants.align_right)
         #   self.addExpandedWidget(_expanded_attribute_holder)
         delete_button = self._build_delete_button()
+        self._export_status_icon = self._build_export_status_icon(_button_height)
 
-        self.addCollapsedWidget(self._queue_name_widget, stretch=1)
+        self.addCollapsedWidget(self._queue_name_widget)
+        self.addCollapsedWidget(self._export_status_icon)
         self.addCollapsedWidget(delete_button, alignment=constants.align_right)
 
         self.addExpandedWidget(self._queue_export_directory_widget)
@@ -165,6 +167,25 @@ class QueueItem(base_layouts.ExpandWhenClicked):
         _widget.setToolTip(f"Delete queue")
         _widget.clicked.connect(self._delete_button_clicked)
         return _widget
+
+
+    def _build_export_status_icon(self, size):
+        _widget = base_layouts.HorizontalLayout()
+        return _widget
+
+    def setStatusIcon(self, widget):
+        self._export_status_icon.clear_layout()
+        _height = self._queue_name_widget.height()
+
+        self._export_status_icon.addWidget(widget)
+        self._export_status_icon.setMaximumHeight(_height)
+
+    def item_export_started(self):
+        self.setStatusIcon(visuals.loading_wheel())
+
+    def item_export_finished(self):
+        self.setStatusIcon(base_layouts.VerticalLayout())
+
 
     def _delete_button_clicked(self):
         self._confirmation_dialogue = modal_dialog.ConfirmDialogue(
@@ -282,6 +303,10 @@ class QueueEditor(base_layouts.VerticalLayout):
     changeActiveQueueItemName               =   QtCore.Signal(str, str)
     changeActiveQueueItemExportDirectory    =   QtCore.Signal(str, str)
     changeActiveQueueItemIndex              =   QtCore.Signal(str, str)
+
+    startActiveQueue                        =   QtCore.Signal()
+    stopActiveQueue                         =   QtCore.Signal()
+    _activeQueueFinished = QtCore.Signal()
     # endregion
 
     def finish_initialization(self):
@@ -326,7 +351,7 @@ class QueueEditor(base_layouts.VerticalLayout):
 
         _add_queue_button = base_widgets.Tool_Button()
         _add_queue_button.setToolTip(f'Add new queue')
-        _add_queue_button.setIcon(icons.checkbox_unchecked)
+        _add_queue_button.setIcon(icons.plus)
         _add_queue_button.clicked.connect(self._build_new_queue_dialog)
 
 
@@ -360,14 +385,28 @@ class QueueEditor(base_layouts.VerticalLayout):
 
     # region Combo
     def _build_queue_management_toolbar(self, queue_selector):
+        """
+        Builds a toolbar for selecting an active queue, starting it, and holds the entry point for the queue manager
+
+        Parameters
+        ----------
+        queue_selector
+
+        Returns
+        -------
+
+        """
         _open_editor_button = base_widgets.Tool_Button()
-        _open_editor_button.setIcon(icons.open_file)
+        _open_editor_button.setIcon(icons.gear)
         _open_editor_button.setToolTip(f'Open queue index editor')
         _open_editor_button.clicked.connect(self.open_queue_editor_dialog)
+
+        _start_queue_button = self._build_start_active_queue_button()
 
         _widget = base_layouts.HorizontalLayout()
 
         _widget.addWidget(queue_selector, stretch=1)
+        _widget.addWidget(_start_queue_button, alignment=constants.align_right)
         _widget.addWidget(_open_editor_button, alignment=constants.align_right)
 
         return _widget
@@ -387,6 +426,15 @@ class QueueEditor(base_layouts.VerticalLayout):
     def active_queue_changed(self):
         self._clear_active_queue_items()
         self.requestingActiveQueueItems.emit()
+
+    def _build_start_active_queue_button(self):
+        _widget = buttons.ToggleIconButton(enabled_icon=icons.stop, disabled_icon=icons.start)
+        _widget.enabled.connect(self.startActiveQueue.emit)
+        _widget.disabled.connect(self.stopActiveQueue.emit)
+
+        self._activeQueueFinished.connect( partial(_widget.setIconState, enabled=False, silent=True) )
+
+        return _widget
 
     # endregion
 
@@ -460,9 +508,6 @@ class QueueEditor(base_layouts.VerticalLayout):
 
     # region Active Queue
 
-
-
-
     def _build_active_queue_item_holder(self):
         _widget = base_layouts.VerticalScrollArea()
         _widget.addStretch(1)
@@ -517,8 +562,8 @@ class QueueEditor(base_layouts.VerticalLayout):
             if _widget.queue_item_name() == queue_item_name:
                 return _widget
 
-    def change_active_queue_item_name(self, queue_index_key, new_name):
-        _queue_item = self.get_active_queue_item_from_index(queue_index_key)
+    def change_active_queue_item_name(self, queue_item_index_key, new_name):
+        _queue_item = self.get_active_queue_item_from_index(queue_item_index_key)
         _queue_item.set_queue_item_name(new_name)
 
     def change_active_queue_item_export_directory(self, queue_index_key, new_path):
@@ -532,6 +577,20 @@ class QueueEditor(base_layouts.VerticalLayout):
         _queue_item.set_queue_index(new_index_key)
 
 
+    def queue_item_export_started(self, queue_item_index_key):
+        _queue_item = self.get_active_queue_item_from_index(queue_item_index_key)
+        _queue_item.item_export_started()
+
+    def queue_item_export_finished(self, queue_item_index_key):
+        _queue_item = self.get_active_queue_item_from_index(queue_item_index_key)
+        _queue_item.item_export_finished()
+
+    def queue_finished(self):
+        print('fin')
+        logger.info(f'Received signal that active queue has finished')
+        self._activeQueueFinished.emit()
+
+
 if __name__ == "__main__":
     from pyqt_interface_elements import base_windows
     import sys
@@ -540,13 +599,15 @@ if __name__ == "__main__":
 
 
     _app = QtWidgets.QApplication(sys.argv)
-    _view = QueueEditor()
-    _view.setStyleSheet(styles.maya_detail_view)
+    # _view = QueueEditor()
+    # _view.setStyleSheet(styles.maya_detail_view)
+    #
+    # _view.add_queue_index_item("name1", "pathhhh", "1")
+    # _view.add_queue_index_item("name2", "pathhhh", "12")
+    # _view.add_queue_index_item("name32", "pat", "7")
+    # _view.add_queue_index_item("name4444", "h", "5")
 
-    _view.add_queue_index_item("name1", "pathhhh", "1")
-    _view.add_queue_index_item("name2", "pathhhh", "12")
-    _view.add_queue_index_item("name32", "pat", "7")
-    _view.add_queue_index_item("name4444", "h", "5")
+    _view = buttons.ToggleIconButton(enabled_icon=icons.stop, disabled_icon=icons.start)
 
     # _win = base_windows.Main_Window()
     # _win.setCentralWidget(_view)

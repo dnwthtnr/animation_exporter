@@ -4,6 +4,7 @@ logger.setLevel(logging.DEBUG)
 
 import shutil
 from animation_exporter.utility_resources import keys, settings, cache
+from animation_exporter.animation_exporter_interface.controller import maya_process_delegator
 import file_management, os, local_settings_manager
 from PySide2 import QtCore
 
@@ -101,6 +102,52 @@ def make_queue_item_display_dict(item_dictionary):
 
     return queue_item_display_data_dict
 
+
+def get_queue_item_data(queue, queue_item_identifier, value_key):
+    _queue_item_data = queue.get(queue_item_identifier)
+
+    return _queue_item_data.get(value_key)
+
+def get_queue_item_export_args(queue, queue_item_identifier):
+    print('item stuff')
+    logger.info(f'Getting queue item data for ID: {queue_item_identifier}')
+    try:
+        _export_name = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.item_export_name_key
+        )
+        _export_directory = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.export_directory_key
+        )
+        _export_range = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.animation_range_key
+        )
+
+        _object = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.export_objects_key
+        )
+        _scene_path = get_queue_item_data(
+            queue=queue,
+            queue_item_identifier=queue_item_identifier,
+            value_key=keys.scene_path_key
+        )
+
+        _export_path = os.path.join(_export_directory, f"{_export_name}.fbx")
+        print('more', _scene_path, _export_range, _export_path)
+        logger.info(f'Successfully queried data for queue item {queue_item_identifier}:{_export_name}')
+        return [_scene_path, _object, _export_range, _export_path]
+        # logger.debug(f'\n\nQueue item ID: {queue_item_identifier}\nexport name: {_export_name}, export directory: {_export_directory}, export range: {_export_range}, scene_path: {_scene_path}, objects: {_object}')
+    except Exception as e:
+        logger.warning(f'Encountered exception while attempting to get data for queue item ID: {queue_item_identifier}')
+        logger.exception(e)
+
 class ExportQueuesInterfaceController(QtCore.QObject):
     newQueueAdded = QtCore.Signal(str, str, str)
     queueDeleted = QtCore.Signal(str)
@@ -118,6 +165,13 @@ class ExportQueuesInterfaceController(QtCore.QObject):
     activeQueueItemIndexKeyChanged = QtCore.Signal(str, str)
 
     activeExportQueueChanged = QtCore.Signal(str)
+
+    _startExportQueue = QtCore.Signal(dict)
+    _stopExportQueue = QtCore.Signal()
+
+    activeExportQueueItemStarted = QtCore.Signal(str)
+    activeExportQueueItemFinished = QtCore.Signal(str)
+    activeExportQueueFinished = QtCore.Signal()
 
     def finish_initialization(self):
         if self._export_queue_index_file is not None:
@@ -140,10 +194,25 @@ class ExportQueuesInterfaceController(QtCore.QObject):
     def __init__(self, export_queue_index_file=None, export_queue_index_save_directory=None):
         self._export_queue_index_file = export_queue_index_file
         self._export_queue_index_save_directory = export_queue_index_save_directory
+
+        self._worker_thread = QtCore.QThread()
+        self._worker_thread.start()
+
         super().__init__()
+        self._queue_runner = self._build_queue_runner(thread=self._worker_thread)
 
     def read_queue_index_data(self):
         return file_management.read_json(self.queue_index_file_path)
+
+    def _build_queue_runner(self, thread):
+        _runner = QueueRunner()
+        _runner.queueItemStarted.connect(self.activeExportQueueItemStarted.emit)
+        _runner.queueItemFinished.connect(self.activeExportQueueItemFinished.emit)
+        _runner.queueFinished.connect(self.activeExportQueueFinished.emit)
+        self._startExportQueue.connect(_runner.start_export_queue)
+        self._stopExportQueue.connect(_runner.stop_export_queue)
+        _runner.moveToThread(thread)
+        return _runner
 
     def write_queue_index_data(self, queue_index_data):
         self._cached_queue_index_data_state = queue_index_data
@@ -575,6 +644,102 @@ class ExportQueuesInterfaceController(QtCore.QObject):
         print(active_queue_data)
         self.write_active_export_queue_data(active_queue_data)
     # endregion
+
+    def start_queue(self):
+        print('start')
+        active_queue_data = self.read_active_export_queue_data()
+        self._startExportQueue.emit(active_queue_data)
+
+    def stop_queue(self):
+        print('stop')
+        self._stopExportQueue.emit()
+
+class QueueRunner(QtCore.QObject):
+
+    queueItemStarted = QtCore.Signal(str)
+    queueItemFinished = QtCore.Signal(str)
+    queueFinished = QtCore.Signal()
+
+    def __init__(self):
+        super().__init__()
+        self._export_argument_tempfiles = {}
+
+    def start_export_queue(self, queue_data):
+        _maya_delegator = maya_process_delegator.MayaProcessDelegator()
+        _maya_delegator.itemExported.connect(self._queue_item_export_finished)
+
+        logger.info(f'Starting export queue')
+
+        _active_queue_keys              =   list(queue_data.keys())
+        _active_queue_keys_int          =   [int(_key) for _key in _active_queue_keys]
+        sorted_active_queue_keys_int   =   sorted(_active_queue_keys_int)
+
+        for _queue_item_key_int in sorted_active_queue_keys_int:
+            _queue_item_key = str(_queue_item_key_int)
+
+            _export_args = get_queue_item_export_args(queue=queue_data, queue_item_identifier=_queue_item_key)
+
+            ####
+
+            logger.info(f'Generating temp file to hold export arguments for queue item: {_queue_item_key}')
+            try:
+                _export_args_file = cache.get_unique_file_name("_export_args.json")
+
+                logger.info(f'Successfully generated export argument temp file. "{_export_args_file}"')
+            except Exception as e:
+                logger.warning(f'Hit exception while attempting to get temp export arg file.')
+                logger.exception(e)
+                raise e
+
+            #####
+
+            logger.debug(f'Writing export arguments to disk')
+            try:
+                file_management.write_json(_export_args_file, _export_args)
+
+                logger.info(f'Successfully wrote export argument temp file')
+            except Exception as e:
+                logger.warning(f'Hit exception while attempting to save temp export arg file.')
+                logger.exception(e)
+                raise e
+
+            # TODO: it's getting hung up here -- parallelize these actions
+
+            self._export_argument_tempfiles[_queue_item_key] = _export_args_file
+
+
+            logger.info(f'Sending export item and path to maya delegator')
+            self.queueItemStarted.emit(_queue_item_key)
+            _maya_delegator.export_from_scene(_queue_item_key, _export_args_file)
+
+    @QtCore.Slot()
+    def _queue_item_export_finished(self, queue_item_key):
+        logger.info(f'Queue item ID: {queue_item_key} passed to slot')
+
+        logger.info(f'Emitting signal: "itemFinished" with queue ID {queue_item_key}')
+        self.queueItemFinished.emit(queue_item_key)
+
+        self._delete_temp_argument_file(queue_item_key)
+
+        if len(self._export_argument_tempfiles) == 0:
+            self.queueFinished.emit()
+
+
+    def _delete_temp_argument_file(self, queue_item_key):
+        _filepath = self._export_argument_tempfiles.get(queue_item_key)
+
+        if _filepath is not None:
+            os.remove(_filepath)
+            logger.info(f'Deleted file: {_filepath}')
+
+            del self._export_argument_tempfiles[queue_item_key]
+
+
+    def stop_export_queue(self):
+        print('stopping export queue')
+
+
+
 
 if __name__ == "__main__":
     _p = ["0", "7", "2", "1", "2276"]

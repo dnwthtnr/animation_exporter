@@ -181,7 +181,6 @@ class QueueItem(base_layouts.ExpandWhenClicked):
         return _widget
 
     def build_status_icon(self):
-
         _widget = base_layouts.HorizontalLayout()
         return _widget
 
