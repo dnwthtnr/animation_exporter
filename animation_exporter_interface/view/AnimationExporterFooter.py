@@ -36,7 +36,7 @@ class ExporterFooter(base_layouts.HorizontalLayout):
             return self.output_location_selection.directory
 
     def build_version_footer(self):
-        _label = base_widgets.Label(text="version: 1.0.0")
+        _label = base_widgets.Label(text="version: 0.1.0")
         return _label
 
     def build_button_holder(self):

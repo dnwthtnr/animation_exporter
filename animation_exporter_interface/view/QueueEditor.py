@@ -344,10 +344,7 @@ class QueueEditor(base_layouts.VerticalLayout):
         return _queue_editor_dialog
 
     def _build_queue_editor_toolbar(self):
-        _duplicate_queue_button = base_widgets.Tool_Button()
-        _duplicate_queue_button.setToolTip(f'Duplicate queue')
-        _duplicate_queue_button.setIcon(icons.open_file)
-        _duplicate_queue_button.clicked.connect(self.duplicate_queue_button_clicked)
+        _duplicate_queue_button = self._build_duplicate_button()
 
         _add_queue_button = base_widgets.Tool_Button()
         _add_queue_button.setToolTip(f'Add new queue')
@@ -358,7 +355,39 @@ class QueueEditor(base_layouts.VerticalLayout):
         _widget = base_layouts.HorizontalLayout()
         _widget.addStretch(1)
         _widget.addWidget(_add_queue_button)
-        # _widget.addWidget(_duplicate_queue_button)
+        _widget.addWidget(_duplicate_queue_button)
+        return _widget
+
+    def _build_duplicate_button(self):
+        """
+        Builds a button displaying the duplicate icon that calls duplicate_queue_button_clicked when clicked
+
+        Returns
+        -------
+        base_widgets.Tool_Button
+            The new button
+
+        """
+        _widget = base_widgets.Tool_Button()
+        _widget.setToolTip(f'Duplicate queue')
+        _widget.setIcon(icons.duplicate)
+        _widget.clicked.connect(self.duplicate_queue_button_clicked)
+        return _widget
+
+    def _build_add_button(self):
+        """
+        Builds a button displaying the plus icon that calls _build_new_queue_dialog when clicked
+
+        Returns
+        -------
+        base_widgets.Tool_Button
+            The new button
+
+        """
+        _widget = base_widgets.Tool_Button()
+        _widget.setToolTip(f'Add new queue')
+        _widget.setIcon(icons.plus)
+        _widget.clicked.connect(self._build_new_queue_dialog)
         return _widget
 
     def _build_new_queue_dialog(self):

@@ -72,6 +72,7 @@ class ExporterMainWindow(base_windows.Main_Window):
         _menu_bar.setStyleSheet(styles.maya_menu_bar)
 
         _file_menu = _menu_bar.addMenu("&File")
+        _file_menu.addAction(QtWidgets.QAction(text="Settings", parent=_file_menu) )
 
         _edit_menu = _menu_bar.addMenu("&Edit")
 
