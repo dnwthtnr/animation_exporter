@@ -67,9 +67,11 @@ class PanelController(QtCore.QObject):
         self.populate_scene_view_from_cached_scene_data()
         logger.info(f'Construction of panels complete')
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, margins, *args, **kwargs):
 
         super().__init__(*args, **kwargs)
+        self.margins = margins
+
         self.worker_thread = QtCore.QThread()
         self.worker_thread.start()
 
@@ -343,7 +345,7 @@ class PanelController(QtCore.QObject):
 
         """
         _empty = base_widgets.Label("No Details Yet")
-        _widget = base_layouts.VerticalLayout()
+        _widget = base_layouts.VerticalLayout(margins=self.margins)
         _widget.addWidget(_empty, alignment=constants.align_center)
         _widget.setStyleSheet(styles.maya_detail_view)
         return _widget
@@ -365,7 +367,7 @@ class PanelController(QtCore.QObject):
         _item_detail_controller = item_detail_controller.ItemDetailController(
             item_detail_dictionary=item_data
         )
-        _item_view = ItemDetailedView.ItemDetailedView()
+        _item_view = ItemDetailedView.ItemDetailedView(margins=self.margins)
 
         _item_detail_controller.dataResponse.connect(_item_view.populate_detail_view)
         _item_detail_controller.addToQueue.connect(self.add_to_active_export_queue)

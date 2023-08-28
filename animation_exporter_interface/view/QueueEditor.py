@@ -5,9 +5,9 @@ logger.setLevel(logging.DEBUG)
 from PySide2 import QtCore, QtWidgets
 from functools import partial
 from animation_exporter.utility_resources import keys
-from pyqt_interface_elements import ( base_layouts, base_widgets,
-                                      proceadural_displays, icons,
-                                      constants, modal_dialog, styles, line_edits, base_windows, buttons, visuals )
+from pyqt_interface_elements import (base_layouts, base_widgets,
+                                     proceadural_displays, icons,
+                                     constants, dialogs, styles, line_edits, base_windows, buttons, visuals)
 
 # TODO: Add widget stuff for active queue items
 
@@ -163,7 +163,7 @@ class QueueItem(base_layouts.ExpandWhenClicked):
 
     def _build_delete_button(self):
         _widget = base_widgets.Tool_Button()
-        _widget.setIcon(icons.close)
+        _widget.setIcon(icons.delete)
         _widget.setToolTip(f"Delete queue")
         _widget.clicked.connect(self._delete_button_clicked)
         return _widget
@@ -264,7 +264,7 @@ class QueueIndexItem(base_layouts.ExpandWhenClicked):
 
     def _build_delete_button(self):
         _widget = base_widgets.Tool_Button()
-        _widget.setIcon(icons.close)
+        _widget.setIcon(icons.delete)
         _widget.setToolTip(f"Delete queue")
         _widget.clicked.connect(self._delete_button_clicked)
         return _widget
@@ -312,8 +312,8 @@ class QueueEditor(base_layouts.VerticalLayout):
     def finish_initialization(self):
         self.requestingExistingQueueIndex.emit()
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self._queue_editor_dialog = self._build_queue_editor_dialog()
         self._queue_selection_combo = self._build_queue_selection_combo()
         queue_manager_toolbar = self._build_queue_management_toolbar(queue_selector=self._queue_selection_combo)

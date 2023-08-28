@@ -11,7 +11,7 @@ from animation_exporter import animation_exporter_interface, utility_resources
 import threading
 
 def build_animation_exporter_window():
-    _panel_controller = animation_exporter_interface.controller.panel_controller.PanelController()
+    _panel_controller = animation_exporter_interface.controller.panel_controller.PanelController(margins=15)
 
     _window = animation_exporter_interface.view.AnimationExporterMainWindow.ExporterMainWindow()
     _window._panel_controller = _panel_controller
