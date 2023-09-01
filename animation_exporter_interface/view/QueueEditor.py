@@ -188,7 +188,7 @@ class QueueItem(base_layouts.ExpandWhenClicked):
 
 
     def _delete_button_clicked(self):
-        self._confirmation_dialogue = modal_dialog.ConfirmDialogue(
+        self._confirmation_dialogue = dialogs.ConfirmDialogue(
             display_text=f'Are you sure you want to delete the "{self.queue_item_name()}" queue item? \nThe file associated with this queue will also be deleted.',
             parent=self
         )
@@ -392,8 +392,8 @@ class QueueEditor(base_layouts.VerticalLayout):
 
     def _build_new_queue_dialog(self):
 
-        _dialog = NewQueueDialog(parent=self)
-        _dialog.accept.connect(self.addNewQueue.emit)
+        _dialog = dialogs.FileDialog()
+        # _dialog.accept.connect(self.addNewQueue.emit)
 
         _dialog.show()
 
