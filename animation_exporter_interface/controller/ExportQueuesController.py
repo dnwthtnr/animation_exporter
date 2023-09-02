@@ -489,6 +489,8 @@ class ExportQueuesInterfaceController(QtCore.QObject):
 
         return
 
+    # def add_scene_item_data_to
+
     def add_item_to_active_queue(self, scene_data_dict, *args):
         """
         Constructs and writes the export data dict to the active queue file.
@@ -501,7 +503,6 @@ class ExportQueuesInterfaceController(QtCore.QObject):
 
         """
 
-        print('yeah')
         _active_queue_data = self.read_active_export_queue_data()
 
         _queue_item_index_key           =   generate_new_queue_index_id(_active_queue_data)

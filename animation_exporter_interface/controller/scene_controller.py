@@ -76,6 +76,10 @@ class Scene_Controller(QtCore.QObject):
 
     ####################################################
 
+    def generate_export_name(self, object_name, animation_range, export_object_count):
+        export_name = f"{object_name}_OBJ-COUNT:{export_object_count}"
+        return export_name
+
     def _get_object_data(self, object_name, object_parent, object_children):
         logger.debug(f'Getting details for object: {object_name}')
 
@@ -89,11 +93,15 @@ class Scene_Controller(QtCore.QObject):
             _scene_path = self.current_file
             logger.debug(f'_scene_path for object: {object_name} :: {_scene_path}')
 
-            _item_export_name = f'placeholder_name'
-            logger.debug(f'_item_export_name for object: {object_name} :: {_item_export_name}')
-
             _objects_to_export = self.get_export_objects(object_name)
             logger.debug(f'_objects_to_export for object: {object_name} :: {_objects_to_export}')
+
+            _item_export_name = self.generate_export_name(
+                object_name=object_name,
+                animation_range=_animation_range,
+                export_object_count=len(_objects_to_export)
+            )
+            logger.debug(f'_item_export_name for object: {object_name} :: {_item_export_name}')
 
             _export_directory = os.path.dirname(self.current_file)
             logger.debug(f'_export_directory for object: {object_name} :: {_export_directory}')

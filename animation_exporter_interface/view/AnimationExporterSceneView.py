@@ -29,10 +29,10 @@ class ExporterSceneView(base_layouts.VerticalLayout):
     def build_current_scene_widget(self):
 
         _label = self.build_file_label()
-        _file_picker = self.build_file_picker()
+        self._file_picker = self.build_file_picker()
 
         _layout = base_layouts.HorizontalLayout()
-        _layout.addWidgets([_label, _file_picker])
+        _layout.addWidgets([_label, self._file_picker])
 
         return _layout
 
@@ -46,8 +46,10 @@ class ExporterSceneView(base_layouts.VerticalLayout):
         _file_picker.FileSelected.connect(self.SceneSelected.emit)
         return _file_picker
 
+    def setFileLoadingState(self, loading, *args):
+        self._file_picker.setFileLoadingState(loading)
 
-    def populate_with_empty_view(self):
+    def populate_with_empty_view(self, *args):
         self.content_panel.clear_layout()
         _layout = base_layouts.VerticalLayout()
 

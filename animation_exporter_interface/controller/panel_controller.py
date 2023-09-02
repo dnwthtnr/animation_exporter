@@ -1,3 +1,5 @@
+import copy
+
 from functools import partial
 
 import file_management
@@ -106,27 +108,6 @@ class PanelController(QtCore.QObject):
 
         logger.debug(f'Connecting signals between queue_runner, queue_view and panel_controller')
         try:
-            # self.startQueue.connect(_queue_runner.start_queue)
-
-            # _queue_runner.QueueItemRemoved.connect(queue_view.remove_queue_item)
-
-            # TODO: separate this out. Have runner emit signal that item has started to signal to queue view to start
-            #  the loading instead of it doing it itself
-            # _queue_runner.itemFinished.connect(queue_view.queueItemCompleted)
-            # _queue_runner.itemStarted.connect(queue_view.queueItemStarted)
-
-            # self._queue_view.QueueSelected.connect(self.queue_selected)
-            # self._queue_view.QueueSelectionListDataQuery.connect(self.emit_queue_paths)
-            #
-            # self._queue_view.RemoveQueueItem.connect(queue_controller.remove_export_queue_item)
-            # self._queue_view.UpdateQueueItemName.connect(queue_controller.update_queue_item_export_name)
-            # self._queue_view.UpdateQueueItemExportDirectory.connect(queue_controller.update_queue_item_export_directory)
-            # self._queue_view.UpdateQueueItemFrameRange.connect(queue_controller.update_queue_item_export_frame_range)
-            # self._queue_view.StartQueueButtonClicked.connect(_queue_runner.start_queue)
-            #
-            # self._queue_view.saveCurrentQueue.connect(self.save_current_queue)
-
-            # TODO: Rework queue runner and way of hooking up to queue view to manage export states
 
             # region Queues Hookup
             queue_view        .requestingExistingQueueIndex   .connect(   queue_controller      .finish_initialization          )
@@ -169,14 +150,6 @@ class PanelController(QtCore.QObject):
 
 
             self              .addToActiveQueue                         .connect(   queue_controller.add_item_to_active_queue)
-
-
-
-            # queue_controller  .activeExportQueueChanged       .connect(   queue_view            .add_queue_index_item           )
-
-            # self.QueueItemAdded.connect(self._queue_view.add_queue_item)
-            # self.QueueDataResponse.connect(self._queue_view.populate_queue_view)
-            # self.QueuePathsDataResponse.connect(self._queue_view.populate_queues_combobox)
             logger.info(f'Successfully connected queue panel signals')
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to connect queue view signals. Aborting')
@@ -194,27 +167,6 @@ class PanelController(QtCore.QObject):
 
         queue_view.finish_initialization()
 
-        # queue_controller.add_queue_to_index('name', r'C:\Users\Tanner - Work\Documents\Settings\queuenew.json')
-
-
-    # def save_current_queue(self, new_queue_path):
-    #     print(new_queue_path)
-    #     queue_controller.duplicate_current_queue(new_queue_path)
-    #     self.emit_queue_paths()
-
-    # @QtCore.Slot()
-    # def queue_selected(self, queue_path):
-    #     _result = queue_controller.set_current_queue_path(queue_path)
-    #     if _result == -1:
-    #         logger.warning(f'Queue path: {queue_path} encountered error. Removing from combobox')
-    #         self._queue_view.remove_queue(queue_path)
-    #
-    #     self.QueueDataResponse.emit(queue_controller.current_export_queue())
-
-    # @QtCore.Slot()
-    # def emit_queue_paths(self):
-    #     self.QueuePathsDataResponse.emit(queue_controller.queue_paths())
-
     @QtCore.Slot()
     def add_to_active_export_queue(self, scene_data_dict):
         logger.info(f'Caught signal to add item to export queue. Attempting to emit addToActiveQueue')
@@ -222,20 +174,23 @@ class PanelController(QtCore.QObject):
         export_name = scene_data_dict.get(keys.item_export_name_key)
         selected_animation_ranges = scene_data_dict.get(keys.animation_partitions_key)
 
-        print('yaya', scene_data_dict)
 
-
-        if not isinstance(selected_animation_ranges, list) or len(selected_animation_ranges) == 0:
-            self.addToActiveQueue.emit(scene_data_dict)
-            pass
+        if not isinstance(selected_animation_ranges, list):
+            _entry_scene_data_dict = copy.deepcopy(scene_data_dict)
+            _entry_scene_data_dict[keys.item_export_name_key] = export_name + f"_ANIM_RANGE:(N/A)"
+            self.addToActiveQueue.emit(_entry_scene_data_dict)
+            return
 
         for _animation_range in selected_animation_ranges:
-            _range_export_name = export_name
-            _range_export_name = export_name + f"[{_animation_range[0]}_{_animation_range[1]}]"
+            _entry_scene_data_dict = copy.deepcopy(scene_data_dict)
+
+            _entry_scene_data_dict[keys.item_export_name_key] = export_name + f"_ANIM_RANGE:[{_animation_range[0]}_{_animation_range[1]}]"
+
+
 
             # logger.debug(f'New export queue item data: {scene_path, _range_export_name, scene_objects, animation_range, export_directory}')
             try:
-                self.addToActiveQueue.emit(scene_data_dict)
+                self.addToActiveQueue.emit(_entry_scene_data_dict)
                 logger.info(f'Successfully emitted addToActiveQueue')
             except Exception as e:
                 logger.warning(f'Encountered exception while attempting to emit addToActiveQueue with queue item data. Aborting')
@@ -253,8 +208,6 @@ class PanelController(QtCore.QObject):
         """
         logger.debug(f'Building scene view panel and controller')
         try:
-
-
             _scene_view = AnimationExporterSceneView.ExporterSceneView()
             logger.info(f'Scene panel successfully built')
         except Exception as e:
@@ -279,6 +232,9 @@ class PanelController(QtCore.QObject):
             _scene_view.SceneSelected.connect(self._write_scene_object_data)
 
             self.populateSceneDataView.connect(_scene_view.populate_item_view)
+            self.writeSceneData.connect(partial(_scene_view.setFileLoadingState, True))
+            self.writeSceneData.connect(_scene_view.populate_with_empty_view)
+            self._maya_delegator.sceneDataWritten.connect(partial(_scene_view.setFileLoadingState, False))
             # _scene_controller.ItemDetailsDataResponse.connect(self.generate_scene_detail_panel)
 
             self.SceneDetailPanelBuilt.connect(_scene_detail_view.clearAndAddWidget)

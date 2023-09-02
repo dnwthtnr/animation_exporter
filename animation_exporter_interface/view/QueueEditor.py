@@ -22,47 +22,6 @@ _attribute_display_classes = [
     proceadural_displays.LineEditAttributeEditor
 ]
 
-# TODO: revise
-class NewQueueDialog(base_windows.Dialog):
-    accept = QtCore.Signal(str, str)
-
-    def __init__(self, parent=None):
-        super().__init__(parent=parent)
-
-        _layout = QtWidgets.QVBoxLayout()
-        self.setLayout(_layout)
-
-        self.name_widget = proceadural_displays.LineEditAttributeEditor(attribute_name="Queue Name",
-                                                                    attribute_value="newqueuename")
-        self.path_widget = proceadural_displays.LineEditAttributeEditor(attribute_name="Queue Path",
-                                                                          attribute_value="path")
-        _accept_button = base_widgets.Button(text="Accept")
-        _accept_button.clicked.connect(self._accept_button_clicked)
-        _cancel_button = base_widgets.Button(text="Cancel")
-        _cancel_button.clicked.connect(self.close)
-
-        _buttons = base_layouts.HorizontalLayout()
-        _buttons.addWidgets([_accept_button, _cancel_button])
-
-
-        _layout.addWidget(self.name_widget)
-        _layout.addWidget(self.path_widget)
-        _layout.addWidget(_buttons)
-
-        self.setLayout(_layout)
-        self.setWindowModality(QtCore.Qt.ApplicationModal)
-        self.setWindowFlag(QtCore.Qt.Tool, True)
-    def name(self):
-        return self.name_widget.attribute_value
-
-    def path(self):
-        return self.path_widget.attribute_value
-
-    def _accept_button_clicked(self):
-        self.accept.emit(self.name(), self.path())
-        self.close()
-
-
 class QueueItem(base_layouts.ExpandWhenClicked):
     deleteQueueItem = QtCore.Signal(str)
 
@@ -270,7 +229,7 @@ class QueueIndexItem(base_layouts.ExpandWhenClicked):
         return _widget
 
     def _delete_button_clicked(self):
-        self._confirmation_dialogue = modal_dialog.ConfirmDialogue(
+        self._confirmation_dialogue = dialogs.ConfirmDialogue(
             display_text=f'Are you sure you want to delete the "{self.queue_name()}" queue item? \nThe file associated with this queue will also be deleted.',
             parent=self
         )
@@ -328,7 +287,7 @@ class QueueEditor(base_layouts.VerticalLayout):
         self._queue_editor_dialog.show()
 
     def _build_queue_editor_dialog(self):
-        _queue_editor_dialog= base_windows.Dialog()
+        _queue_editor_dialog= base_windows.Dialog(parent=self)
         self._queue_item_scroll_area = base_layouts.VerticalScrollArea()
         self._queue_item_scroll_area.addStretch(1)
 
@@ -338,7 +297,6 @@ class QueueEditor(base_layouts.VerticalLayout):
         _queue_editor_layout.addWidget(self._queue_item_scroll_area, stretch=1)
 
         _queue_editor_dialog.setLayout(_queue_editor_layout)
-        _queue_editor_dialog.setWindowModality(QtCore.Qt.ApplicationModal)
         _queue_editor_dialog.setWindowFlag(QtCore.Qt.Tool, True)
 
         return _queue_editor_dialog
@@ -392,14 +350,31 @@ class QueueEditor(base_layouts.VerticalLayout):
 
     def _build_new_queue_dialog(self):
 
-        _dialog = dialogs.FileDialog()
-        # _dialog.accept.connect(self.addNewQueue.emit)
+        self._new_queue_dialog = dialogs.FileDialog(parent=self)
+        self._new_queue_dialog.setWindowFlag(QtCore.Qt.Tool, True)
+        self._new_queue_dialog.setWindowModality(QtCore.Qt.WindowModal)
+        self._new_queue_dialog.appendAddFileOption(
+            text="New Queue:",
+            file_extensions=['.json'],
 
-        _dialog.show()
+        )
+        self._new_queue_dialog.fileSelected.connect(self._new_queue_file_selected)
 
-    def add_queue_button_clicked(self):
+        self._new_queue_dialog.show()
+
+    def _new_queue_file_selected(self, filepath):
+        """
+        Emits the
+        Parameters
+        ----------
+        filepath
+
+        Returns
+        -------
+
+        """
         logger.info(f'Add queue button clicked. Emitting addNewQueue')
-        self.addNewQueue.emit()
+        self.addNewQueue.emit(filepath, filepath)
 
     def delete_queue_button_clicked(self, queue_index_key):
         logger.info(f'Delete queue button clicked. Emitting deleteQueue {queue_index_key}')
@@ -434,6 +409,9 @@ class QueueEditor(base_layouts.VerticalLayout):
 
         _widget = base_layouts.HorizontalLayout()
 
+        _current_queue_label = base_widgets.Label(text="Current Queue: ")
+
+        _widget.addWidget(_current_queue_label, alignment=constants.align_left)
         _widget.addWidget(queue_selector, stretch=1)
         _widget.addWidget(_start_queue_button, alignment=constants.align_right)
         _widget.addWidget(_open_editor_button, alignment=constants.align_right)
@@ -518,10 +496,12 @@ class QueueEditor(base_layouts.VerticalLayout):
 
     def change_queue_index_item_name(self, queue_index_key, new_name):
         _queue_item = self.get_queue_item_from_index(queue_index_key)
+        _old_name = _queue_item.queue_name()
         _queue_item.set_queue_name(new_name)
 
         # add to combo
-        _queue_combo_index = self._queue_selection_combo.findText(_queue_item.queue_name())
+        print(_old_name, 'delete')
+        _queue_combo_index = self._queue_selection_combo.findText(_old_name)
         self._queue_selection_combo.removeItem(_queue_combo_index)
         self._queue_selection_combo.addItem(new_name)
 
