@@ -5,7 +5,11 @@ from animation_exporter.animation_exporter_interface.controller import scene_con
 
 class ExporterSceneView(base_layouts.VerticalLayout):
     SceneSelected = QtCore.Signal(object)
-    ItemSelected = QtCore.Signal(object)
+
+    newItemData = QtCore.Signal(dict)
+    combineItemDataSets = QtCore.Signal(list)
+
+    sceneItemSelectionChanged = QtCore.Signal(list)
 
     _setScenePath = QtCore.Signal(object)
 
@@ -50,6 +54,9 @@ class ExporterSceneView(base_layouts.VerticalLayout):
     def setFileLoadingState(self, loading, *args):
         self._file_picker.setFileLoadingState(loading)
 
+        if loading is True:
+            self.populate_with_empty_view()
+
     def populate_with_empty_view(self, *args):
         self.content_panel.clear_layout()
         _layout = base_layouts.VerticalLayout()
@@ -59,9 +66,18 @@ class ExporterSceneView(base_layouts.VerticalLayout):
         _layout.addWidget(_label)
         self.content_panel.addWidget(_layout, alignment=constants.align_center)
 
-    def set_scene_path(self, filepath):
+
+    def setItemModel(self, model):
+        self.content_panel.clear_layout()
+
+        self.item_view = self.build_item_view()
+        self.item_view.setModel(model)
+
+        self.content_panel.addWidget(self.item_view)
+
+
+    def setScenePath(self, filepath):
         self._setScenePath.emit(filepath)
-        return
 
     @QtCore.Slot()
     def populate_item_view(self, scene_path, scene_data):
@@ -86,7 +102,7 @@ class ExporterSceneView(base_layouts.VerticalLayout):
         _view = model_view_delegate.Tree_Item_Selection_View()
         # _view.horizontalHeader().setStretchLastSection(True)
         # _view.setSelectionBehavior(model_view_delegate.Table_Item_Selection_View.SelectRows)
-        _view.SelectionChanged.connect(self.emit_item_selection_changed)
+        _view.SelectionChanged.connect(self.sceneItemSelectionChanged.emit)
         return _view
 
     def current_selection(self):
@@ -105,6 +121,30 @@ class ExporterSceneView(base_layouts.VerticalLayout):
     #signals
 
     @QtCore.Slot()
+    def items_selected(self, items):
+        """
+        Get the data from the item model for the given items
+
+        Parameters
+        ----------
+        items : list[str]
+            Item identifiers corresponding to items in the current item model
+
+        """
+        _sceneDataList = []
+        for _item in items:
+            _node_for_item = self.item_model.get_node_for_display_name(_item)
+            _data_for_node = _node_for_item.data_dictionary
+            _sceneDataList.append(_data_for_node)
+
+        if len(_sceneDataList) == 1:
+            self.emit_item_selection_changed(_sceneDataList[0])
+            return
+
+        self.combineItemDataSets.emit(_sceneDataList)
+
+
+    @QtCore.Slot()
     def emit_item_selection_changed(self, items):
         """
 
@@ -119,12 +159,12 @@ class ExporterSceneView(base_layouts.VerticalLayout):
             _node_for_item = self.item_model.get_node_for_display_name(_item)
             _data_for_node = _node_for_item.data_dictionary
             _sceneDataList.append(_data_for_node)
-            
+
         _data = scene_controller.combineSceneData(sceneDataList=_sceneDataList)
         # _node = self.item_model.get_node_for_display_name(items)
         # TODO: Add ability to combien data here for multiple selections. Accept lIst
         # print('\n\n',items, _node.data_dictionary, '\n\n')
-        self.ItemSelected.emit(_data)
+        self.newItemData.emit(_data)
 
 
 if __name__ == "__main__":

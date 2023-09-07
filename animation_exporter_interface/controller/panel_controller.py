@@ -32,7 +32,8 @@ from animation_exporter.animation_exporter_interface.controller import (
 ExportQueuesController,
     # queue_controller,
 maya_process_delegator,
-item_detail_controller
+item_detail_controller,
+SceneDataController
 )
 from animation_exporter.utility_resources import keys, settings, cache
 
@@ -53,8 +54,9 @@ class PanelController(QtCore.QObject):
     # SceneSelected = QtCore.Signal(str)
     SceneDetailPanelBuilt = QtCore.Signal(object)
 
-    writeSceneData = QtCore.Signal(str, str)
-    populateSceneDataView = QtCore.Signal(str, dict)
+    _writeSceneData = QtCore.Signal(str, str)
+    _sceneDataWritten = QtCore.Signal(str)
+    _setScenePath = QtCore.Signal(str)
     startQueue = QtCore.Signal()
 
     # endregion
@@ -66,7 +68,6 @@ class PanelController(QtCore.QObject):
         self._build_footer_panel()
         self._initialize_scene_view_components()
         self.build_queue_view()
-        self.populate_scene_view_from_cached_scene_data()
         logger.info(f'Construction of panels complete')
 
     def __init__(self, margins, *args, **kwargs):
@@ -80,9 +81,7 @@ class PanelController(QtCore.QObject):
         self._maya_delegator = maya_process_delegator.MayaProcessDelegator()
         self._maya_delegator.moveToThread(self.worker_thread)
 
-        self.writeSceneData.connect(self._maya_delegator.open_file_write_scene_data)
-
-        self._maya_delegator.sceneDataWritten.connect(self.populate_scene_view_from_cached_scene_data)
+        self._writeSceneData.connect(self._maya_delegator.open_file_write_scene_data)
 
 
     # region #######################| QUEUE STUFF |##########################
@@ -209,36 +208,39 @@ class PanelController(QtCore.QObject):
         and connects signals before starting their event loops
 
         """
+        scene_data_controller = SceneDataController.SceneDataController()
+
         logger.debug(f'Building scene view panel and controller')
         try:
-            _scene_view = AnimationExporterSceneView.ExporterSceneView()
+            scene_view = AnimationExporterSceneView.ExporterSceneView()
             logger.info(f'Scene panel successfully built')
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to build scene view. Aborting')
             logger.exception(e)
             return
 
+        scene_view.controller = scene_data_controller
 
         _scene_detail_view = self._build_empty_item_detail_panel()
 
         _scene_view_splitter = base_layouts.Splitter(constants.vertical)
         _scene_view_splitter.setStyleSheet(styles.maya_splitter)
-        _scene_view_splitter.addWidget(_scene_view)
+        _scene_view_splitter.addWidget(scene_view)
         _scene_view_splitter.addWidget(_scene_detail_view)
         _scene_view_splitter.setSizes([450, 300])
 
 
-        logger.debug(f'Connecting signals between _scene_view, _scene_controller and panel_controller')
+        logger.debug(f'Connecting signals between scene_view, _scene_controller and panel_controller')
         try:
+            scene_view.sceneItemSelectionChanged.connect(scene_data_controller.itemSelectionChanged)
+            scene_view.SceneSelected.connect(scene_data_controller.sceneSelectionChanged)
 
-            _scene_view.ItemSelected.connect(self._build_then_add_item_detail_panel)
-            _scene_view.SceneSelected.connect(self._write_scene_object_data)
+            scene_data_controller.newSceneDataModel.connect(scene_view.setItemModel)
+            scene_data_controller.writeSceneData.connect(self._maya_delegator.open_file_write_scene_data)
+            scene_data_controller.newItemData.connect(self._build_then_add_item_detail_panel)
+            scene_data_controller.writingSceneData.connect(scene_view.setFileLoadingState)
 
-            self.populateSceneDataView.connect(_scene_view.populate_item_view)
-            self.writeSceneData.connect(partial(_scene_view.setFileLoadingState, True))
-            self.writeSceneData.connect(_scene_view.populate_with_empty_view)
-            self._maya_delegator.sceneDataWritten.connect(partial(_scene_view.setFileLoadingState, False))
-            # _scene_controller.ItemDetailsDataResponse.connect(self.generate_scene_detail_panel)
+            self._maya_delegator.sceneDataWritten.connect(scene_data_controller.readSceneData)
 
             self.SceneDetailPanelBuilt.connect(_scene_detail_view.clearAndAddWidget)
             logger.info(f'Successfully connected scene view signals')
@@ -247,19 +249,29 @@ class PanelController(QtCore.QObject):
             logger.exception(e)
             return
 
+        logger.info(f'Emitting FocalPanelBuilt with widget: {scene_view}')
         try:
-            _scene_view.finish_initialization()
-        except Exception as e:
-            logger.exception(e)
-
-
-        logger.info(f'Emitting FocalPanelBuilt with widget: {_scene_view}')
-        try:
-            _scene_view.show()
+            scene_view.show()
             self.FocalPanelBuilt.emit(_scene_view_splitter, "Scene View")
         except Exception as e:
             logger.warning(f'Ecountered exception when attempting to emit FocalPanelBuilt with scene view')
             logger.exception(e)
+
+        try:
+            scene_view.finish_initialization()
+        except Exception as e:
+            logger.exception(e)
+
+
+        logger.info(f'Attempting to read cached scene data')
+        try:
+            scene_data_controller.readSceneData()
+        except Exception as e:
+            logger.warning(f'Ecountered exception when attempting to read cached scene data. Aborting.')
+            logger.exception(e)
+
+    def testt(self, file):
+        print(file, 'lol')
 
     @QtCore.Slot()
     def _write_scene_object_data(self, scene):
@@ -275,23 +287,7 @@ class PanelController(QtCore.QObject):
         _scene_data_filepath = cache.get_unique_file_name(root_name="current_scene_data.json")
         settings.cache_values.set_setting(setting=keys.current_scene_data_file, value=_scene_data_filepath)
 
-        self.writeSceneData.emit(scene, _scene_data_filepath)
-
-    @QtCore.Slot()
-    def populate_scene_view_from_cached_scene_data(self):
-        """
-        Gets the file containing scene data and builds a display for it
-
-        """
-        _scene_data_filepath = settings.cache_values.get_setting(keys.current_scene_data_file)
-
-        if os.path.exists(_scene_data_filepath):
-            _data = file_management.read_json(_scene_data_filepath)
-
-            _scene_path = _data.get(keys.scene_path_key)
-            _scene_data = _data.get(keys.object_data)
-
-            self.populateSceneDataView.emit(_scene_path, _scene_data)
+        self._writeSceneData.emit(scene, _scene_data_filepath)
 
     def _build_empty_item_detail_panel(self):
         """

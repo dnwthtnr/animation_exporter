@@ -48,6 +48,8 @@ class QueueItem(base_layouts.ExpandWhenClicked):
         )
         self._queue_name_widget.valueEdited.connect(self._change_queue_item_name)
 
+        print('queueexportdirectory', _item_export_directory, queue_item_display_dict)
+
         self._queue_export_directory_widget = proceadural_displays.ChooseDirectoryAttributeEditor(
             attribute_name="Export Directory",
             attribute_value=_item_export_directory
@@ -530,6 +532,7 @@ class QueueEditor(base_layouts.VerticalLayout):
         self._active_queue_item_holder.clear_layout()
 
     def add_active_queue_item(self, queue_item_display_dict):
+        print('displaydict', queue_item_display_dict)
         _item = QueueItem(queue_item_display_dict)
 
         _item.  deleteQueueItem                   .connect( self.deleteActiveQueueItem.emit                  )

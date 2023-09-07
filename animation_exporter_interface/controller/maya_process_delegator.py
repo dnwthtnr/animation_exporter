@@ -6,6 +6,7 @@ CURRENT_FOLDER = os.path.dirname(__file__)
 class MayaProcessDelegator(QtCore.QObject):
     sceneDataWritten = QtCore.Signal()
     itemExported = QtCore.Signal(object)
+    itemDataSetsCombined = QtCore.Signal(dict)
 
 
     def __init__(self):
