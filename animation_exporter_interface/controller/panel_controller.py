@@ -174,6 +174,8 @@ class PanelController(QtCore.QObject):
         export_name = scene_data_dict.get(keys.item_export_name_key)
         selected_animation_ranges = scene_data_dict.get(keys.animation_partitions_key)
 
+        print(scene_data_dict)
+
 
         if not isinstance(selected_animation_ranges, list):
             _entry_scene_data_dict = copy.deepcopy(scene_data_dict)
@@ -182,6 +184,7 @@ class PanelController(QtCore.QObject):
             return
 
         for _animation_range in selected_animation_ranges:
+            print(_animation_range, export_name)
             _entry_scene_data_dict = copy.deepcopy(scene_data_dict)
 
             _entry_scene_data_dict[keys.item_export_name_key] = export_name + f"_ANIM_RANGE:[{_animation_range[0]}_{_animation_range[1]}]"

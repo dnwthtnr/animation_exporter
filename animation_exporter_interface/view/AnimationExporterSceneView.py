@@ -106,6 +106,7 @@ class ExporterSceneView(base_layouts.VerticalLayout):
     @QtCore.Slot()
     def emit_item_selection_changed(self, item):
         _node = self.item_model.get_node_for_display_name(item)
+        print('\n\n',item, _node.data_dictionary, '\n\n')
         self.ItemSelected.emit(_node.data_dictionary)
 
 

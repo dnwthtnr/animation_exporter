@@ -36,7 +36,7 @@ class MayaProcessDelegator(QtCore.QObject):
             stdin=subprocess.PIPE,
             encoding="utf"
         )
-        print(_p.communicate())
+        print('communicated', _p.communicate())
         self.sceneDataWritten.emit()
         return 0
 
