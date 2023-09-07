@@ -1,5 +1,6 @@
 from PySide2 import QtCore, QtWidgets, QtGui
 from pyqt_interface_elements import base_widgets, base_layouts, base_windows, line_edits, model_view_delegate, constants, styles
+from animation_exporter.animation_exporter_interface.controller import scene_controller
 
 
 class ExporterSceneView(base_layouts.VerticalLayout):
@@ -104,10 +105,26 @@ class ExporterSceneView(base_layouts.VerticalLayout):
     #signals
 
     @QtCore.Slot()
-    def emit_item_selection_changed(self, item):
-        _node = self.item_model.get_node_for_display_name(item)
-        print('\n\n',item, _node.data_dictionary, '\n\n')
-        self.ItemSelected.emit(_node.data_dictionary)
+    def emit_item_selection_changed(self, items):
+        """
+
+        Parameters
+        ----------
+        items : list[str]
+            List of selected items to get data for
+
+        """
+        _sceneDataList = []
+        for _item in items:
+            _node_for_item = self.item_model.get_node_for_display_name(_item)
+            _data_for_node = _node_for_item.data_dictionary
+            _sceneDataList.append(_data_for_node)
+            
+        _data = scene_controller.combineSceneData(sceneDataList=_sceneDataList)
+        # _node = self.item_model.get_node_for_display_name(items)
+        # TODO: Add ability to combien data here for multiple selections. Accept lIst
+        # print('\n\n',items, _node.data_dictionary, '\n\n')
+        self.ItemSelected.emit(_data)
 
 
 if __name__ == "__main__":
