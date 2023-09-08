@@ -48,7 +48,7 @@ class QueueItem(base_layouts.ExpandWhenClicked):
         )
         self._queue_name_widget.valueEdited.connect(self._change_queue_item_name)
 
-        print('queueexportdirectory', _item_export_directory, queue_item_display_dict)
+        # print('queueexportdirectory', _item_export_directory, queue_item_display_dict)
 
         self._queue_export_directory_widget = proceadural_displays.ChooseDirectoryAttributeEditor(
             attribute_name="Export Directory",
@@ -502,7 +502,7 @@ class QueueEditor(base_layouts.VerticalLayout):
         _queue_item.set_queue_name(new_name)
 
         # add to combo
-        print(_old_name, 'delete')
+        # print(_old_name, 'delete')
         _queue_combo_index = self._queue_selection_combo.findText(_old_name)
         self._queue_selection_combo.removeItem(_queue_combo_index)
         self._queue_selection_combo.addItem(new_name)
@@ -532,7 +532,7 @@ class QueueEditor(base_layouts.VerticalLayout):
         self._active_queue_item_holder.clear_layout()
 
     def add_active_queue_item(self, queue_item_display_dict):
-        print('displaydict', queue_item_display_dict)
+        # print('displaydict', queue_item_display_dict)
         _item = QueueItem(queue_item_display_dict)
 
         _item.  deleteQueueItem                   .connect( self.deleteActiveQueueItem.emit                  )
@@ -598,7 +598,7 @@ class QueueEditor(base_layouts.VerticalLayout):
         _queue_item.item_export_finished()
 
     def queue_finished(self):
-        print('fin')
+        # print('fin')
         logger.info(f'Received signal that active queue has finished')
         self._activeQueueFinished.emit()
 

@@ -173,20 +173,18 @@ class PanelController(QtCore.QObject):
         export_name = scene_data_dict.get(keys.item_export_name_key)
         selected_animation_ranges = scene_data_dict.get(keys.animation_partitions_key)
 
-        print(scene_data_dict)
-
 
         if not isinstance(selected_animation_ranges, list):
             _entry_scene_data_dict = copy.deepcopy(scene_data_dict)
-            _entry_scene_data_dict[keys.item_export_name_key] = export_name + f"_ANIM_RANGE:(N/A)"
+            _entry_scene_data_dict[keys.item_export_name_key] = export_name + f"_RANGE(N/A)"
             self.addToActiveQueue.emit(_entry_scene_data_dict)
             return
 
         for _animation_range in selected_animation_ranges:
-            print(_animation_range, export_name)
             _entry_scene_data_dict = copy.deepcopy(scene_data_dict)
 
-            _entry_scene_data_dict[keys.item_export_name_key] = export_name + f"_ANIM_RANGE:[{_animation_range[0]}_{_animation_range[1]}]"
+            _entry_scene_data_dict[keys.item_export_name_key] = export_name + f"_RANGE({_animation_range[0]}_{_animation_range[1]})"
+            _entry_scene_data_dict[keys.animation_range_key] = _animation_range
 
 
 
@@ -238,6 +236,7 @@ class PanelController(QtCore.QObject):
             scene_data_controller.newSceneDataModel.connect(scene_view.setItemModel)
             scene_data_controller.writeSceneData.connect(self._maya_delegator.open_file_write_scene_data)
             scene_data_controller.newItemData.connect(self._build_then_add_item_detail_panel)
+            scene_data_controller.newScenePath.connect(scene_view.setScenePath)
             scene_data_controller.writingSceneData.connect(scene_view.setFileLoadingState)
 
             self._maya_delegator.sceneDataWritten.connect(scene_data_controller.readSceneData)
@@ -269,9 +268,6 @@ class PanelController(QtCore.QObject):
         except Exception as e:
             logger.warning(f'Ecountered exception when attempting to read cached scene data. Aborting.')
             logger.exception(e)
-
-    def testt(self, file):
-        print(file, 'lol')
 
     @QtCore.Slot()
     def _write_scene_object_data(self, scene):
@@ -331,7 +327,6 @@ class PanelController(QtCore.QObject):
         _item_view.dataRequest.connect(_item_detail_controller.emit_data_response)
         _item_view.valueChanged.connect(_item_detail_controller.update_value)
         _item_view.AddToQueueButtonClicked.connect(partial(_item_detail_controller.emit_queue_data))
-        _item_view.AddToQueueButtonClicked.connect(partial(print, "yes"))
 
         _item_view.finish_initialization()
 

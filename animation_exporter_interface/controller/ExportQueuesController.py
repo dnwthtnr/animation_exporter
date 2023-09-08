@@ -47,8 +47,8 @@ def change_queue_index_key(queue_index_data, oldIndex, newIndex):
 
     """
     _indexed_queue_data = queue_index_data.get(oldIndex)
-    print(queue_index_data)
-    print(_indexed_queue_data)
+    # print(queue_index_data)
+    # print(_indexed_queue_data)
     del queue_index_data[oldIndex]
     _indexed_queue_data[keys.queue_index_key] = newIndex
     return queue_index_data
@@ -109,7 +109,7 @@ def get_queue_item_data(queue, queue_item_identifier, value_key):
     return _queue_item_data.get(value_key)
 
 def get_queue_item_export_args(queue, queue_item_identifier):
-    print('item stuff')
+    # print('item stuff')
     logger.info(f'Getting queue item data for ID: {queue_item_identifier}')
     try:
         _export_name = get_queue_item_data(
@@ -140,7 +140,7 @@ def get_queue_item_export_args(queue, queue_item_identifier):
         )
 
         _export_path = os.path.join(_export_directory, f"{_export_name}.fbx")
-        print('more', _scene_path, _export_range, _export_path)
+        # print('more', _scene_path, _export_range, _export_path)
         logger.info(f'Successfully queried data for queue item {queue_item_identifier}:{_export_name}')
         return [_scene_path, _object, _export_range, _export_path]
         # logger.debug(f'\n\nQueue item ID: {queue_item_identifier}\nexport name: {_export_name}, export directory: {_export_directory}, export range: {_export_range}, scene_path: {_scene_path}, objects: {_object}')
@@ -176,7 +176,7 @@ class ExportQueuesInterfaceController(QtCore.QObject):
     def finish_initialization(self):
         if self._export_queue_index_file is not None:
             _result = self._load_from_queue_index_file(self._export_queue_index_file)
-            print(_result)
+            # print(_result)
             if _result != -1:
                 self.queue_index_file_path = self._export_queue_index_file
                 self._emit_queue_index_items()
@@ -226,7 +226,7 @@ class ExportQueuesInterfaceController(QtCore.QObject):
             print(e)
             return -1
 
-        print(export_queue_index_file)
+        # print(export_queue_index_file)
 
         if not isinstance(_queue_index_data, dict):
             return -1
@@ -237,7 +237,7 @@ class ExportQueuesInterfaceController(QtCore.QObject):
         try:
             _keys = list(_queue_index_data.keys())
             _are_keys_digits = [int(_key) for _key in _keys]
-            print(_are_keys_digits)
+            # print(_are_keys_digits)
         except ValueError as e:
             return -1
 
@@ -405,7 +405,7 @@ class ExportQueuesInterfaceController(QtCore.QObject):
                 newIndex=str(_expected_int_index_key)
             )
 
-            print(_int_index_key, _expected_int_index_key)
+            # print(_int_index_key, _expected_int_index_key)
 
             self.queueIndexKeyChanged.emit(
                 str(_int_index_key),
@@ -444,7 +444,7 @@ class ExportQueuesInterfaceController(QtCore.QObject):
 
         _queue_index_data[queue_index_key][keys.queue_active_state] = True
 
-        print('writing', _queue_index_data)
+        # print('writing', _queue_index_data)
 
         self.write_queue_index_data(_queue_index_data)
 
@@ -547,7 +547,7 @@ class ExportQueuesInterfaceController(QtCore.QObject):
 
         """
         logger.info(f'Recieved signal to delete queue item index: {queue_item_index_key}')
-        print(queue_item_index_key, self.read_active_export_queue_data().keys())
+        # print(queue_item_index_key, self.read_active_export_queue_data().keys())
         _active_queue_data = self.read_active_export_queue_data()
 
         if queue_item_index_key not in _active_queue_data:
@@ -627,7 +627,7 @@ class ExportQueuesInterfaceController(QtCore.QObject):
         _sorted_active_queue_keys_int   =   sorted(_active_queue_keys_int)
 
         for _expected_key_int, _actual_key_int in enumerate(_sorted_active_queue_keys_int):
-            print(_expected_key_int, _actual_key_int)
+            # print(_expected_key_int, _actual_key_int)
             if _expected_key_int == _actual_key_int:
                 continue
 
@@ -642,12 +642,12 @@ class ExportQueuesInterfaceController(QtCore.QObject):
 
             self.activeQueueItemIndexKeyChanged.emit(queue_item_index_key, expected_queue_item_index_key)
 
-        print(active_queue_data)
+        # print(active_queue_data)
         self.write_active_export_queue_data(active_queue_data)
     # endregion
 
     def start_queue(self):
-        print('start')
+        # print('start')
         active_queue_data = self.read_active_export_queue_data()
         self._startExportQueue.emit(active_queue_data)
 

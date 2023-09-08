@@ -81,7 +81,7 @@ class ExporterSceneView(base_layouts.VerticalLayout):
 
     @QtCore.Slot()
     def populate_item_view(self, scene_path, scene_data):
-        print(scene_path)
+        # print(scene_path)
         self.content_panel.clear_layout()
 
         self.set_scene_path(scene_path)

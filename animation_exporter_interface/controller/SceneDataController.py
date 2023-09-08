@@ -32,9 +32,6 @@ class SceneDataController(QtCore.QObject):
     def setModel(self, model):
         self._model = model
 
-    def test(self, *args):
-        print('testing')
-
     def sceneSelectionChanged(self, filepath):
         """
         Emits the signal to write the scene data for the given scene filepath
@@ -88,7 +85,6 @@ class SceneDataController(QtCore.QObject):
         -------
 
         """
-        print(items)
         dataSets = []
         for _item in items:
             _node_for_item = self.model().get_node_for_display_name(_item)

@@ -38,7 +38,7 @@ class ExporterMainWindow(base_windows.Main_Window):
 
         logger.info(f'Building central widget and adding holders')
         try:
-            central_layout = base_layouts.VerticalLayout(margins=[10, 10, 0, 0], spacing=5)
+            central_layout = base_layouts.VerticalLayout(margins=[10, 0, 10, 0], spacing=5)
 
             central_layout.addWidget(self.header, alignment=constants.align_top)
             central_layout.addWidget(self.focal_tab_widget)
@@ -53,7 +53,7 @@ class ExporterMainWindow(base_windows.Main_Window):
         self.setCentralWidget(central_layout)
 
         logger.info(f'Resizing window: {self}')
-        self.resize(850, 450)
+        self.resize(850, 950)
 
         self.setWindowTitle(f'AnimExporter')
 

@@ -6,36 +6,25 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-from maya import cmds, mel, standalone
+from maya import mel, standalone
+import maya.cmds as cmds
 from animation_exporter.utility_resources import keys
 
 # region: Export Stuff
 
-def set_animation_start(frame):
-    logger.info(f'Attempting to set animation bake start to {frame}')
-    try:
-        mel.eval(f"FBXExportBakeComplexStart -v {frame}")
-        logger.info(f'Successfully set animation bake start time')
-    except Exception as e:
-        logger.warning(f'Encountered exception when attempting to set animation bake start')
-        logger.exception(e)
 
 
-def set_animation_end(frame):
-    logger.info(f'Attempting to set animation bake end to {frame}')
-    try:
-        mel.eval(f"FBXExportBakeComplexEnd -v {frame}")
-        logger.info(f'Successfully set animation bake end time')
-    except Exception as e:
-        logger.warning(f'Encountered exception when attempting to set animation bake end')
-        logger.exception(e)
+def bake_animation_range(export_name, start_frame, end_frame):
 
+    mel.eval("FBXExportBakeComplexAnimation -v true;")
 
-def bake_animation_range(start_frame, end_frame):
-    mel.eval("FBXExportBakeComplexAnimation -v true")
-    set_animation_start(start_frame)
-    set_animation_end(end_frame)
-    mel.eval("FBXExportBakeComplexStep -v 1")
+    mel.eval(f"FBXExportBakeComplexStart -v {start_frame};")
+    mel.eval(f"FBXExportBakeComplexEnd -v {end_frame};")
+    # mel.eval('FBXExportSkeletonDefinitions -v true')
+    mel.eval(f'FBXExportSplitAnimationIntoTakes -v "nameexport" {start_frame} {end_frame};')
+    mel.eval('FBXExportDeleteOriginalTakeOnSplitAnimation -v true;')
+
+    mel.eval("FBXExportBakeComplexStep -v 1;")
 
 
 def export_animation(objects, export_path):
@@ -43,8 +32,6 @@ def export_animation(objects, export_path):
     # logger.debug(f'Exporting objects: {objects}')
     try:
         cmds.select(objects)
-        print(cmds.ls(), objects)
-        cmds.file(export_path, exportSelected=True, type="FBX export", force=True, prompt=False)
 
         logger.info(f'Successfully exported to: {export_path}')
     except Exception as e:
@@ -54,14 +41,45 @@ def export_animation(objects, export_path):
 
 def export_animation_range_from_scene(scene_path, objects, frame_range, export_path):
     cmds.file(scene_path, open=True, force=True)
-
+    cmds.select(objects)
     cmds.loadPlugin('fbxmaya')
 
-    if isinstance(frame_range, list) and len(frame_range) == 2:
-        cmds.select(objects)
-        bake_animation_range(frame_range[0], frame_range[-1])
+    mel.eval('FBXResetExport;')
 
-    export_animation(objects, export_path)
+    mel.eval("FBXExportBakeComplexAnimation -v true")
+
+    _startframe = frame_range[0]
+    _endframe = frame_range[-1]
+
+    mel.eval(f"FBXExportBakeComplexStart -v {_startframe}")
+    mel.eval(f"FBXExportBakeComplexEnd -v {_endframe}")
+    # mel.eval('FBXExportSkeletonDefinitions -v true')
+    mel.eval(f'FBXExportSplitAnimationIntoTakes -v "nameexport" {_startframe} {_endframe}')
+    mel.eval('FBXExportDeleteOriginalTakeOnSplitAnimation -v true;')
+
+    mel.eval("FBXExportBakeComplexStep -v 1")
+
+    cmds.file(export_path, exportSelected=True, type="FBX export", force=True, prompt=False)
+    #
+    #
+    # cmds.file(scene_path, open=True, force=True)
+    #
+    # cmds.loadPlugin('fbxmaya')
+    #
+    # mel.eval('FBXResetExport;')
+    #
+    # cmds.select(objects)
+    # if isinstance(frame_range, list) and len(frame_range) == 2:
+    #     bake_animation_range(export_path, frame_range[0], frame_range[-1])
+    #
+    #
+    #
+    # try:
+    #     cmds.file(export_path, exportSelected=True, type="FBX export", force=True, prompt=False)
+    # except Exception as e:
+    #     mel.eval(f'FBXExport -s -file "{export_path}";')
+    #
+    # mel.eval('FBXExportSplitAnimationIntoTakes -clear;')
 
 # endregion
 
@@ -116,7 +134,7 @@ def export_queue_item(queue, queue_item_identifier):
             export_path=os.path.join(_export_directory, f"{_export_name}.fbx")
         )
 
-        print(_export_name)
+        # print(_export_name)
         logger.info(f'Successfully exported queue item ID: {queue_item_identifier}')
         return 0
     except Exception as e:

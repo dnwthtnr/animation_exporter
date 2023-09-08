@@ -78,7 +78,7 @@ class ItemDetailedView(base_layouts.VerticalLayout):
         logger.info(f'Building item data attribute holder with given item data')
         logger.debug(item_data)
         try:
-            print(item_data.get(keys.animation_times), item_data.get(keys.animation_range_key))
+            # print(item_data.get(keys.animation_times), item_data.get(keys.animation_range_key))
 
             _animation_keyframes = item_data.get(keys.animation_times)
             _animation_range = item_data.get(keys.animation_range_key)

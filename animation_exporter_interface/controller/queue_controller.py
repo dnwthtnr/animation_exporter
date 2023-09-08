@@ -160,8 +160,6 @@ def get_new_queue_item_identifier():
 def add_to_export_queue(scene_path, export_name, scene_objects, animation_range, export_directory):
     _queue_item_identifier = get_new_queue_item_identifier()
 
-    print('yeah')
-
     _scene_data_dict = {}
     _scene_data_dict[keys.queue_item_identifier_key] = _queue_item_identifier
     _scene_data_dict[keys.scene_path_key] = scene_path
@@ -194,7 +192,6 @@ def get_queue_item_data(queue, queue_item_identifier, value_key):
 
 
 def get_queue_item_export_args(queue, queue_item_identifier):
-    print('item stuff')
     logger.info(f'Getting queue item data for ID: {queue_item_identifier}')
     try:
         _export_name = get_queue_item_data(
@@ -225,7 +222,6 @@ def get_queue_item_export_args(queue, queue_item_identifier):
         )
 
         _export_path = os.path.join(_export_directory, f"{_export_name}.fbx")
-        print('more', _scene_path, _export_range, _export_path)
         logger.info(f'Successfully queried data for queue item {queue_item_identifier}:{_export_name}')
         return [_scene_path, _object, _export_range, _export_path]
         # logger.debug(f'\n\nQueue item ID: {queue_item_identifier}\nexport name: {_export_name}, export directory: {_export_directory}, export range: {_export_range}, scene_path: {_scene_path}, objects: {_object}')
@@ -303,7 +299,6 @@ class QueueRunner(QtCore.QObject):
 
 
     def delete_temp_argument_file(self, queue_item_id):
-        print(self.export_argument_filepaths)
         _filepath = self.export_argument_filepaths.get(queue_item_id)
 
         if _filepath is not None:

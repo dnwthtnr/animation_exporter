@@ -17,7 +17,7 @@ class ItemDetailController(QtCore.QObject):
         """
         super().__init__()
         _data = {}
-        _data[keys.animation_partitions_key] = self.animation_partitions(item_detail_dictionary.get(keys.animation_times, [0, 0]))
+        _data[keys.animation_partitions_key] = self.animation_partitions(item_detail_dictionary.get(keys.animation_times, []))
         _data[keys.export_directory_key] = item_detail_dictionary.get(keys.export_directory_key)
         _data[keys.export_objects_key] = item_detail_dictionary.get(keys.export_objects_key)
         _data[keys.scene_path_key] = item_detail_dictionary.get(keys.scene_path_key)
@@ -29,7 +29,7 @@ class ItemDetailController(QtCore.QObject):
 
 
     def animation_partitions(self, animation_times):
-        if not isinstance(animation_times, list):
+        if animation_times == [] or animation_times is None:
             return animation_times
 
         return [
@@ -72,7 +72,6 @@ class ItemDetailController(QtCore.QObject):
         args
 
         """
-        print('addingemit')
         self.addToQueue.emit(self.item_detail_dictionary)
 
 

@@ -269,7 +269,7 @@ def write_json(path, data):
 
 
 def generate_export_name(object_name, export_object_count):
-    export_name = f"{object_name}_OBJ-COUNT:{export_object_count}"
+    export_name = f"{object_name}_OBJ-COUNT({export_object_count})"
     return export_name
 
 
@@ -428,15 +428,12 @@ def collect_and_write_scene_data(filepath, output_filepath):
 
 import math_operations
 def combineAnimationTimes(animationTimesLists):
-    print(animationTimesLists)
     _combinedAnimationTimesList = [_item for _list in animationTimesLists if _list is not None for _item in _list ]
     returnAnimationTimesList = math_operations.kill_duplicate_list_elements(_combinedAnimationTimesList)
-    print(returnAnimationTimesList)
     return returnAnimationTimesList
 
 
 def combineAnimationRanges(animationRanges):
-    print('ranges', animationRanges)
     returnAnimationRange = []
     for _animationRange in animationRanges:
         if _animationRange is None:
