@@ -72,11 +72,18 @@ class ExporterMainWindow(base_windows.Main_Window):
         _menu_bar.setStyleSheet(styles.maya_menu_bar)
 
         _file_menu = _menu_bar.addMenu("&File")
-        _file_menu.addAction(QtWidgets.QAction(text="Settings", parent=_file_menu) )
+
+        _settings_action = QtWidgets.QAction(text="Settings", parent=_file_menu)
+        _settings_action.triggered.connect(self.open_settings)
+
+        _file_menu.addAction(_settings_action)
 
         _edit_menu = _menu_bar.addMenu("&Edit")
 
         return _menu_bar
+
+    def open_settings(self):
+        print('settings')
 
 
     # region #######################| TAB WIDGET STUFF |##########################
