@@ -12,6 +12,23 @@ DEFAULTS_FOLDER = os.path.join(RESOURCES_FOLDER, "defaults")
 CACHE_FOLDER = os.path.join(RESOURCES_FOLDER, "cache")
 # TODO: replace with settings holders
 
+userSettingsModuleName = "userSettings"
+
+
+def readDefaultsFile(filename):
+    _path = os.path.join(DEFAULTS_FOLDER, filename)
+    if not os.path.exists(_path):
+        raise FileNotFoundError(f'File: {_path} does not exist')
+    return file_management.read_json(_path)
+
+def populateUserSettings(userSettingsModuleName):
+    _module = local_settings_manager.SettingsForModule(module_name=userSettingsModuleName)
+    _default = readDefaultsFile(userSettingsModuleName + '.json')
+
+    if len(_module.settings_dictionary()) != len(_default):
+        _module.overwrite_with_dictionary(_default)
+
+
 cache_values = local_settings_manager.SettingsForModule(module_name=f'tempcache')
 
 
@@ -82,3 +99,4 @@ def set_settings_last_read_modification_date(date):
         value=date
     )
 
+populateUserSettings(userSettingsModuleName)

@@ -3,6 +3,8 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.NOTSET)
 from PySide2 import QtCore, QtWidgets, QtGui
 from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants, styles
+from animation_exporter.animation_exporter_interface.controller import SettingsController
+from animation_exporter.animation_exporter_interface.view import SettingsView
 
 # TODO: make a widget that holds different items to export -- like a queue
 
@@ -83,6 +85,16 @@ class ExporterMainWindow(base_windows.Main_Window):
         return _menu_bar
 
     def open_settings(self):
+        _settingController = SettingsController.SettingsController(module='userSettings')
+        self._settingView = SettingsView.SettingsEditor(parent=self)
+        self._settingView.controller = _settingController
+
+        self._settingView.settingDataRequest.connect(_settingController.emitSettings)
+        self._settingView.settingsChanged.connect(_settingController.setSettingDictionary)
+
+        _settingController.settingsDictionary.connect(self._settingView.addSettings)
+
+        self._settingView.finish_initialization()
         print('settings')
 
 

@@ -38,15 +38,14 @@ class ItemDetailAttributeHolder(proceadural_displays.AttributeHolder):
     def create_attribute_entry(self, attribute_name, attribute_value, attribute_mapper, map_by_identity, map_by_type):
         # TODO: copy this into baseclass
         for _entry_type in attribute_mapper:
-            if _entry_type.identifier(self, value=attribute_value) is True:
 
-                if _entry_type == proceadural_displays.RangeSliderAttributeEditor:
-                    _entry = _entry_type(attribute_name, [attribute_value, self.animation_range, self.animation_times])
-                    if len(self.animation_times) == 0:
-                        _entry.setEnabled(False)
-                else:
-                    _entry = _entry_type(attribute_name, attribute_value)
+            if _entry_type == proceadural_displays.RangeSliderAttributeEditor:
+                _attribute_value = [attribute_value, self.animation_range, self.animation_times]
+            else:
+                _attribute_value = attribute_value
 
+            if _entry_type.identifier(self, value=_attribute_value) is True:
+                _entry = _entry_type(attribute_name, _attribute_value)
                 return _entry
         return None
 

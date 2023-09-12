@@ -4,7 +4,7 @@ logger.setLevel(logging.DEBUG)
 
 from PySide2 import QtCore, QtWidgets
 from functools import partial
-from animation_exporter.utility_resources import keys
+from animation_exporter.utility_resources import keys, userSettings
 from pyqt_interface_elements import (base_layouts, base_widgets,
                                      proceadural_displays, icons,
                                      constants, dialogs, styles, line_edits, base_windows, buttons, visuals)
@@ -149,6 +149,10 @@ class QueueItem(base_layouts.ExpandWhenClicked):
 
 
     def _delete_button_clicked(self):
+        print('delete', userSettings.askBeforeExportItemDeletion())
+        if userSettings.askBeforeExportItemDeletion() is False:
+            self.deleteQueueItem.emit(self.queue_index())
+            return
         self._confirmation_dialogue = dialogs.ConfirmDialogue(
             display_text=f'Are you sure you want to delete the "{self.queue_item_name()}" queue item? \nThe file associated with this queue will also be deleted.',
             parent=self
@@ -231,6 +235,9 @@ class QueueIndexItem(base_layouts.ExpandWhenClicked):
         return _widget
 
     def _delete_button_clicked(self):
+        if userSettings.askBeforeQueueDeletion() is False:
+            self.deleteQueue.emit(self.queue_index_key())
+            return
         self._confirmation_dialogue = dialogs.ConfirmDialogue(
             display_text=f'Are you sure you want to delete the "{self.queue_name()}" queue item? \nThe file associated with this queue will also be deleted.',
             parent=self
