@@ -13,9 +13,9 @@ from pyqt_interface_elements import base_widgets, base_layouts, base_windows, co
 _attrs = [
     proceadural_displays.RangeSliderAttributeEditor,
     proceadural_displays.TwoDimentionalLineEditAttributeEditor,
+    proceadural_displays.ChooseDirectoryAttributeEditor,
     proceadural_displays.LineEditAttributeEditor,
     proceadural_displays.FilepathDisplayAttributeEditor,
-    proceadural_displays.ChooseDirectoryAttributeEditor,
     proceadural_displays.LargeListTooltipAttributeEditor,
 ]
 

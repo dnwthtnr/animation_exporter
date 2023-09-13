@@ -52,6 +52,7 @@ class ItemDetailController(QtCore.QObject):
         -------
 
         """
+        print(name, value)
         self.item_detail_dictionary[name] = value
 
     @QtCore.Slot()

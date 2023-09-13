@@ -39,11 +39,12 @@ class SettingsEditor(base_windows.Dialog):
             attribute_dictionary=settingsDictionary,
             attribute_mapper=attrs,
             map_by_identity=True,
-            map_by_type=False
+            map_by_type=False,
+            attribute_title_width=250
         )
         self._attribute_mapper.valueChanged.connect(self.settingValueChanged.emit)
 
-        self.scrollArea.addWidget(self._attribute_mapper)
+        self.scrollArea.addWidget(self._attribute_mapper, stretch=1)
 
 
     def _buildButtons(self):
