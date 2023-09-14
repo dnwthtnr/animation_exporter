@@ -46,7 +46,7 @@ class ExportItem(base_layouts.ExpandWhenClicked):
             attribute_name="Export Name",
             attribute_value=_item_name
         )
-        self._queue_name_widget.valueEdited.connect(self._change_queue_item_name)
+        self._queue_name_widget.valueEdited.connect(self._changeExportItemName)
 
         # print('queueexportdirectory', _item_export_directory, queue_item_display_dict)
 
@@ -54,7 +54,7 @@ class ExportItem(base_layouts.ExpandWhenClicked):
             attribute_name="Export Directory",
             attribute_value=_item_export_directory
         )
-        self._queue_export_directory_widget.valueEdited.connect(self._change_queue_item_export_directory)
+        self._queue_export_directory_widget.valueEdited.connect(self._changeExportItemDirectory)
 
         self._queue_index_widget = line_edits.IntLineEdit(value=_item_index)
 
@@ -91,11 +91,11 @@ class ExportItem(base_layouts.ExpandWhenClicked):
         self.set_expanded_stylesheet(styles.maya_expanded_collapsible_layout)
         self.set_collapsed_stylesheet(styles.maya_collapsed_layout)
 
-    def _change_queue_item_name(self, new_name):
+    def _changeExportItemName(self, new_name):
         self.changeExportItemName.emit(self.exportItemIndex(), new_name)
-    def _change_queue_item_export_directory(self, new_directory):
+    def _changeExportItemDirectory(self, new_directory):
         self.changeExportItemExportDirectory.emit(self.exportItemIndex(), new_directory)
-    def _change_queue_index(self, new_index):
+    def _changeExportItemIndex(self, new_index):
         self.changeExportItemIndex.emit(self.exportItemIndex(), new_index)
 
 
@@ -140,8 +140,8 @@ class ExportItem(base_layouts.ExpandWhenClicked):
     #     self.close()
 
 class Queue(base_layouts.ExpandWhenClicked):
-    deleteQueue = QtCore.Signal(str)
-    changeQueueName = QtCore.Signal(str, str)
+    deleteQueueTrigger = QtCore.Signal(str)
+    changeQueueNameTrigger = QtCore.Signal(str, str)
 
     def __init__(self, queue_name, queue_path, queue_index_key):
         super().__init__(margins=[5, 5, 0, 0], spacing=5)
@@ -149,43 +149,41 @@ class Queue(base_layouts.ExpandWhenClicked):
         _title_width = 150
 
         self._queue_index_key = queue_index_key
-        self._queue_name = self._build_queue_name(name=queue_name, width=_title_width)
-        self._queue_path = self._build_queue_path(path=queue_path, width=_title_width)
-        _delete_button = self._build_delete_button()
+        self._queue_name = self._buildQueueNameWidget(name=queue_name, width=_title_width)
+        self._queue_path = self._buildQueuePathWidget(path=queue_path, width=_title_width)
 
         self.addCollapsedWidget(self._queue_name, stretch=1)
-        self.addCollapsedWidget(_delete_button, alignment=constants.align_right)
 
         self.addExpandedWidget(self._queue_path)
 
         self.set_expanded_stylesheet(styles.maya_expanded_collapsible_layout)
         self.set_collapsed_stylesheet(styles.maya_collapsed_layout)
 
-    def queue_index_key(self):
+    def queueIndex(self):
         return self._queue_index_key
 
-    def set_queue_index_key(self, queue_index_key):
+    def setQueueIndex(self, queue_index_key):
         self._queue_index_key = queue_index_key
 
-    def _build_queue_name(self, name, width=None):
+    def _buildQueueNameWidget(self, name, width=None):
         _widget = proceadural_displays.NameEditorAttributeEditor(attribute_name="Export File Name:", attribute_value=name)
-        _widget.valueEdited.connect(self.change_queue_name)
+        _widget.valueEdited.connect(self.changeQueueName)
 
         if width is not None:
             _widget.setMinimumWidth(width)
 
         return _widget
 
-    def queue_name(self):
+    def queueName(self):
         return self._queue_name.attribute_value
 
-    def set_queue_name(self, new_name):
+    def setQueueName(self, new_name):
         self._queue_name.setAttributeValue(new_name)
 
-    def change_queue_name(self, new_name):
-        self.changeQueueName.emit(self.queue_index_key(), new_name)
+    def changeQueueName(self, new_name):
+        self.changeQueueNameTrigger.emit(self.queueIndex(), new_name)
 
-    def _build_queue_path(self, path, width=None):
+    def _buildQueuePathWidget(self, path, width=None):
 
         _widget = proceadural_displays.LineEditAttributeEditor(attribute_name="Scene Path:", attribute_value=path)
         # _widget.valueEdited.connect(self.emit_export_name_changed)
@@ -196,32 +194,13 @@ class Queue(base_layouts.ExpandWhenClicked):
 
         return _widget
 
-    def queue_path(self):
+    def queuePath(self):
         return self._queue_path.attribute_value
 
-    def set_queue_path(self, new_queue_path):
+    def setQueuePath(self, new_queue_path):
         self._queue_path.setAttributeValue(new_queue_path)
 
-    def _build_delete_button(self):
-        _widget = base_widgets.Tool_Button()
-        _widget.setIcon(icons.delete)
-        _widget.setToolTip(f"Delete queue")
-        _widget.clicked.connect(self._delete_button_clicked)
-        return _widget
-
-    def _delete_button_clicked(self):
-        if userSettings.askBeforeQueueDeletion() is False:
-            self.deleteQueue.emit(self.queue_index_key())
-            return
-        self._confirmation_dialogue = dialogs.ConfirmDialogue(
-            display_text=f'Are you sure you want to delete the "{self.queue_name()}" queue item? \nThe file associated with this queue will also be deleted.',
-            parent=self
-        )
-        self._confirmation_dialogue.confirmed.connect(partial(self.deleteQueue.emit, self.queue_index_key()))
-
-        self._confirmation_dialogue.show()
-
-    def delete_queue(self):
+    def deleteQueue(self):
         self.close()
 
 class QueueEditor(base_layouts.VerticalLayout):
@@ -281,18 +260,21 @@ class QueueEditor(base_layouts.VerticalLayout):
     # region Dialog
     def openQueueEditDialog(self):
         self.queueEditorDialog.show()
+        self.queueEditorDialog.resize(*userSettings.queueWindowSize())
+        self.queueEditorDialog.move(self.mapToGlobal(self.pos()))
 
     def _buildQueueEditDialog(self):
-        _queue_editor_dialog= base_windows.Dialog(parent=self)
-        self._queue_item_scroll_area = base_layouts.VerticalScrollArea()
-        self._queue_item_scroll_area.addStretch(1)
+        _queue_editor_dialog= base_windows.Main_Window(parent=self)
+        self.queueHolder = self._buildQueueHolder()
+        _queueHolderScrollArea = base_layouts.VerticalScrollArea()
+        _queueHolderScrollArea.addWidget(self.queueHolder)
 
-        self._queue_editor_toolbar = self._buildQueueEditToolbar()
-        _queue_editor_layout = QtWidgets.QVBoxLayout()
-        _queue_editor_layout.addWidget(self._queue_editor_toolbar, alignment=constants.align_top)
-        _queue_editor_layout.addWidget(self._queue_item_scroll_area, stretch=1)
+        queueToolbar = self._buildQueueEditToolbar()
+        _queue_editor_layout = base_layouts.VerticalLayout(margins=10)
+        _queue_editor_layout.addWidget(queueToolbar, alignment=constants.align_top)
+        _queue_editor_layout.addWidget(_queueHolderScrollArea, stretch=1)
 
-        _queue_editor_dialog.setLayout(_queue_editor_layout)
+        _queue_editor_dialog.setCentralWidget(_queue_editor_layout)
         _queue_editor_dialog.setWindowFlag(QtCore.Qt.Tool, True)
 
         return _queue_editor_dialog
@@ -300,17 +282,30 @@ class QueueEditor(base_layouts.VerticalLayout):
     def _buildQueueEditToolbar(self):
         _duplicate_queue_button = self._buildDuplicateQueueButton()
 
-        _add_queue_button = base_widgets.Tool_Button()
-        _add_queue_button.setToolTip(f'Add new queue')
-        _add_queue_button.setIcon(icons.plus)
-        _add_queue_button.clicked.connect(self._buildAddQueueDialog)
-
-
+        _add_queue_button = self._buildAddQueueButton()
+        _deleteQueueButton = self._buildDeleteQueueButton()
 
         _widget = base_layouts.HorizontalLayout()
         _widget.addStretch(1)
-        _widget.addWidget(_add_queue_button)
         _widget.addWidget(_duplicate_queue_button)
+        _widget.addWidget(_deleteQueueButton)
+        _widget.addWidget(_add_queue_button)
+        return _widget
+
+    def _buildAddQueueButton(self):
+        """
+        Builds a button displaying the duplicate icon that calls duplicate_queue_button_clicked when clicked
+
+        Returns
+        -------
+        base_widgets.Tool_Button
+            The new button
+
+        """
+        _widget = base_widgets.Tool_Button()
+        _widget.setToolTip(f'Add new queue')
+        _widget.setIcon(icons.plus)
+        _widget.clicked.connect(self._buildAddQueueDialog)
         return _widget
 
     def _buildDuplicateQueueButton(self):
@@ -358,6 +353,34 @@ class QueueEditor(base_layouts.VerticalLayout):
         self._new_queue_dialog.fileSelected.connect(self._newQueueFileSelectedEvent)
 
         self._new_queue_dialog.show()
+
+    def _buildDeleteQueueButton(self):
+        _widget = base_widgets.Tool_Button()
+        _widget.setIcon(icons.delete)
+        _widget.setToolTip(f"Delete queue")
+        _widget.clicked.connect(self._deleteQueueButtonClicked)
+        return _widget
+
+    @QtCore.Slot("_deleteExportItemButtonClicked")
+    def _deleteQueueButtonClicked(self):
+        if userSettings.askBeforeExportItemDeletion() is False:
+            self.emitDeleteSelectedQueues()
+            return
+        self._confirmationDialog = dialogs.ConfirmDialogue(
+            display_text=f'Are you sure you want to delete the selected queue(s)?\nThis action will result in permanent data loss.',
+            parent=self
+        )
+        self._confirmationDialog.confirmed.connect(self.emitDeleteSelectedQueues)
+        self._confirmationDialog.show()
+
+    def emitDeleteSelectedQueues(self):
+        """
+        Iterates through the currently selected export item
+        indexes and emits them on the delteExportItemTrigger signal
+
+        """
+        for _index in self.selectedQueues():
+            self.deleteQueueTrigger.emit(_index)
 
     def _newQueueFileSelectedEvent(self, filepath):
         """
@@ -441,7 +464,6 @@ class QueueEditor(base_layouts.VerticalLayout):
         self._confirmationDialog.confirmed.connect(self.emitDeleteSelectedItems)
         self._confirmationDialog.show()
 
-
     def emitDeleteSelectedItems(self):
         """
         Iterates through the currently selected export item
@@ -450,15 +472,6 @@ class QueueEditor(base_layouts.VerticalLayout):
         """
         for _index in self.selectedExportItems():
             self.deleteExportItemTrigger.emit(_index)
-
-
-    # def _buildRenameExportItemButton(self):
-    #     _widget = base_widgets.Tool_Button()
-    #     _widget.setIcon(icons.delete)
-    #     _widget.setToolTip(f"Delete queue")
-    #     _widget.clicked.connect(self._deleteButtonClicked)
-    #     return _widget
-
 
     def _buildOpenQueueEditorButton(self):
         _button = base_widgets.Tool_Button()
@@ -476,7 +489,7 @@ class QueueEditor(base_layouts.VerticalLayout):
         _new_selection = self.queueSelectorCombo.currentText()
         _queue_item = self.getQueueFromName(_new_selection)
 
-        self.changeActiveQueue.emit(_queue_item.queue_index_key())
+        self.changeActiveQueue.emit(_queue_item.queueIndex())
 
     def activeQueueChangeEvent(self):
         self.exportItemHolder.clear_layout()
@@ -494,6 +507,27 @@ class QueueEditor(base_layouts.VerticalLayout):
     # endregion
 
     # region Queue Editing Methods
+
+    def _buildQueueHolder(self):
+        _widget = base_layouts.VerticalSelectableObjectHolder()
+        _widget.setSelectionMode(base_layouts.SelectableObjectHolder.MultiSelection)
+        _widget.addStretch(1)
+        return _widget
+
+    def selectedQueues(self):
+        """
+        Query the current selected export items and gets the respective indexes
+
+        Returns
+        -------
+        list[str]
+            A list of the ExportItem export item indexes
+
+        """
+        _items = self.queueHolder.currentSelection()
+        _itemIndexes = [_item.queueIndex() for _item in _items]
+        return _itemIndexes
+
     def addQueueEvent(self, queue_name, queue_path, queue_index_key):
         logger.info(f'Received signal to add queue. {queue_name, queue_path, queue_index_key}')
         _item = Queue(
@@ -501,27 +535,28 @@ class QueueEditor(base_layouts.VerticalLayout):
             queue_path=queue_path,
             queue_index_key=queue_index_key
         )
-        _item.changeQueueName.connect(self.changeQueueNameTrigger.emit)
-        _item.deleteQueue.connect(self.deleteQueueButtonClickEvent)
-        self._queue_item_scroll_area.addWidget(_item)
+        _item.changeQueueNameTrigger.connect(self.changeQueueNameTrigger.emit)
+        _item.deleteQueueTrigger.connect(self.deleteQueueButtonClickEvent)
+        self.queueHolder.addWidget(_item)
 
         self.queueSelectorCombo.addItem(queue_name)
 
-    def getQueueFromIndex(self, queue_index_key):
-        for _widget in self._queue_item_scroll_area.children():
+    def getQueueFromIndex(self, queueIndex):
+        for _selectionLayout in self.queueHolder.children:
+            _widget = _selectionLayout.children[0]
             if not isinstance(_widget, Queue):
                 continue
-            # print('keys',_widget.queue_index())
 
-            if _widget.queue_index_key() == queue_index_key:
+            if _widget.queueIndex() == queueIndex:
                 return _widget
 
     def getQueueFromName(self, queue_name):
-        for _widget in self._queue_item_scroll_area.children():
+        for _selectionLayout in self.queueHolder.children:
+            _widget = _selectionLayout.children[0]
             if not isinstance(_widget, Queue):
                 continue
 
-            if _widget.queue_name() == queue_name:
+            if _widget.queueName() == queue_name:
                 return _widget
 
     def deleteQueueEvent(self, queue_index_key):
@@ -537,15 +572,15 @@ class QueueEditor(base_layouts.VerticalLayout):
         _queue_item = self.getQueueFromIndex(queue_index_key)
 
         # remove from combo
-        _queue_combo_index = self.queueSelectorCombo.findText(_queue_item.queue_name())
+        _queue_combo_index = self.queueSelectorCombo.findText(_queue_item.queueName())
         self.queueSelectorCombo.removeItem(_queue_combo_index)
 
-        _queue_item.delete_queue()
+        _queue_item.deleteQueue()
 
     def changeQueueNameEvent(self, queue_index_key, new_name):
         _queue_item = self.getQueueFromIndex(queue_index_key)
-        _old_name = _queue_item.queue_name()
-        _queue_item.set_queue_name(new_name)
+        _old_name = _queue_item.queueName()
+        _queue_item.setQueueName(new_name)
 
         # add to combo
         # print(_old_name, 'delete')
@@ -555,11 +590,11 @@ class QueueEditor(base_layouts.VerticalLayout):
 
     def changeQueuePathEvent(self, queue_index_key, new_path):
         _queue_item = self.getQueueFromIndex(queue_index_key)
-        _queue_item.set_queue_path(new_path)
+        _queue_item.setQueuePath(new_path)
 
     def changeQueueKeyEvent(self, queue_index_key, new_index_key):
         _queue_item = self.getQueueFromIndex(queue_index_key)
-        _queue_item.set_queue_index_key(new_index_key)
+        _queue_item.setQueueIndex(new_index_key)
     # endregion
 
 
@@ -568,6 +603,7 @@ class QueueEditor(base_layouts.VerticalLayout):
     def _buildExportItemHolder(self):
         _widget = base_layouts.VerticalSelectableObjectHolder()
         _widget.setSelectionMode(base_layouts.SelectableObjectHolder.MultiSelection)
+        _widget.setStyleSheet(styles.maya_outliner)
         _widget.addStretch(1)
         return _widget
 

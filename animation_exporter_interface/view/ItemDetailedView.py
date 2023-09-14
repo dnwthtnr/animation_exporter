@@ -5,7 +5,7 @@ logger.setLevel(logging.NOTSET)
 
 from PySide2 import QtCore
 
-from animation_exporter.utility_resources import keys
+from animation_exporter.utility_resources import keys, userSettings
 import math_operations
 
 from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants, proceadural_displays, styles
@@ -32,11 +32,11 @@ class ItemDetailAttributeHolder(proceadural_displays.AttributeHolder):
             attribute_dictionary=attribute_dictionary,
             attribute_mapper=_attrs,
             orientation=constants.vertical,
-            map_by_type=False
+            map_by_type=False,
+            attributes_to_hide=userSettings.itemViewHiddenAttributes()
         )
 
     def create_attribute_entry(self, attribute_name, attribute_value, attribute_mapper, map_by_identity, map_by_type):
-        # TODO: copy this into baseclass
         for _entry_type in attribute_mapper:
 
             if _entry_type == proceadural_displays.RangeSliderAttributeEditor:
@@ -66,7 +66,7 @@ class ItemDetailedView(base_layouts.VerticalLayout):
     @QtCore.Slot()
     def populate_detail_view(self, item_data):
         self.attribute_holder = self.build_attribute_holder(item_data)
-        _button = self.build_add_to_queue_button()
+        _button = self._buildAddToQueueButton()
 
         self.addWidget(self.attribute_holder)
         self.addWidget(_button, alignment=constants.align_right)
@@ -77,8 +77,6 @@ class ItemDetailedView(base_layouts.VerticalLayout):
         logger.info(f'Building item data attribute holder with given item data')
         logger.debug(item_data)
         try:
-            # print(item_data.get(keys.animation_times), item_data.get(keys.animation_range_key))
-
             _animation_keyframes = item_data.get(keys.animation_times)
             _animation_range = item_data.get(keys.animation_range_key)
             if _animation_range is None:
@@ -95,12 +93,11 @@ class ItemDetailedView(base_layouts.VerticalLayout):
             return
         return _holder
 
-    def build_add_to_queue_button(self):
+    def _buildAddToQueueButton(self):
         _button = base_widgets.Button(text="Add to Queue")
-        _button.setMinimumSize(105, 25)
+        _button.setMinimumSize(115, 35)
         _button.clicked.connect(self.emit_add_to_queue)
         return _button
 
     def emit_add_to_queue(self):
         self.AddToQueueButtonClicked.emit()
-        return

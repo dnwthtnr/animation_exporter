@@ -7,11 +7,13 @@ import os.path
 import local_settings_manager, file_management
 from functools import partial
 from PySide2 import QtCore, QtWidgets
+from animation_exporter.utility_resources import settings
 
 
 class SettingsController(QtCore.QObject):
 
     settingsDictionary = QtCore.Signal(dict)
+    closeSettings = QtCore.Signal()
 
     _settingsModule = None
     def __init__(self, module):
@@ -51,3 +53,8 @@ class SettingsController(QtCore.QObject):
 
         """
         self.settingsDictionary.emit(self.settingsModule().settings_dictionary())
+
+    def resetSettings(self):
+        _default = settings.readDefaultsFile(filename=self.settingsModule().moduleName())
+        self.settingsModule().overwrite_with_dictionary(_default)
+        self.closeSettings.emit()

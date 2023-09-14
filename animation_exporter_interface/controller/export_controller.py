@@ -1,5 +1,6 @@
-import sys, os
 
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
 import file_management
 import logging
 
@@ -9,6 +10,7 @@ logger.setLevel(logging.DEBUG)
 from maya import mel, standalone
 import maya.cmds as cmds
 from animation_exporter.utility_resources import keys
+
 
 # region: Export Stuff
 

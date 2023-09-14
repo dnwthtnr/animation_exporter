@@ -1,5 +1,5 @@
 from PySide2 import QtCore, QtWidgets, QtGui
-from pyqt_interface_elements import base_widgets, base_layouts, base_windows, line_edits, model_view_delegate, constants, styles
+from pyqt_interface_elements import base_widgets, base_layouts, base_windows, line_edits, model_view_delegate, constants, styles, visuals
 from animation_exporter.animation_exporter_interface.controller import scene_controller
 
 
@@ -55,7 +55,17 @@ class ExporterSceneView(base_layouts.VerticalLayout):
         self._file_picker.setFileLoadingState(loading)
 
         if loading is True:
-            self.populate_with_empty_view()
+            self.populateWithLoadingView()
+
+    def populateWithLoadingView(self, *args):
+        self.content_panel.clear_layout()
+        _layout = base_layouts.VerticalLayout()
+
+        # _label = base_widgets.Label(f'Nothing to Display. Please Select File')
+
+        _layout.setMaximumHeight(_layout.height()*.5)
+        _layout.addWidget(visuals.loadingSceneData(), stretch=1)
+        self.content_panel.addWidget(_layout, alignment=constants.align_center)
 
     def populate_with_empty_view(self, *args):
         self.content_panel.clear_layout()

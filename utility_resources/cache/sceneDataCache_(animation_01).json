@@ -36,8 +36,8 @@
         },
         "naughtydog_test_rig_grp": {
             "AnimationRange": [
-                0.8,
-                470.89172482993195
+                0,
+                470
             ],
             "AnimationTimes": [
                 0.8,
@@ -191,8 +191,8 @@
         },
         "persp1": {
             "AnimationRange": [
-                1.0,
-                415.4477049319728
+                1,
+                415
             ],
             "AnimationTimes": [
                 1.0,
@@ -449,8 +449,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -769,8 +769,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -1088,8 +1088,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -1409,8 +1409,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|l_arm_sub_ctrl_grp": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -1462,8 +1462,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|l_arm_sub_ctrl_grp|l_elbow_sub_ctrl_transComp_GRP": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -1486,8 +1486,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|l_arm_sub_ctrl_grp|l_elbow_sub_ctrl_transComp_GRP|l_elbow_sub_ctrl_offset_GRP": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -1510,8 +1510,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|l_arm_sub_ctrl_grp|l_elbow_sub_ctrl_transComp_GRP|l_elbow_sub_ctrl_offset_GRP|l_elbow_sub_ctrl": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -1557,8 +1557,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|l_arm_sub_ctrl_grp|l_elbow_twist_sub_ctrl_transComp_GRP": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -1583,8 +1583,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|l_arm_sub_ctrl_grp|l_elbow_twist_sub_ctrl_transComp_GRP|l_elbow_twist_sub_ctrl_offset_GRP": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -1622,8 +1622,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|l_arm_sub_ctrl_grp|l_elbow_twist_sub_ctrl_transComp_GRP|l_elbow_twist_sub_ctrl_offset_GRP|l_elbow_twist_sub_ctrl_twist_GRP": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -1646,8 +1646,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|l_arm_sub_ctrl_grp|l_elbow_twist_sub_ctrl_transComp_GRP|l_elbow_twist_sub_ctrl_offset_GRP|l_elbow_twist_sub_ctrl_twist_GRP|l_elbow_twist_sub_ctrl": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -1693,8 +1693,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|l_arm_sub_ctrl_grp|l_shoulder_sub_ctrl_transComp_GRP": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -1717,8 +1717,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|l_arm_sub_ctrl_grp|l_shoulder_sub_ctrl_transComp_GRP|l_shoulder_sub_ctrl_offset_GRP": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -1741,8 +1741,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|l_arm_sub_ctrl_grp|l_shoulder_sub_ctrl_transComp_GRP|l_shoulder_sub_ctrl_offset_GRP|l_shoulder_sub_ctrl": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -1788,8 +1788,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|l_arm_sub_ctrl_grp|l_shoulder_twist_sub_ctrl_transComp_GRP": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -1814,8 +1814,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|l_arm_sub_ctrl_grp|l_shoulder_twist_sub_ctrl_transComp_GRP|l_shoulder_twist_sub_ctrl_offset_GRP": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -1853,8 +1853,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|l_arm_sub_ctrl_grp|l_shoulder_twist_sub_ctrl_transComp_GRP|l_shoulder_twist_sub_ctrl_offset_GRP|l_shoulder_twist_sub_ctrl_twist_GRP": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -1877,8 +1877,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|l_arm_sub_ctrl_grp|l_shoulder_twist_sub_ctrl_transComp_GRP|l_shoulder_twist_sub_ctrl_offset_GRP|l_shoulder_twist_sub_ctrl_twist_GRP|l_shoulder_twist_sub_ctrl": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -1924,8 +1924,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|l_arm_sub_ctrl_grp|l_wrist_sub_ctrl_transComp_GRP": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -1948,8 +1948,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|l_arm_sub_ctrl_grp|l_wrist_sub_ctrl_transComp_GRP|l_wrist_sub_ctrl_offset_GRP": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -1972,8 +1972,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|l_arm_sub_ctrl_grp|l_wrist_sub_ctrl_transComp_GRP|l_wrist_sub_ctrl_offset_GRP|l_wrist_sub_ctrl": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -2146,8 +2146,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -2425,8 +2425,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -2717,8 +2717,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -2993,8 +2993,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -3282,8 +3282,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -3555,8 +3555,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -3922,8 +3922,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl|spined_ctrl_offset_GRP": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -4187,8 +4187,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl|spined_ctrl_offset_GRP|spined_ctrl": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -4456,8 +4456,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl|spined_ctrl_offset_GRP|spined_ctrl|l_clavicle_ctrl_transComp_GRP": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -4644,8 +4644,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl|spined_ctrl_offset_GRP|spined_ctrl|l_clavicle_ctrl_transComp_GRP|l_clavicle_ctrl_offset_GRP": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -4831,8 +4831,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl|spined_ctrl_offset_GRP|spined_ctrl|l_clavicle_ctrl_transComp_GRP|l_clavicle_ctrl_offset_GRP|l_clavicle_ctrl": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -6910,8 +6910,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl|spined_ctrl_offset_GRP|spined_ctrl|l_clavicle_ctrl_transComp_GRP|l_clavicle_ctrl_offset_GRP|l_clavicle_ctrl|l_scapula_ctrl_transComp_GRP": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -6935,8 +6935,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl|spined_ctrl_offset_GRP|spined_ctrl|l_clavicle_ctrl_transComp_GRP|l_clavicle_ctrl_offset_GRP|l_clavicle_ctrl|l_scapula_ctrl_transComp_GRP|l_scapula_ctrl_offset_GRP": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -6959,8 +6959,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl|spined_ctrl_offset_GRP|spined_ctrl|l_clavicle_ctrl_transComp_GRP|l_clavicle_ctrl_offset_GRP|l_clavicle_ctrl|l_scapula_ctrl_transComp_GRP|l_scapula_ctrl_offset_GRP|l_scapula_ctrl": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -7023,8 +7023,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl|spined_ctrl_offset_GRP|spined_ctrl|l_clavicle_ctrl_transComp_GRP|l_clavicle_ctrl_offset_GRP|l_clavicle_ctrl|l_shoulder_fk_ctrl_transComp_GRP": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -7079,8 +7079,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl|spined_ctrl_offset_GRP|spined_ctrl|l_clavicle_ctrl_transComp_GRP|l_clavicle_ctrl_offset_GRP|l_clavicle_ctrl|l_shoulder_fk_ctrl_transComp_GRP|l_shoulder_fk_ctrl": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -7135,8 +7135,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl|spined_ctrl_offset_GRP|spined_ctrl|l_clavicle_ctrl_transComp_GRP|l_clavicle_ctrl_offset_GRP|l_clavicle_ctrl|l_shoulder_fk_ctrl_transComp_GRP|l_shoulder_fk_ctrl|l_elbow_fk_ctrl_transComp_GRP": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -7182,8 +7182,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl|spined_ctrl_offset_GRP|spined_ctrl|l_clavicle_ctrl_transComp_GRP|l_clavicle_ctrl_offset_GRP|l_clavicle_ctrl|l_shoulder_fk_ctrl_transComp_GRP|l_shoulder_fk_ctrl|l_elbow_fk_ctrl_transComp_GRP|l_elbow_fk_ctrl": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -7242,8 +7242,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl|spined_ctrl_offset_GRP|spined_ctrl|l_clavicle_ctrl_transComp_GRP|l_clavicle_ctrl_offset_GRP|l_clavicle_ctrl|l_shoulder_fk_ctrl_transComp_GRP|l_shoulder_fk_ctrl|l_elbow_fk_ctrl_transComp_GRP|l_elbow_fk_ctrl|l_wrist_fk_ctrl_transComp_GRP": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -7279,8 +7279,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl|spined_ctrl_offset_GRP|spined_ctrl|l_clavicle_ctrl_transComp_GRP|l_clavicle_ctrl_offset_GRP|l_clavicle_ctrl|l_shoulder_fk_ctrl_transComp_GRP|l_shoulder_fk_ctrl|l_elbow_fk_ctrl_transComp_GRP|l_elbow_fk_ctrl|l_wrist_fk_ctrl_transComp_GRP|l_wrist_fk_ctrl": {
             "AnimationRange": [
-                1.0,
-                470.89172482993195
+                1,
+                470
             ],
             "AnimationTimes": [
                 1.0,
@@ -7582,8 +7582,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl|spined_ctrl_offset_GRP|spined_ctrl|l_pectoral_ctrl_transComp_GRP": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -7606,8 +7606,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl|spined_ctrl_offset_GRP|spined_ctrl|l_pectoral_ctrl_transComp_GRP|l_pectoral_ctrl": {
             "AnimationRange": [
-                1.0,
-                1.0
+                1,
+                1
             ],
             "AnimationTimes": [
                 1.0
@@ -8544,8 +8544,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl|spined_ctrl_offset_GRP|spined_ctrl|neck_ctrl_offset_GRP": {
             "AnimationRange": [
-                1.0,
-                288.9216081632653
+                1,
+                288
             ],
             "AnimationTimes": [
                 1.0,
@@ -8571,8 +8571,8 @@
         },
         "|naughtydog_test_rig_grp|CTRL|move_ctrl_offset_GRP|move_ctrl|spinea_ctrl_offset_GRP|spinea_ctrl|spineb_ctrl_offset_GRP|spineb_ctrl|spinec_ctrl_offset_GRP|spinec_ctrl|spined_ctrl_offset_GRP|spined_ctrl|neck_ctrl_offset_GRP|neck_ctrl": {
             "AnimationRange": [
-                1.0,
-                288.9216081632653
+                1,
+                288
             ],
             "AnimationTimes": [
                 1.0,

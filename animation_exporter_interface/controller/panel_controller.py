@@ -182,15 +182,26 @@ class PanelController(QtCore.QObject):
             self.addToActiveQueue.emit(_entry_scene_data_dict)
             return
 
+        if False in [isinstance(_item, list) for _item in selected_animation_ranges]:
+            _entry_scene_data_dict = copy.deepcopy(scene_data_dict)
+
+            _entry_scene_data_dict[keys.item_export_name_key] = export_name + f"_RANGE({selected_animation_ranges[0]}_{selected_animation_ranges[1]})"
+            _entry_scene_data_dict[keys.animation_range_key] = selected_animation_ranges
+            try:
+                self.addToActiveQueue.emit(_entry_scene_data_dict)
+                logger.info(f'Successfully emitted addToActiveQueue')
+            except Exception as e:
+                logger.warning(f'Encountered exception while attempting to emit addToActiveQueue with queue item data. Aborting')
+                logger.exception(e)
+
+            return
+
+
         for _animation_range in selected_animation_ranges:
             _entry_scene_data_dict = copy.deepcopy(scene_data_dict)
 
             _entry_scene_data_dict[keys.item_export_name_key] = export_name + f"_RANGE({_animation_range[0]}_{_animation_range[1]})"
             _entry_scene_data_dict[keys.animation_range_key] = _animation_range
-
-
-
-            # logger.debug(f'New export queue item data: {scene_path, _range_export_name, scene_objects, animation_range, export_directory}')
             try:
                 self.addToActiveQueue.emit(_entry_scene_data_dict)
                 logger.info(f'Successfully emitted addToActiveQueue')

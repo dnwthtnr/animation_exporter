@@ -211,7 +211,7 @@ def get_descendant_animation_range(object):
     """
     _animation_times_list = get_descendant_animation_times_list(object)
     if len(_animation_times_list) > 1:
-        return [_animation_times_list[0], _animation_times_list[-1]]
+        return [int(_animation_times_list[0]), int(_animation_times_list[-1])]
 #endregion
 
 # region Export Objects
