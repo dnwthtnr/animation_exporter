@@ -2,7 +2,8 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.NOTSET)
 from PySide2 import QtCore, QtWidgets, QtGui
-from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants, styles
+from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants, styles, icons
+from animation_exporter.utility_resources import userSettings
 from animation_exporter.animation_exporter_interface.controller import SettingsController
 from animation_exporter.animation_exporter_interface.view import SettingsView
 
@@ -55,9 +56,10 @@ class ExporterMainWindow(base_windows.Main_Window):
         self.setCentralWidget(central_layout)
 
         logger.info(f'Resizing window: {self}')
-        self.resize(850, 950)
+        self.resize(*userSettings.mainWindowSize())
 
-        self.setWindowTitle(f'AnimExporter')
+        self.setWindowTitle(f'Animporter')
+        self.setWindowIcon(icons.logo)
 
         logger.info(f'Emitting InitializationFinished signal')
         self.InitializationFinished.emit()
@@ -86,16 +88,17 @@ class ExporterMainWindow(base_windows.Main_Window):
 
     def open_settings(self):
         _settingController = SettingsController.SettingsController(module='userSettings')
-        self._settingView = SettingsView.SettingsEditor(parent=self)
+        self._settingView = SettingsView.SettingsEditor(parent=self, margins=10, spacing=7)
         self._settingView.controller = _settingController
 
         self._settingView.settingDataRequest.connect(_settingController.emitSettings)
         self._settingView.settingsChanged.connect(_settingController.setSettingDictionary)
+        self._settingView.resetSettings.connect(_settingController.resetSettings)
 
         _settingController.settingsDictionary.connect(self._settingView.addSettings)
+        _settingController.closeSettings.connect(self._settingView.close)
 
         self._settingView.finish_initialization()
-        print('settings')
 
 
     # region #######################| TAB WIDGET STUFF |##########################

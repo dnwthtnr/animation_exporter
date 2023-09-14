@@ -454,7 +454,7 @@ class ExportQueuesInterfaceController(QtCore.QObject):
         _queue_index_data = self.read_queue_index_data()
 
         _active_queue_index_key = self.active_export_queue_index_key()
-
+        #TODO: this is coming up as none
         if _active_queue_index_key not in _queue_index_data:
             raise IndexError(f'Queue index key: {_active_queue_index_key} does not exist.')
 

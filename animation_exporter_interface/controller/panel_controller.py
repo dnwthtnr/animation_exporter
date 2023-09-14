@@ -110,42 +110,42 @@ class PanelController(QtCore.QObject):
 
             # region Queues Hookup
             queue_view        .requestingExistingQueueIndex   .connect(   queue_controller      .finish_initialization          )
-            queue_view        .addNewQueue                    .connect(   queue_controller.add_queue_to_index             )
-            queue_view        .duplicateQueue                 .connect(   queue_controller      .duplicate_queue                )
-            queue_view        .deleteQueue                    .connect(   queue_controller      .remove_queue_from_index        )
-            queue_view        .changeQueueName                .connect(   queue_controller      .change_queue_name              )
-            queue_view        .changeQueueDirectory           .connect(   queue_controller      .change_queue_path              )
-            queue_view        .changeQueueIndex               .connect(   queue_controller      .change_queue_index_position    )
+            queue_view        .addNewQueueTrigger                    .connect(queue_controller.add_queue_to_index)
+            queue_view        .duplicateQueueTrigger                 .connect(queue_controller      .duplicate_queue)
+            queue_view        .deleteQueueTrigger                    .connect(queue_controller      .remove_queue_from_index)
+            queue_view        .changeQueueNameTrigger                .connect(queue_controller      .change_queue_name)
+            queue_view        .changeQueueDirectoryTrigger           .connect(queue_controller      .change_queue_path)
+            queue_view        .changeQueueIndexTrigger               .connect(queue_controller      .change_queue_index_position)
 
             queue_view        .changeActiveQueue              .connect(   queue_controller      .set_active_export_queue        )
             queue_view        .requestingActiveQueueItems     .connect(   queue_controller      .emit_active_queue_item_data_response        )
 
             # region Active Queue Hookup
-            queue_view        .deleteActiveQueueItem                    .connect(   queue_controller      .remove_item_from_active_queue                )
-            queue_view        .changeActiveQueueItemName                .connect(   queue_controller      .change_active_queue_item_name                )
-            queue_view        .changeActiveQueueItemExportDirectory     .connect(   queue_controller      .change_active_queue_item_export_directory    )
-            queue_view        .changeActiveQueueItemIndex               .connect(   queue_controller      .change_active_queue_item_index_position      )
+            queue_view        .deleteExportItemTrigger                    .connect(queue_controller      .remove_item_from_active_queue)
+            queue_view        .changeExportItemNameTrigger                .connect(queue_controller      .change_active_queue_item_name)
+            queue_view        .changeExportItemDirectoryTrigger     .connect(queue_controller      .change_active_queue_item_export_directory)
+            queue_view        .changeExportItemIndexTrigger               .connect(queue_controller      .change_active_queue_item_index_position)
 
             queue_view.startActiveQueue.connect(queue_controller.start_queue)
             queue_view.stopActiveQueue.connect(queue_controller.stop_queue)
 
 
-            queue_controller  .newQueueAdded                  .connect(   queue_view            .add_queue_index_item           )
-            queue_controller  .queueDeleted                   .connect(   queue_view            .delete_queue_index_item        )
-            queue_controller  .queueNameChanged               .connect(   queue_view            .change_queue_index_item_name   )
-            queue_controller  .queuePathChanged               .connect(   queue_view            .change_queue_index_item_path   )
-            queue_controller  .queueIndexKeyChanged           .connect(   queue_view            .change_queue_index_item_key    )
-            queue_controller  .activeExportQueueChanged           .connect(   queue_view            .active_queue_changed    )
+            queue_controller  .newQueueAdded                  .connect(queue_view            .addQueueEvent)
+            queue_controller  .queueDeleted                   .connect(queue_view            .deleteQueueEvent)
+            queue_controller  .queueNameChanged               .connect(queue_view            .changeQueueNameEvent)
+            queue_controller  .queuePathChanged               .connect(queue_view            .changeQueuePathEvent)
+            queue_controller  .queueIndexKeyChanged           .connect(queue_view            .changeQueueKeyEvent)
+            queue_controller  .activeExportQueueChanged           .connect(queue_view            .activeQueueChangeEvent)
 
-            queue_controller  .newActiveQueueItemAdded                  .connect(   queue_view            .add_active_queue_item                        )
-            queue_controller  .activeQueueItemDeleted                   .connect(   queue_view            .delete_active_queue_item                     )
-            queue_controller  .activeQueueItemNameChanged               .connect(   queue_view            .change_active_queue_item_name                )
-            queue_controller  .activeQueueItemExportDirectoryChanged    .connect(   queue_view            .change_active_queue_item_export_directory    )
-            queue_controller  .activeQueueItemIndexKeyChanged           .connect(   queue_view            .change_active_queue_item_key                 )
+            queue_controller  .newActiveQueueItemAdded                  .connect(queue_view            .addExportItemEvent)
+            queue_controller  .activeQueueItemDeleted                   .connect(queue_view            .deleteExportItemEvent)
+            queue_controller  .activeQueueItemNameChanged               .connect(queue_view            .changeExportItemNameEvent)
+            queue_controller  .activeQueueItemExportDirectoryChanged    .connect(queue_view            .changeExportItemDirectoryEvent)
+            queue_controller  .activeQueueItemIndexKeyChanged           .connect(queue_view            .changeExportItemKeyEvent)
 
-            queue_controller.activeExportQueueItemStarted.connect(   queue_view            .queue_item_export_started                        )
-            queue_controller.activeExportQueueItemFinished.connect(   queue_view            .queue_item_export_finished                     )
-            queue_controller.activeExportQueueFinished.connect(queue_view.queue_finished)
+            queue_controller.activeExportQueueItemStarted.connect(queue_view            .exportItemExportStartEvent)
+            queue_controller.activeExportQueueItemFinished.connect(queue_view            .exportItemExportFinishEvent)
+            queue_controller.activeExportQueueFinished.connect(queue_view.queueExportFinishEvent)
 
 
             self              .addToActiveQueue                         .connect(   queue_controller.add_item_to_active_queue)
@@ -171,7 +171,9 @@ class PanelController(QtCore.QObject):
         logger.info(f'Caught signal to add item to export queue. Attempting to emit addToActiveQueue')
 
         export_name = scene_data_dict.get(keys.item_export_name_key)
-        selected_animation_ranges = scene_data_dict.get(keys.animation_partitions_key)
+        selected_animation_ranges = scene_data_dict.get(keys.queue_item_animation_range)
+
+        print(selected_animation_ranges)
 
 
         if not isinstance(selected_animation_ranges, list):
@@ -180,15 +182,26 @@ class PanelController(QtCore.QObject):
             self.addToActiveQueue.emit(_entry_scene_data_dict)
             return
 
+        if False in [isinstance(_item, list) for _item in selected_animation_ranges]:
+            _entry_scene_data_dict = copy.deepcopy(scene_data_dict)
+
+            _entry_scene_data_dict[keys.item_export_name_key] = export_name + f"_RANGE({selected_animation_ranges[0]}_{selected_animation_ranges[1]})"
+            _entry_scene_data_dict[keys.animation_range_key] = selected_animation_ranges
+            try:
+                self.addToActiveQueue.emit(_entry_scene_data_dict)
+                logger.info(f'Successfully emitted addToActiveQueue')
+            except Exception as e:
+                logger.warning(f'Encountered exception while attempting to emit addToActiveQueue with queue item data. Aborting')
+                logger.exception(e)
+
+            return
+
+
         for _animation_range in selected_animation_ranges:
             _entry_scene_data_dict = copy.deepcopy(scene_data_dict)
 
             _entry_scene_data_dict[keys.item_export_name_key] = export_name + f"_RANGE({_animation_range[0]}_{_animation_range[1]})"
             _entry_scene_data_dict[keys.animation_range_key] = _animation_range
-
-
-
-            # logger.debug(f'New export queue item data: {scene_path, _range_export_name, scene_objects, animation_range, export_directory}')
             try:
                 self.addToActiveQueue.emit(_entry_scene_data_dict)
                 logger.info(f'Successfully emitted addToActiveQueue')

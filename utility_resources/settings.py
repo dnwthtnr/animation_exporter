@@ -15,15 +15,15 @@ CACHE_FOLDER = os.path.join(RESOURCES_FOLDER, "cache")
 userSettingsModuleName = "userSettings"
 
 
-def readDefaultsFile(filename):
-    _path = os.path.join(DEFAULTS_FOLDER, filename)
+def readDefaultsFile(filename: object) -> object:
+    _path = os.path.join(DEFAULTS_FOLDER, f'{filename}.json')
     if not os.path.exists(_path):
         raise FileNotFoundError(f'File: {_path} does not exist')
     return file_management.read_json(_path)
 
 def populateUserSettings(userSettingsModuleName):
     _module = local_settings_manager.SettingsForModule(module_name=userSettingsModuleName)
-    _default = readDefaultsFile(userSettingsModuleName + '.json')
+    _default = readDefaultsFile(userSettingsModuleName)
 
     if len(_module.settings_dictionary()) != len(_default):
         _module.overwrite_with_dictionary(_default)
