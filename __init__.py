@@ -38,6 +38,7 @@ def main():
     _window.moveToThread(_thread)
     _window.finish_initialization()
     _window.show()
+    print('shows')
 
     sys.exit(_app.exec_())
 

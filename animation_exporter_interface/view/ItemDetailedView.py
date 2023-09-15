@@ -73,6 +73,7 @@ class ItemDetailedView(base_layouts.VerticalLayout):
         self.setStyleSheet(styles.maya_detail_view)
 
 
+
     def build_attribute_holder(self, item_data):
         logger.info(f'Building item data attribute holder with given item data')
         logger.debug(item_data)

@@ -16,10 +16,10 @@ _attributes_to_hide = [keys.queue_item_index_key]
 _non_editable_attributes = []
 
 
-_attribute_display_classes = [
-    proceadural_displays.NameEditorAttributeEditor,
+_attrs= [
     proceadural_displays.ChooseDirectoryAttributeEditor,
-    proceadural_displays.LineEditAttributeEditor
+    proceadural_displays.LineEditAttributeEditor,
+    proceadural_displays.TwoDimentionalLineEditAttributeEditor
 ]
 
 class ExportItem(base_layouts.ExpandWhenClicked):
@@ -28,6 +28,8 @@ class ExportItem(base_layouts.ExpandWhenClicked):
     changeExportItemName = QtCore.Signal(str, str)
     changeExportItemExportDirectory = QtCore.Signal(str, str)
     changeExportItemIndex = QtCore.Signal(str, str)
+
+    exportItemValueChanged = QtCore.Signal(str, list)
 
     exportItemAttributeChanged = QtCore.Signal(str, object)
 
@@ -86,10 +88,22 @@ class ExportItem(base_layouts.ExpandWhenClicked):
         self.addCollapsedWidget(self._queue_name_widget)
         self.addCollapsedWidget(self._export_status_icon)
 
-        self.addExpandedWidget(self._queue_export_directory_widget)
+        self._expandedAttributeHolder = proceadural_displays.AttributeHolder(
+            attribute_dictionary=queue_item_display_dict,
+            attribute_mapper=_attrs,
+            map_by_type=False,
+            map_by_identity=True,
+            attributes_to_hide=userSettings.exportItemsHiddenAttributes()
+        )
+        self._expandedAttributeHolder.valueChanged.connect(self._changeExportItemValue)
+
+        self.addExpandedWidget(self._expandedAttributeHolder)
 
         self.set_expanded_stylesheet(styles.maya_expanded_collapsible_layout)
         self.set_collapsed_stylesheet(styles.maya_collapsed_layout)
+
+    def _changeExportItemValue(self, attribute, value):
+        self.exportItemValueChanged.emit(self.exportItemIndex(), [attribute, value])
 
     def _changeExportItemName(self, new_name):
         self.changeExportItemName.emit(self.exportItemIndex(), new_name)
@@ -221,6 +235,8 @@ class QueueEditor(base_layouts.VerticalLayout):
     # region Export Item Signals
     requestingActiveQueueItems              =   QtCore.Signal()
 
+    exportItemValueChanged = QtCore.Signal(str, list)
+
     deleteExportItemTrigger                   =   QtCore.Signal(str)
     changeExportItemNameTrigger               =   QtCore.Signal(str, str)
     changeExportItemDirectoryTrigger    =   QtCore.Signal(str, str)
@@ -234,11 +250,6 @@ class QueueEditor(base_layouts.VerticalLayout):
     def finish_initialization(self):
         self.requestingExistingQueueIndex.emit()
 
-    def __new__(cls, *args, **kwargs):
-        if not hasattr(cls, 'instance'):
-            cls.instance = super(QueueEditor, cls).__new__(cls)
-        return cls.instance
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         print('spawning')
@@ -250,7 +261,7 @@ class QueueEditor(base_layouts.VerticalLayout):
 
         self.exportItemHolder = self._buildExportItemHolder()
 
-        focalLayout = base_layouts.HorizontalLayout()
+        focalLayout = base_layouts.HorizontalLayout(margins=2, spacing=10)
         focalLayout.addWidget(exportItemActionToolbar, alignment=constants.align_left)
         focalLayout.addWidget(self.exportItemHolder, stretch=1)
 
@@ -542,8 +553,8 @@ class QueueEditor(base_layouts.VerticalLayout):
         self.queueSelectorCombo.addItem(queue_name)
 
     def getQueueFromIndex(self, queueIndex):
-        for _selectionLayout in self.queueHolder.children:
-            _widget = _selectionLayout.children[0]
+        for _selectionLayout in self.queueHolder.children():
+            _widget = _selectionLayout.children()[0]
             if not isinstance(_widget, Queue):
                 continue
 
@@ -551,8 +562,9 @@ class QueueEditor(base_layouts.VerticalLayout):
                 return _widget
 
     def getQueueFromName(self, queue_name):
-        for _selectionLayout in self.queueHolder.children:
-            _widget = _selectionLayout.children[0]
+        for _selectionLayout in self.queueHolder.selectionLayouts():
+            print(_selectionLayout.children(), 'chil')
+            _widget = _selectionLayout.children()[0]
             if not isinstance(_widget, Queue):
                 continue
 
@@ -625,6 +637,7 @@ class QueueEditor(base_layouts.VerticalLayout):
     def addExportItemEvent(self, queue_item_display_dict):
         _item = ExportItem(queue_item_display_dict)
 
+        _item.exportItemValueChanged.connect(self.exportItemValueChanged.emit)
         _item.  deleteExportItem                   .connect(self.deleteExportItemTrigger.emit)
         _item.  changeExportItemName               .connect(self.changeExportItemNameTrigger.emit)
         _item.  changeExportItemExportDirectory    .connect(self.changeExportItemDirectoryTrigger.emit)
@@ -649,8 +662,8 @@ class QueueEditor(base_layouts.VerticalLayout):
         self.exportItemHolder.disown_child(_queue_item)
 
     def getExportItemFromIndex(self, queue_item_index_key):
-        for _selectionLayout in self.exportItemHolder.children:
-            _widget = _selectionLayout.children[0]
+        for _selectionLayout in self.exportItemHolder.children():
+            _widget = _selectionLayout.children()[0]
             if not isinstance(_widget, ExportItem):
                 continue
 

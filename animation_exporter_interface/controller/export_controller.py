@@ -1,6 +1,12 @@
 
 import sys, os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
+sys.path.append(r"Q:\\__packages\\_GitHub")
+sys.path.append(r"Q:\__packages\_GitHub\primary_toolkit\PF\Autodesk\Maya2022\Python37")
+sys.path.append(r"Q:\__packages\_GitHub\primary_toolkit\PF\Autodesk\Maya2022\Python37\Lib")
+sys.path.append(r"Q:\__packages\_GitHub\primary_toolkit\PF\Autodesk\Maya2022\Python37\Lib\site-packages")
+sys.path.append(r"Q:\__packages\_GitHub\primary_toolkit\PF\Autodesk\Maya2022\bin")
+sys.path.append(r"Q:\__packages\_GitHub\primary_toolkit\PF\Autodesk\Maya2022\Python37\DLLs")
 import file_management
 import logging
 
@@ -44,7 +50,8 @@ def export_animation(objects, export_path):
 def export_animation_range_from_scene(scene_path, objects, frame_range, export_path):
     cmds.file(scene_path, open=True, force=True)
     cmds.select(objects)
-    cmds.loadPlugin('fbxmaya')
+    # sys.path.append(r'C:\Program Files\Autodesk\Maya2022\plug-ins')
+    cmds.loadPlugin(r'C:/Program Files/Autodesk/Maya2022/plug-ins/fbx/plug-ins/fbxmaya.mll')
 
     mel.eval('FBXResetExport;')
 

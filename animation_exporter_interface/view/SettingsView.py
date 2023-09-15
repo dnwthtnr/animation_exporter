@@ -7,8 +7,8 @@ import os.path
 import local_settings_manager, file_management
 from functools import partial
 from PySide2 import QtCore, QtWidgets, QtGui
-from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants, styles, proceadural_displays
-from animation_exporter.utility_resources import userSettings
+from pyqt_interface_elements import base_widgets, base_layouts, base_windows, constants, styles, proceadural_displays, dialogs
+from animation_exporter.utility_resources import userSettings, cache
 
 attrs = [
     proceadural_displays.BoolComboAttributeEditor,
@@ -16,6 +16,15 @@ attrs = [
     proceadural_displays.LineEditAttributeEditor,
     proceadural_displays.TwoDimentionalLineEditAttributeEditor,
 ]
+
+class SettingAttributeHolder(proceadural_displays.AttributeHolder):
+    # def __new__(cls, *args, **kwargs):
+    #     if not hasattr(cls, 'instance'):
+    #         cls.instance = super().__new__(cls)
+    #     return cls.instance
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class SettingsEditor(base_windows.Main_Window):
 
@@ -49,7 +58,7 @@ class SettingsEditor(base_windows.Main_Window):
 
     def addSettings(self, settingsDictionary):
         self.scrollArea.clear_layout()
-        self._attribute_mapper = proceadural_displays.AttributeHolder(
+        self._attribute_mapper = SettingAttributeHolder(
             attribute_dictionary=settingsDictionary,
             attribute_mapper=attrs,
             map_by_identity=True,
@@ -74,7 +83,7 @@ class SettingsEditor(base_windows.Main_Window):
         return _button
 
     def saveButtonClicked(self):
-        print('saved', self._attribute_mapper.attribute_dictionary())
+        # print('saved', self._attribute_mapper.attribute_dictionary())
         self.settingsChanged.emit(self._attribute_mapper.attribute_dictionary())
         self.close()
 
@@ -92,6 +101,9 @@ class SettingsEditor(base_windows.Main_Window):
         _settings_action = QtWidgets.QAction(text="Reset Settings", parent=_file_menu)
         _settings_action.triggered.connect(self.resetSettings.emit)
 
+        _emptyCache = QtWidgets.QAction(text="Clear Disk Cache", parent=_file_menu)
+        _emptyCache.triggered.connect(self.emptyCacheEvent)
+
         _hiddenSettingsAction = QtWidgets.QAction(text="Show Hidden Settings", parent=_file_menu)
         _hiddenSettingsAction.triggered.connect(partial(self.visibilityEvent, _hiddenSettingsAction))
         _hiddenSettingsAction.setCheckable(True)
@@ -100,11 +112,22 @@ class SettingsEditor(base_windows.Main_Window):
 
         _file_menu.addAction(_settings_action)
         _file_menu.addAction(_hiddenSettingsAction)
+        _file_menu.addAction(_emptyCache)
 
         return _menu_bar
+
+    def emptyCacheEvent(self):
+        self._confirm = dialogs.ConfirmDialogue(
+            display_text=f"Clearing disk cache is undoable. Are you sure?\n\n\rCache Size: {cache.cacheSize()}\n",
+            parent=self
+        )
+        self._confirm.confirmed.connect(cache.clearCache)
+        self._confirm.show()
 
     def visibilityEvent(self, action):
         self._attribute_mapper.setHiddenAttributeVisibility(action.isChecked())
         _hideSettingEntry = self._attribute_mapper.get_attribute_entry(userSettings.showHiddenSettingsKey)
+        if _hideSettingEntry is None:
+            return
         _hideSettingEntry.setAttributeValue(action.isChecked())
 

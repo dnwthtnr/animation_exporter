@@ -148,6 +148,7 @@ def get_queue_item_export_args(queue, queue_item_identifier):
         logger.warning(f'Encountered exception while attempting to get data for queue item ID: {queue_item_identifier}')
         logger.exception(e)
 
+
 class ExportQueuesInterfaceController(QtCore.QObject):
     newQueueAdded = QtCore.Signal(str, str, str)
     queueDeleted = QtCore.Signal(str)
@@ -288,6 +289,7 @@ class ExportQueuesInterfaceController(QtCore.QObject):
         self.newQueueAdded.emit(queue_name, queue_path, queue_index_key)
 
     def remove_queue_from_index(self, queue_index_key):
+        print('called@')
         """
         Deletes the queue distinguished by the given key and reorders the existing queue index keys
 
@@ -299,16 +301,20 @@ class ExportQueuesInterfaceController(QtCore.QObject):
         """
         logger.info(f'Received signal to remove queue to index. {queue_index_key}')
 
+
         _queue_index_data = self.read_queue_index_data()
 
         if queue_index_key not in _queue_index_data:
             raise IndexError(f'Queue index key: {queue_index_key} does not exist.')
 
+        print(queue_index_key, _queue_index_data[queue_index_key])
+
         del _queue_index_data[queue_index_key]
         self.write_queue_index_data(_queue_index_data)
         self.queueDeleted.emit(queue_index_key)
+        print(_queue_index_data)
 
-        self.reorder_queue_indices()
+        # self.reorder_queue_indices()
 
     def duplicate_queue(self, queue_index_key):
         _queue_index_data = self.read_queue_index_data()
@@ -386,6 +392,7 @@ class ExportQueuesInterfaceController(QtCore.QObject):
         -------
 
         """
+        # TODO: FIX ME -- Keep writing an empty dict
         queue_index_data = self.read_queue_index_data()
         if len(queue_index_data) == 0:
             return
@@ -561,6 +568,19 @@ class ExportQueuesInterfaceController(QtCore.QObject):
 
         # self.reorder_active_queue_item_indices()
 
+    def changeExportItemValue(self, exportItemIndex, valueChangeList):
+        _active_queue_data = self.read_active_export_queue_data()
+
+        if exportItemIndex not in _active_queue_data:
+            raise IndexError(f'Queue index key: {exportItemIndex} does not exist.')
+
+        _attributeName = valueChangeList[0]
+        _attributeValue = valueChangeList[1]
+
+        _active_queue_data [exportItemIndex] [_attributeName] = _attributeValue
+        self.write_active_export_queue_data(_active_queue_data)
+
+
     def change_active_queue_item_name(self, queue_item_index_key, new_name):
         _active_queue_data = self.read_active_export_queue_data()
 
@@ -573,19 +593,6 @@ class ExportQueuesInterfaceController(QtCore.QObject):
         self.write_active_export_queue_data(_active_queue_data)
 
         self.activeQueueItemNameChanged.emit(queue_item_index_key, new_name)
-
-    def change_active_queue_item_export_directory(self, queue_item_index_key, new_path):
-        _active_queue_data = self.read_active_export_queue_data()
-
-        if queue_item_index_key not in _active_queue_data:
-            raise IndexError(f'Queue index key: {queue_item_index_key} does not exist.')
-
-
-        _active_queue_data [queue_item_index_key] [keys.queue_item_export_directory] = new_path
-
-        self.write_active_export_queue_data(_active_queue_data)
-
-        self.activeQueueItemExportDirectoryChanged.emit(queue_item_index_key, new_path)
 
     def change_active_queue_item_index_position(self, queue_item_index_key, new_queue_item_index_key):
         _active_queue_data = self.read_active_export_queue_data()

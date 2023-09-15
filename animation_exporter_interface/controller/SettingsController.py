@@ -16,6 +16,11 @@ class SettingsController(QtCore.QObject):
     closeSettings = QtCore.Signal()
 
     _settingsModule = None
+
+    # def __new__(cls, *args, **kwargs):
+    #     if not hasattr(cls, 'instance'):
+    #         cls.instance = super(SettingsController, cls).__new__(cls)
+    #     return cls.instance
     def __init__(self, module):
         super().__init__()
         self.setSettingsModule(module)
@@ -41,6 +46,7 @@ class SettingsController(QtCore.QObject):
         -------
 
         """
+        print('change', setting, value)
         self.settingsModule().set_setting(setting, value)
 
     def setSettingDictionary(self, settingDictionary):

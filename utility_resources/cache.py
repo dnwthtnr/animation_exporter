@@ -13,3 +13,15 @@ def get_unique_file_name(root_name):
         iteration += 1
     return _path
 
+def clearCache():
+    for _item in os.listdir(settings.CACHE_FOLDER):
+        _path = os.path.join(settings.CACHE_FOLDER, _item)
+        os.remove(_path)
+
+def cacheSize():
+    size = 0
+    for path, dirs, files in os.walk(settings.CACHE_FOLDER):
+        for f in files:
+            fp = os.path.join(path, f)
+            size += os.path.getsize(fp)
+    return size

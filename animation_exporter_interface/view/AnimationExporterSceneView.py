@@ -22,7 +22,7 @@ class ExporterSceneView(base_layouts.VerticalLayout):
         _current_scene_widget = self.build_current_scene_widget()
         self.content_panel = base_layouts.VerticalLayout()
 
-        _central = base_layouts.VerticalLayout()
+        _central = base_layouts.VerticalLayout(margins=2, spacing=10)
         _central.addWidget(_current_scene_widget, alignment=constants.align_top)
         _central.addWidget(self.content_panel, stretch=1)
 
@@ -112,6 +112,7 @@ class ExporterSceneView(base_layouts.VerticalLayout):
         _view = model_view_delegate.Tree_Item_Selection_View()
         # _view.horizontalHeader().setStretchLastSection(True)
         # _view.setSelectionBehavior(model_view_delegate.Table_Item_Selection_View.SelectRows)
+        _view.SelectionChanged.connect(print)
         _view.SelectionChanged.connect(self.sceneItemSelectionChanged.emit)
         return _view
 

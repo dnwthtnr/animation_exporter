@@ -123,8 +123,8 @@ class PanelController(QtCore.QObject):
             # region Active Queue Hookup
             queue_view        .deleteExportItemTrigger                    .connect(queue_controller      .remove_item_from_active_queue)
             queue_view        .changeExportItemNameTrigger                .connect(queue_controller      .change_active_queue_item_name)
-            queue_view        .changeExportItemDirectoryTrigger     .connect(queue_controller      .change_active_queue_item_export_directory)
             queue_view        .changeExportItemIndexTrigger               .connect(queue_controller      .change_active_queue_item_index_position)
+            queue_view.exportItemValueChanged.connect(queue_controller.changeExportItemValue)
 
             queue_view.startActiveQueue.connect(queue_controller.start_queue)
             queue_view.stopActiveQueue.connect(queue_controller.stop_queue)
@@ -176,7 +176,7 @@ class PanelController(QtCore.QObject):
         print(selected_animation_ranges)
 
 
-        if not isinstance(selected_animation_ranges, list):
+        if not isinstance(selected_animation_ranges, list) or len(selected_animation_ranges) == 0:
             _entry_scene_data_dict = copy.deepcopy(scene_data_dict)
             _entry_scene_data_dict[keys.item_export_name_key] = export_name + f"_RANGE(N/A)"
             self.addToActiveQueue.emit(_entry_scene_data_dict)
@@ -238,7 +238,8 @@ class PanelController(QtCore.QObject):
         _scene_view_splitter.setStyleSheet(styles.maya_splitter)
         _scene_view_splitter.addWidget(scene_view)
         _scene_view_splitter.addWidget(_scene_detail_view)
-        _scene_view_splitter.setSizes([450, 300])
+        _scene_view_splitter.preferredSizes = [450, 300]
+        _scene_view_splitter.restorePrefferedSizes()
 
 
         logger.debug(f'Connecting signals between scene_view, _scene_controller and panel_controller')
@@ -251,6 +252,9 @@ class PanelController(QtCore.QObject):
             scene_data_controller.newItemData.connect(self._build_then_add_item_detail_panel)
             scene_data_controller.newScenePath.connect(scene_view.setScenePath)
             scene_data_controller.writingSceneData.connect(scene_view.setFileLoadingState)
+
+            scene_data_controller.writingSceneData.connect(partial(self.changeSplitterSizes, splitter=_scene_view_splitter))
+            scene_data_controller.writingSceneData.connect(_scene_detail_view.clear_layout)
 
             self._maya_delegator.sceneDataWritten.connect(scene_data_controller.readSceneData)
 
@@ -281,6 +285,12 @@ class PanelController(QtCore.QObject):
         except Exception as e:
             logger.warning(f'Ecountered exception when attempting to read cached scene data. Aborting.')
             logger.exception(e)
+
+    def changeSplitterSizes(self, condition, splitter):
+        if condition is True:
+            splitter.collapse(0)
+            return
+        splitter.restorePrefferedSizes()
 
     @QtCore.Slot()
     def _write_scene_object_data(self, scene):
@@ -326,6 +336,7 @@ class PanelController(QtCore.QObject):
             The item data to build the panel from
 
         """
+
         logger.info(f'Signal caught to build scene detail view for dict: {item_data}')
 
         _item_detail_controller = item_detail_controller.ItemDetailController(

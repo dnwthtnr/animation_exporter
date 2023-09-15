@@ -86,17 +86,21 @@ class SceneDataController(QtCore.QObject):
 
         """
         dataSets = []
-        for _item in items:
-            _node_for_item = self.model().get_node_for_display_name(_item)
-            _data_for_node = _node_for_item.data_dictionary
-            dataSets.append(_data_for_node)
+        print(items)
+        try:
+            for _item in items:
+                _node_for_item = self.model().get_node_for_display_name(_item)
+                _data_for_node = _node_for_item.data_dictionary
+                dataSets.append(_data_for_node)
 
-        if len(dataSets) == 1:
-            self.newItemData.emit(dataSets[0])
-            return
+            if len(dataSets) == 1:
+                self.newItemData.emit(dataSets[0])
+                return
 
-        combinedItemData = self.combineDataSets(dataSets=dataSets)
-        self.newItemData.emit(combinedItemData)
+            combinedItemData = self.combineDataSets(dataSets=dataSets)
+            self.newItemData.emit(combinedItemData)
+        except Exception as e:
+            logger.warning(e)
 
     def combineDataSets(self, dataSets):
         combinedData = scene_controller.combineSceneData(dataSets)
