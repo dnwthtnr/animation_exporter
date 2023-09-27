@@ -1,0 +1,22 @@
+
+*{
+background-color: @primary_50;
+color: @maya_white_text;
+}
+QTreeView::item{
+background-color: @primary_50;
+color: @maya_white_text;
+}
+QTreeView::item:selected{
+background-color: @maya_blue_selection;
+color: @maya_white_text;
+}
+QHeaderView::section{
+background-color: @primary_50;
+color: @maya_white_text;
+}
+QLineEdit{
+background-color: @primary_25;
+color: @maya_white_text;
+border: none;
+}

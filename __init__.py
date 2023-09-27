@@ -1,15 +1,12 @@
-from animation_exporter import (
-    logger
-)
+import logger
 
 from PySide2 import QtWidgets, QtCore
 import sys, os
 
-from animation_exporter import animation_exporter_interface, utility_resources
+from source import animation_exporter_interface, utility_resources
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-import threading
 
 def build_animation_exporter_window():
     _panel_controller = animation_exporter_interface.controller.panel_controller.PanelController(margins=7)
