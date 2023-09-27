@@ -7,7 +7,8 @@ from PySide2 import QtCore
 
 from source.utility_resources import userSettings, keys
 
-from source.PySideWrapper import base_widgets, base_layouts, constants, proceadural_displays, styles
+from source.PySideWrapper import base_widgets
+from lib.PySideWrapper.source.PySideWrappers import constants, proceadural_displays, styles, base_layouts
 
 _attrs = [
     proceadural_displays.RangeSliderAttributeEditor,

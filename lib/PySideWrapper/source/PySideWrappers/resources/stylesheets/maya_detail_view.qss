@@ -1,0 +1,14 @@
+*{
+background-color: @primary_50;
+color: @maya_white_text;
+}
+QHeaderView::section{
+background-color: @primary_50;
+color: @maya_white_text;
+}
+QLineEdit{
+background-color: @primary_25;
+color: @maya_white_text;
+border: none;
+}
+@@maya_button@@

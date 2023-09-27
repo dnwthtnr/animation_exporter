@@ -7,13 +7,9 @@ logger.setLevel(logging.DEBUG)
 from PySide2 import QtCore, QtWidgets
 from source.PySideWrapper import (
     base_widgets,
-    base_layouts,
-    constants,
-    icons,
-    styles,
-    proceadural_displays,
     visuals
 )
+from lib.PySideWrapper.source.PySideWrappers import constants, proceadural_displays, styles, icons, base_layouts
 from functools import partial
 from source.utility_resources import keys
 

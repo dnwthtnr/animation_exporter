@@ -1,0 +1,4 @@
+QSplitter::handle {
+color: @maya_blue_selection;
+background-color: @282D2E;
+}

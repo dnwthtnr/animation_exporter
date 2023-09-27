@@ -4,7 +4,8 @@ logger.setLevel(logging.DEBUG)
 
 from functools import partial
 from PySide2 import QtCore, QtWidgets
-from source.PySideWrapper import base_widgets, base_layouts, base_windows, constants, styles, proceadural_displays, dialogs
+from source.PySideWrapper import base_widgets, base_windows
+from lib.PySideWrapper.source.PySideWrappers import constants, proceadural_displays, dialogs, styles, base_layouts
 from source.utility_resources import cache
 from source.utility_resources import userSettings
 

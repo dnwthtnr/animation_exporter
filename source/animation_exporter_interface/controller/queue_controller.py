@@ -9,9 +9,7 @@ from source.utility_resources import settings, keys
 from source.animation_exporter_interface.controller import maya_process_delegator
 from PySide2 import QtCore
 from functools import partial
-from source import local_settings_manager
-from source import file_management
-
+from lib import file_management, local_settings_manager
 
 default_queue_name = "export_queue"
 

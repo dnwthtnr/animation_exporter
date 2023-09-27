@@ -1,0 +1,4 @@
+QWidget{
+background-color: @primary_75;
+color: @maya_white_text;
+}

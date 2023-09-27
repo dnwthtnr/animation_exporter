@@ -1,35 +1,32 @@
+
+# region Standard Imports
 import copy
-
 from functools import partial
-
 import logging
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+# endregion
+
+# region 3rd Party Imports
 from PySide2 import QtCore
-from source.PySideWrapper import (
-    base_widgets,
-    base_layouts,
-    constants,
-    styles
-)
+# endregion
+
+# region Application Imports
+import ExportQueuesController, maya_process_delegator, item_detail_controller, SceneDataController
+
 from source.animation_exporter_interface.view import (
-    # AnimationExportQueueView,
     QueueEditor,
     ItemDetailedView,
     AnimationExporterHeader,
     AnimationExporterSceneView
 )
 from source.animation_exporter_interface.view import AnimationExporterFooter
-from source.animation_exporter_interface.controller import (
-ExportQueuesController,
-    # queue_controller,
-maya_process_delegator,
-item_detail_controller,
-SceneDataController
-)
-from source.utility_resources import cache
-from source.utility_resources import settings, keys
+from source.utility_resources import keys, settings, cache
+
+from lib.PySideWrapper import base_widgets, base_layouts, styles, constants
+# endregion
+
+
 
 
 class PanelController(QtCore.QObject):

@@ -1,5 +1,6 @@
-from PySide2 import QtCore, QtWidgets, QtGui
-from source.PySideWrapper import base_widgets, base_layouts, base_windows, line_edits, model_view_delegate, constants, styles, visuals
+from PySide2 import QtCore, QtWidgets
+from source.PySideWrapper import base_widgets, model_view_delegate, visuals
+from lib.PySideWrapper.source.PySideWrappers import constants, styles, line_edits, base_layouts
 from source.animation_exporter_interface.controller import scene_controller
 
 

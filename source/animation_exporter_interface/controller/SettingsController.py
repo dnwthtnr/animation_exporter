@@ -2,7 +2,7 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-from source import local_settings_manager
+from lib import local_settings_manager
 from PySide2 import QtCore
 from source.utility_resources import settings
 

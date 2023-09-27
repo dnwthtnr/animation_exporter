@@ -1,6 +1,7 @@
 
-from PySide2 import QtCore, QtWidgets, QtGui
-from source.PySideWrapper import base_widgets, base_layouts, base_windows, line_edits
+from PySide2 import QtCore
+from source.PySideWrapper import base_widgets
+from lib.PySideWrapper.source.PySideWrappers import line_edits, base_layouts
 
 
 class ExporterHeader(base_layouts.HorizontalLayout):

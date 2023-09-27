@@ -7,7 +7,8 @@ from source.animation_exporter_interface.controller import scene_controller
 
 from source.utility_resources import cache
 from source.utility_resources import settings, keys
-from source import file_management
+from lib import file_management
+
 
 class SceneDataController(QtCore.QObject):
     newSceneDataModel = QtCore.Signal(object)

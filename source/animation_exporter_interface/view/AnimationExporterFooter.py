@@ -1,13 +1,12 @@
 
-import logging
 import os.path
 
+import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+from lib.PySideWrapper.source.PySideWrappers import (constants,styles,line_edits,base_layouts,base_widgets)
 
-from PySide2 import QtCore, QtWidgets, QtGui
-from source.PySideWrapper import base_widgets, base_layouts, base_windows, constants, line_edits, styles
-from functools import partial
+from PySide2 import QtCore, QtWidgets
 
 
 class ExporterFooter(base_layouts.HorizontalLayout):

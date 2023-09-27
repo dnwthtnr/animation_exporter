@@ -2,7 +2,8 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.NOTSET)
 from PySide2 import QtCore, QtWidgets
-from source.PySideWrapper import base_widgets, base_layouts, base_windows, constants, styles, icons
+from source.PySideWrapper import base_widgets, base_windows
+from lib.PySideWrapper.source.PySideWrappers import constants, styles, icons, base_layouts
 from source.utility_resources import userSettings
 from source.animation_exporter_interface.controller import SettingsController
 from source.animation_exporter_interface.view import SettingsView

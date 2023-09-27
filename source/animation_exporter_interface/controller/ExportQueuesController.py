@@ -6,13 +6,13 @@ import shutil, os
 from source.utility_resources import cache
 from source.utility_resources import keys
 from source.animation_exporter_interface.controller import maya_process_delegator
-from source import file_management, local_settings_manager
+from lib import file_management, local_settings_manager
 from PySide2 import QtCore
 
 _queue_settings = local_settings_manager.SettingsForModule(module_name="current_export_queue")
 
 def _create_queue_index_file(directory):
-    _file_path = file_management.generate_unique_file_name(directory=directory, root_name="ExportQueuesIndex") +'.json'
+    _file_path = file_management.generate_unique_file_name(directory=directory, root_name="ExportQueuesIndex") + '.json'
     file_management.write_json(data={}, path=_file_path)
     return _file_path
 

@@ -5,9 +5,10 @@ logger.setLevel(logging.DEBUG)
 from PySide2 import QtCore
 from functools import partial
 from source.utility_resources import userSettings, keys
-from source.PySideWrapper import (base_layouts, base_widgets,
-                                     proceadural_displays, icons,
-                                     constants, dialogs, styles, line_edits, buttons, visuals, base_windows)
+from source.PySideWrapper import (base_widgets,
+                                  buttons, visuals)
+from lib.PySideWrapper.source.PySideWrappers import constants, proceadural_displays, dialogs, styles, icons, line_edits, \
+    base_layouts
 
 # TODO: Add widget stuff for active queue items
 

@@ -2,10 +2,8 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-import json
 import os.path
-from source import local_settings_manager, file_management
-from functools import partial
+from lib import file_management, local_settings_manager
 
 RESOURCES_FOLDER = os.path.dirname(__file__)
 DEFAULTS_FOLDER = os.path.join(RESOURCES_FOLDER, "defaults")

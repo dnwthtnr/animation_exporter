@@ -12,7 +12,7 @@ from maya import cmds, standalone
 import json
 
 from source.utility_resources import keys
-from source import math_operations
+from lib import math_operations
 
 
 def write_json(path, data):

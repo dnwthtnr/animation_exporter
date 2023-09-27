@@ -1,5 +1,4 @@
-
-from source import local_settings_manager, file_management
+from lib import local_settings_manager
 
 userSettingsModuleName = "userSettings"
 
