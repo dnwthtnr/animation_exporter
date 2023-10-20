@@ -1,0 +1,17 @@
+QWidget{
+background-color: @maya_button_background;
+}
+QLineEdit{
+color: @maya_white_text;
+background-color: @primary_25;
+border: none;
+}
+QLabel{
+color: @maya_white_text;
+font-weight: 900;
+background-color: transparent;
+}
+QToolButton{
+background-color: @maya_button_background;
+border: none;
+}
