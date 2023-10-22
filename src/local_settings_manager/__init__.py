@@ -86,18 +86,18 @@ class SettingsForModule:
         return self._root_folder
 
     def add_module_subfolder(self, folderName):
+        new_directory = os.path.join(self.settings_folder(), folderName)
         if folderName in os.listdir(self.settings_folder()):
-            return
+            return new_directory
 
         try:
-            newDirectory = os.path.join(self.settings_folder(), folderName)
-            os.mkdir(newDirectory)
+            os.mkdir(new_directory)
         except Exception as e:
             logger.warning(f"Hit exception of type {type(e)} while attempting to create module subfolder for module ({self.moduleName()}). Full readout logged to EXCEPTION. Aborting")
             logger.exception(e)
             return
 
-        return newDirectory
+        return new_directory
 
 
 

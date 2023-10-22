@@ -6,7 +6,7 @@ This file contains the setup for the capture of logs.
 import logging, sys
 
 # Local Imports
-from utility_resources import logSettings
+from src.animation_exporter.utility_resources import logSettings
 
 root_logger = logging.getLogger()
 root_logger.setLevel(logging.DEBUG)
@@ -39,24 +39,12 @@ class LevelFilter(logging.Filter):
 formatter = logging.Formatter(fmt="[%(asctime)s] %(levelname)s (%(module)s : %(lineno)d): %(message)s")
 
 
-fileHandler = logging.FileHandler(filename=logSettings.log_filepath())
+log_filepath = logSettings.log_filepath()
+
+
+fileHandler = logging.FileHandler(filename=log_filepath)
 fileHandler.setFormatter(formatter)
 root_logger.addHandler(fileHandler)
 
-root_logger.info("\n")
-root_logger.critical(f"########## | NEW SESSION | ##########")
-root_logger.info("\n\n")
-
-error_stream_handler = logging.StreamHandler(stream=sys.stderr)
-error_stream_handler.setLevel(logging.WARNING)
-error_stream_handler.setFormatter(formatter)
-
-
-informational_log_filter = LevelFilter(min_level=logging.NOTSET, max_level=logging.INFO)
-info_stream_handler = logging.StreamHandler(stream=sys.stdout)
-info_stream_handler.addFilter(informational_log_filter)
-info_stream_handler.setFormatter(formatter)
-
-root_logger.addHandler(error_stream_handler)
-root_logger.addHandler(info_stream_handler)
+logSettings.insert_log_session_seperator(log_filepath)
 

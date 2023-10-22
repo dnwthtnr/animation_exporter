@@ -79,15 +79,22 @@ class ExporterMainWindow(base_windows.Main_Window):
         _file_menu = _menu_bar.addMenu("&File")
 
         _settings_action = QtWidgets.QAction(text="Settings", parent=_file_menu)
-        _settings_action.triggered.connect(self.open_settings)
+        _settings_action.setIcon(icons.gear)
+        _settings_action.triggered.connect(self.open_settings_window)
 
         _file_menu.addAction(_settings_action)
 
-        _edit_menu = _menu_bar.addMenu("&Edit")
+        _help_menu = _menu_bar.addMenu("&Help")
+
+        diagnostic_menu = _help_menu.addMenu("&Diagnostic Tools")
+        logs_action = QtWidgets.QAction(text="Log Viewer", parent=diagnostic_menu)
+
+        diagnostic_menu.addAction(logs_action)
 
         return _menu_bar
 
-    def open_settings(self):
+    def open_settings_window(self):
+        logger.info(f"Event triggered to open settings window.")
         _settingController = SettingsController.SettingsController(module='userSettings')
         self._settingView = SettingsView.SettingsEditor(parent=self, margins=10, spacing=7)
         self._settingView.controller = _settingController
@@ -100,6 +107,9 @@ class ExporterMainWindow(base_windows.Main_Window):
         _settingController.closeSettings.connect(self._settingView.close)
 
         self._settingView.finish_initialization()
+
+    def open_log_viewer(self):
+        return
 
 
     # region #######################| TAB WIDGET STUFF |##########################

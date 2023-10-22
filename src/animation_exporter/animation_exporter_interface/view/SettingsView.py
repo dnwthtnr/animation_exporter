@@ -5,7 +5,7 @@ logger.setLevel(logging.DEBUG)
 from functools import partial
 from PySide2 import QtCore, QtWidgets
 from PySideWrapper import base_widgets, base_windows
-from PySideWrapper import constants, proceadural_displays, dialogs, styles, base_layouts
+from PySideWrapper import constants, proceadural_displays, dialogs, styles, base_layouts, icons
 from utility_resources import cache
 from utility_resources import userSettings
 
@@ -35,10 +35,11 @@ class SettingsEditor(base_windows.Main_Window):
     toggleHiddenSettings = QtCore.Signal(bool)
 
     def __init__(self, margins=[0, 0, 0, 0], spacing=0, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(logger=logger, *args, **kwargs)
         self.margins = margins
         self.spacing = spacing
         self.setWindowTitle('Settings')
+        self.setWindowIcon(icons.gear)
         self.resize(*userSettings.settingsWindowSize())
 
     def finish_initialization(self):

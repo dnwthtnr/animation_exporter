@@ -9,6 +9,9 @@ logger.setLevel(logging.INFO)
 This file holds a data mode class specialized for the organization of catalog content data
 """
 from PySide2 import QtCore
+from . import icons
+
+from logviewer import logcontroller
 
 
 def getDataFromSelectionModelSelection(selectionModelIndexes, dataModel, role, column):
@@ -498,6 +501,310 @@ class Selection_Tree_Model(QtCore.QAbstractItemModel):
             else:
                 _text = self.header_for_column(section)
             return _text
+
+
+class FileNode:
+
+    def __init__(self, filepath, display_name, display_icon):
+        self._filepath       = filepath
+        self._display_name   = display_name
+        self._parent_node    = None
+        self._child_nodes    = []
+        self._display_icon   = display_icon
+
+    @property
+    def filepath(self):
+        print('lol', self._filepath)
+        return self._filepath
+
+    @property
+    def display_name(self):
+        return self._display_name
+
+    @property
+    def parent_node(self):
+        return self._parent_node
+
+    @property
+    def child_nodes(self):
+        return self._child_nodes
+
+    @property
+    def display_icon(self):
+        return self._display_icon
+
+    def add_child_node(self, node):
+        self._child_nodes.append(node)
+        node.set_parent_node(self)
+
+    def set_parent_node(self, node):
+        self._parent_node = node
+
+
+
+    def child_count(self):
+        """
+
+        Returns
+        -------
+        int
+
+        """
+        return len(self.child_nodes)
+
+    def get_child(self, row):
+        """
+
+        Parameters
+        ----------
+        row : int
+
+        Returns
+        -------
+        FileNode or None
+
+        """
+        if len(self.child_nodes) == 0:
+            return
+        return self.child_nodes[row]
+
+    def index_in_parents_child_list(self):
+        """
+
+        Returns
+        -------
+        int
+
+        """
+        if self.parent_node is not None:
+            return self.parent_node.child_nodes.index(self)
+
+class BaseDictTreeModel(QtCore.QAbstractItemModel):
+
+    def __init__(self, item_dict, node_type=None, keys_to_exclude=None, *args, **kwargs):
+        """
+
+        Parameters
+        ----------
+        item_dict: dict
+
+        """
+        super().__init__(*args, **kwargs)
+        if not node_type:
+            node_type = FileNode
+        if not keys_to_exclude:
+            keys_to_exclude = []
+
+        self.node_type = node_type
+        self.keys_to_exclude = keys_to_exclude
+
+        self.item_dict = item_dict
+        self.nodes = self.generate_nodes_from_dict(self.item_dict)
+
+    @property
+    def root_node(self):
+        if len(self.nodes) == 0:
+            return
+        return self.nodes[0]
+
+    def generate_nodes_from_dict(self, dictionary, parent_node=None, node_list=None):
+        """
+        Given a flat dictionary will create node objects from it
+
+        Parameters
+        ----------
+        dictionary
+        parent_node : self.node_type
+
+        Returns
+        -------
+
+        """
+        if not node_list:
+            node_list = []
+        for key, value in dictionary.items():
+            if key in self.keys_to_exclude:
+                continue
+
+            node = self.create_node(key, value, self.node_type)
+            node_list.append(node)
+            if parent_node:
+                parent_node.add_child_node(node)
+            if isinstance(value, dict):
+                _valid_keys = [key for key in value if key not in self.keys_to_exclude]
+                if len(_valid_keys) == 0:
+                    continue
+                _child_nodes = self.generate_nodes_from_dict(dictionary=value, parent_node=node, node_list=node_list)
+                continue
+        return node_list
+
+    def create_node(self, key, value, node_type):
+        """
+        Creates a node of the given type using the given key and value
+
+        Parameters
+        ----------
+        key
+        value
+        node_type
+
+        Returns
+        -------
+
+        """
+        raise NotImplementedError(f"Must implement 'create_node'.")
+
+    def get_node_for_display_name(self, display_name):
+        for _node in self.nodes:
+            if _node.display_name == display_name:
+                return _node
+
+    def header_for_column(self, column):
+        return ''
+
+    def data_for_column_and_row(self, row, column):
+        logger.debug(f'Called to get data at row: {row}, column: {column}')
+        try:
+            _key_for_row = self.key_for_row(row)
+            _dict_for_row = self.item_data_dict[_key_for_row]
+            _dict_key_list = list(_dict_for_row.values())
+            _data = _dict_key_list[column]
+            logger.debug(f'Successfully got data: {_data}')
+            return _data
+        except Exception as e:
+            logger.warning(f'Encountered exception while attempting to get data. Returning "null"')
+            logger.exception(e)
+            return "null"
+
+    def rowCount(self, parent=None, *args, **kwargs):
+        """
+        The amount of rows in the model
+
+        Parameters
+        ----------
+        parent : QModelIndex
+            Parent index
+        args :
+        kwargs :
+
+        Returns
+        -------
+        int
+            The amount of rows
+
+        """
+        if parent.isValid() is False:
+            _node = self.root_node
+        else:
+            _node = parent.internalPointer()
+        return _node.child_count()
+
+    def columnCount(self, parent=None, *args, **kwargs):
+        """
+        Column amount is based on the amount of data given in the dict for each project
+
+        Parameters
+        ----------
+        parent : QtCore.QModelIndex
+            The parent model index -- not applicable in a table model
+        args :
+        kwargs :
+
+        Returns
+        -------
+        int
+            The amount of columns
+
+        """
+        return 1
+
+    def data(self, index, role=None):
+        """
+        Returns the data for the given index and role
+
+        Parameters
+        ----------
+        index : QtCore.QModelIndex
+            The index to get data for
+        role : QtCore.Qt.Role
+            The role to get data for
+
+        Returns
+        -------
+        object
+            The data for the given row and role
+
+        """
+        logger.debug(f'Data method called with parameters: {index, role}')
+
+        node = index.internalPointer()
+        if node == self.root_node:
+            return
+
+        if role == QtCore.Qt.DisplayRole:
+            return node.display_name
+        if role == QtCore.Qt.EditRole:
+            print(node.__dict__['_filepath'], node.filepath)
+            return node.filepath
+
+        return
+
+    def parent(self, index):
+        if not index.isValid():
+            return QtCore.QModelIndex()
+
+        node = index.internalPointer()
+        if node == self.root_node:
+            return QtCore.QModelIndex()
+
+        parent_node = node.parent_node
+        if parent_node == self.root_node:
+            return QtCore.QModelIndex()
+
+        return self.createIndex(parent_node.index_in_parents_child_list(), index.column(), parent_node)
+
+    def index(self, row, column, parent=None, *args, **kwargs):
+        if not self.hasIndex(row, column, parent):
+            return QtCore.QModelIndex()
+
+        parent_node = self.root_node
+        if parent.isValid():
+            parent_node = parent.internalPointer()
+
+        node = parent_node.get_child(row)
+        if not node:
+            return QtCore.QModelIndex()
+
+        return self.createIndex(row, column, node)
+
+
+    def headerData(self, section, orientation, role=None):
+        """
+        Returns the header data for the given index and role
+
+        Parameters
+        ----------
+        section : int
+            The index to get header data for.
+        orientation : QtCore.Qt.Orientation
+            The orientation of the header to get data for.
+        role : QtCore.Qt.Role
+            The role to get header data for.
+
+        Returns
+        -------
+        object
+            The header data for the given header index and row
+
+        """
+        if role != QtCore.Qt.DisplayRole or orientation == QtCore.Qt.Vertical:
+            return None
+
+        if section >= self.columnCount():
+            return None
+        _text = self.header_for_column(section)
+        return _text
+
 
 
 class Selection_Table_Model(QtCore.QAbstractItemModel):
