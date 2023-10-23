@@ -1,10 +1,49 @@
-from PySide2 import QtWidgets, QtCore
-import logging
+from PySide2 import QtWidgets, QtCore, QtGui
+import logging, re
 import logcontroller
 
 from PySideWrapper import base_windows, model_view_delegate, base_widgets, base_layouts, icons
 
 logger = logging.getLogger(__name__)
+
+def highlighter_rules():
+    info_format = QtGui.QTextCharFormat()
+    brush = QtGui.QBrush()
+    brush.setColor('#568aad')
+    info_format.setBackground(brush)
+
+
+    highlighter_rules_dict = {
+        r"(.*INFO.*\n)"
+    }
+
+class LogHighlighter(QtGui.QSyntaxHighlighter):
+    
+    def __int__(self, text_document):
+        super().__int__(text_document)
+
+
+    def highlightBlock(self, text):
+        info_format = QtGui.QTextCharFormat()
+        brush = QtGui.QBrush()
+        color = QtGui.QColor(25, 155, 76)
+        brush.setColor(color)
+        info_format.set(brush)
+
+        format = QtGui.QTextCharFormat()
+        format.setFontUnderline(5)
+
+        regex = QtCore.QRegularExpression(r"(.*INFO.*)")
+        matches = regex.globalMatch(text)
+
+        while matches.hasNext():
+            match = matches.next()
+            self.setFormat(match.capturedStart(), match.capturedLength(), info_format)
+
+        # self.setFormat(0, 7, format)
+        # print(text)
+
+        return
 
 
 class LogFileTreeModel(model_view_delegate.BaseDictTreeModel):
@@ -29,7 +68,7 @@ class LogFileTreeModel(model_view_delegate.BaseDictTreeModel):
 
     def header_for_column(self, column):
         if column == 0:
-            return self.root_node.display_name
+            return self.root_node.filepath
         return
 
 
@@ -77,7 +116,6 @@ class LogViewer(base_windows.Main_Window):
         return _view
 
     def file_selection_changed(self, new_selection):
-        print(new_selection)
         self.fileSelectionChanged.emit(new_selection[0])
 
     def update_log_view(self, log_data):
@@ -95,6 +133,7 @@ class LogViewer(base_windows.Main_Window):
 
     def _build_log_view(self):
         _view = base_widgets.TextEdit(text="Viewer")
+        _highlighter = LogHighlighter(_view.document())
         return _view
 
 

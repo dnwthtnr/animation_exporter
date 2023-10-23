@@ -39,7 +39,6 @@ class LogFileBroker(QtCore.QObject):
 
     def finish_initialization(self):
         log_hierarchy_dict = self._get_directory_hierarchy()
-        print(log_hierarchy_dict)
         self.logHierarchyGenerated.emit(log_hierarchy_dict)
 
     @property
@@ -163,6 +162,10 @@ class LogFileBroker(QtCore.QObject):
 
     @QtCore.Slot()
     def read_log_file(self, log_path):
+        if os.path.isdir(log_path):
+            logger.debug(f"Log path: ({log_path}) is a directory and cannot be read.")
+            return
+
         with open(log_path, "r") as f:
             data = f.read()
 

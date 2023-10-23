@@ -295,7 +295,6 @@ class Selection_Tree_Model(QtCore.QAbstractItemModel):
         """
         _nodes = []
         for item_key in list(dictionary.keys()):
-            # print(item_key)
             _item_dictionary = dictionary[item_key]
             _node = Node(_item_dictionary)
             _nodes.append(_node)
@@ -514,7 +513,6 @@ class FileNode:
 
     @property
     def filepath(self):
-        print('lol', self._filepath)
         return self._filepath
 
     @property
@@ -744,7 +742,6 @@ class BaseDictTreeModel(QtCore.QAbstractItemModel):
         if role == QtCore.Qt.DisplayRole:
             return node.display_name
         if role == QtCore.Qt.EditRole:
-            print(node.__dict__['_filepath'], node.filepath)
             return node.filepath
 
         return
@@ -1053,8 +1050,6 @@ class Tree_Item_Selection_View(QtWidgets.QTreeView):
             )
 
         _model = self.model()
-
-        # print('selecteditems', self.cachedIndexSelection)
 
         selected_items = getDataFromSelectionModelSelection(
             selectionModelIndexes=self.cachedIndexSelection,
