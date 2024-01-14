@@ -25,10 +25,10 @@ class LogHighlighter(QtGui.QSyntaxHighlighter):
 
     def highlightBlock(self, text):
         info_format = QtGui.QTextCharFormat()
-        brush = QtGui.QBrush()
+        brush = QtGui.QPen()
         color = QtGui.QColor(25, 155, 76)
         brush.setColor(color)
-        info_format.set(brush)
+        info_format.setTextOutline(brush)
 
         format = QtGui.QTextCharFormat()
         format.setFontUnderline(5)
@@ -38,7 +38,7 @@ class LogHighlighter(QtGui.QSyntaxHighlighter):
 
         while matches.hasNext():
             match = matches.next()
-            self.setFormat(match.capturedStart(), match.capturedLength(), info_format)
+            self.setFormat(match.capturedStart(), match.capturedLength(), color)
 
         # self.setFormat(0, 7, format)
         # print(text)
@@ -70,6 +70,46 @@ class LogFileTreeModel(model_view_delegate.BaseDictTreeModel):
         if column == 0:
             return self.root_node.filepath
         return
+
+pat = r"/(\[([-\d :,]*)\] (\w*) \((\w*) : (\d*)\): (.[^\n]*))"
+
+class LogDisplay(base_layouts.VerticalLayout):
+
+    def __init__(self, log_pattern, session_separation_pattern):
+        super().__init__()
+        self.log_pattern = log_pattern
+        self._build_log_view()
+
+    def _build_log_view(self):
+        return
+
+    def set_log(self, log):
+        """
+
+        Parameters
+        ----------
+        log: str
+            Log data
+
+        """
+        _matches = re.finditer(self.log_pattern, log)
+        # re.findall()
+        print(_matches)
+        for match in range(0, _matches.__sizeof__()):
+            print(_matches.__next__(), 'match')
+            for group in range(0, match.groups()):
+                group = match.group(group)
+                print('i', group)
+
+    def build_log_entry(self, message, log_time=None, log_level=None, logged_module=None, line_number=None):
+        log_entry = base_layouts.HorizontalLayout()
+
+        message_display = base_widgets.TextEdit()
+        message_display.setText(message)
+
+        log_entry.addWidget(message_display)
+
+        return log_entry
 
 
 class LogViewer(base_windows.Main_Window):
@@ -104,6 +144,8 @@ class LogViewer(base_windows.Main_Window):
         self._hierarchy_view = self._build_hierarchy_view()
         self._log_viewer = self._build_log_view()
 
+        self._logview = LogDisplay(log_pattern=pat, session_separation_pattern=None)
+
         central_widget = base_layouts.HorizontalLayout()
         central_widget.addWidget(self.hierarchy_view)
         central_widget.addWidget(self.log_viewer)
@@ -120,6 +162,7 @@ class LogViewer(base_windows.Main_Window):
 
     def update_log_view(self, log_data):
         self.log_viewer.setText(log_data)
+        self._logview.set_log(log_data)
 
 
     def update_hierarchy_view(self, hierarchy_dict):
