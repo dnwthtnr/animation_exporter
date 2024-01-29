@@ -104,7 +104,7 @@ class ExporterMainWindow(base_windows.Main_Window):
         self._settingView.resetSettings.connect(_settingController.resetSettings)
 
         _settingController.settingsDictionary.connect(self._settingView.addSettings)
-        _settingController.closeSettings.connect(self._settingView.close)
+        _settingController.closeSettings.connect(self._settingView.closed)
 
         self._settingView.finish_initialization()
 

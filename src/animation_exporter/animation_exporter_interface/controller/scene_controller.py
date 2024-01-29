@@ -11,8 +11,8 @@ import os.path
 from maya import cmds, standalone
 import json
 
-from src.animation_exporter.utility_resources import keys
-from src import math_operations
+from animation_exporter.utility_resources import keys
+import math_operations
 
 
 def write_json(path, data):

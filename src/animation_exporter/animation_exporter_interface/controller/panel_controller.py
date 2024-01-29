@@ -139,6 +139,12 @@ class PanelController(QtCore.QObject):
             queue_controller  .activeQueueItemIndexKeyChanged           .connect(queue_view            .changeExportItemKeyEvent)
 
             queue_controller.activeExportQueueItemStarted.connect(queue_view            .exportItemExportStartEvent)
+
+
+            queue_controller.activeExportQueueItemStarted.connect(self.footer.setInProgressStatus)
+            queue_controller.activeExportQueueFinished.connect(self.footer.setCompletedStatus)
+
+
             queue_controller.activeExportQueueItemFinished.connect(queue_view            .exportItemExportFinishEvent)
             queue_controller.activeExportQueueFinished.connect(queue_view.queueExportFinishEvent)
 
@@ -393,16 +399,16 @@ class PanelController(QtCore.QObject):
         """
         logger.info(f'Building main window footer')
         try:
-            _widget = AnimationExporterFooter.ExporterFooter(margins=4)
-            _widget.CloseButtonClicked.connect(self.CloseButtonClicked.emit)
+            self.footer = AnimationExporterFooter.ExporterFooter(margins=4)
+            self.footer.CloseButtonClicked.connect(self.CloseButtonClicked.emit)
             logger.info(f'Successfully built footer and connected signals')
         except Exception as e:
             logger.warning(f'Encountered exception while attempting to build footer and connect signal. Aborting')
             logger.exception(e)
             return
 
-        logger.info(f'Emitting HeaderPanelBuilt with widget: {_widget}')
-        self.FooterPanelBuilt.emit(_widget)
+        logger.info(f'Emitting HeaderPanelBuilt with widget: {self.footer}')
+        self.FooterPanelBuilt.emit(self.footer)
     # endregion
 
 

@@ -13,7 +13,7 @@ background-color: @maya_button_background;
 
 
 QTabBar::tab:top:!selected {
-    margin-top: 3px;
+    margin-top: 7px;
 }
 
 QTabBar::tab:bottom:!selected {

@@ -173,6 +173,10 @@ class ExportQueuesInterfaceController(QtCore.QObject):
 
     activeExportQueueItemStarted = QtCore.Signal(str)
     activeExportQueueItemFinished = QtCore.Signal(str)
+
+    displayableQueueItemStarted = QtCore.Signal(str)
+    displayableQueueItemFinished = QtCore.Signal(str)
+
     activeExportQueueFinished = QtCore.Signal()
 
     def finish_initialization(self):
@@ -210,11 +214,17 @@ class ExportQueuesInterfaceController(QtCore.QObject):
         _runner = QueueRunner()
         _runner.queueItemStarted.connect(self.activeExportQueueItemStarted.emit)
         _runner.queueItemFinished.connect(self.activeExportQueueItemFinished.emit)
+
         _runner.queueFinished.connect(self.activeExportQueueFinished.emit)
         self._startExportQueue.connect(_runner.start_export_queue)
         self._stopExportQueue.connect(_runner.stop_export_queue)
         _runner.moveToThread(thread)
         return _runner
+
+
+    def queueItemFinished(self, item_id):
+        self.activeExportQueueItemFinished.emit(item_id)
+        return
 
     def write_queue_index_data(self, queue_index_data):
         self._cached_queue_index_data_state = queue_index_data

@@ -253,7 +253,6 @@ class QueueEditor(base_layouts.VerticalLayout):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print('spawning')
         self.queueEditorDialog = self._buildQueueEditDialog()
         self.queueSelectorCombo = self._buildQueueSelectorCombo()
         queue_manager_toolbar = self._buildExportItemToolbar(queue_selector=self.queueSelectorCombo)
@@ -611,8 +610,6 @@ class QueueEditor(base_layouts.VerticalLayout):
     # endregion
 
 
-    # region Active Queue
-
     def _buildExportItemHolder(self):
         _widget = base_layouts.VerticalSelectableObjectHolder()
         _widget.setSelectionMode(base_layouts.SelectableObjectHolder.MultiSelection)
@@ -702,30 +699,29 @@ class QueueEditor(base_layouts.VerticalLayout):
         _queue_item.exportFinished()
 
     def queueExportFinishEvent(self):
-        # print('fin')
         logger.info(f'Received signal that active queue has finished')
         self._activeQueueFinished.emit()
 
 
-if __name__ == "__main__":
-    from src.PySideWrapper import base_windows
-    import sys
-    from PySide2 import QtWidgets
-
-
-    _app = QtWidgets.QApplication(sys.argv)
-    # _view = QueueEditor()
-    # _view.setStyleSheet(styles.maya_detail_view)
-    #
-    # _view.add_queue_index_item("name1", "pathhhh", "1")
-    # _view.add_queue_index_item("name2", "pathhhh", "12")
-    # _view.add_queue_index_item("name32", "pat", "7")
-    # _view.add_queue_index_item("name4444", "h", "5")
-
-    _view = buttons.ToggleIconButton(enabled_icon=icons.stop, disabled_icon=icons.start)
-
-    # _win = base_windows.Main_Window()
-    # _win.setCentralWidget(_view)
-    _view.show()
-
-    sys.exit(_app.exec_())
+# if __name__ == "__main__":
+#     from src.PySideWrapper import base_windows
+#     import sys
+#     from PySide2 import QtWidgets
+#
+#
+#     _app = QtWidgets.QApplication(sys.argv)
+#     # _view = QueueEditor()
+#     # _view.setStyleSheet(styles.maya_detail_view)
+#     #
+#     # _view.add_queue_index_item("name1", "pathhhh", "1")
+#     # _view.add_queue_index_item("name2", "pathhhh", "12")
+#     # _view.add_queue_index_item("name32", "pat", "7")
+#     # _view.add_queue_index_item("name4444", "h", "5")
+#
+#     _view = buttons.ToggleIconButton(enabled_icon=icons.stop, disabled_icon=icons.start)
+#
+#     # _win = base_windows.Main_Window()
+#     # _win.setCentralWidget(_view)
+#     _view.show()
+#
+#     sys.exit(_app.exec_())

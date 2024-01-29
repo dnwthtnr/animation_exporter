@@ -1,3 +1,7 @@
+"""
+This file holds all the necessary UI elements to display a setting window that facilitates the editing of a dictionary
+"""
+
 import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -15,15 +19,6 @@ attrs = [
     proceadural_displays.LineEditAttributeEditor,
     proceadural_displays.TwoDimentionalLineEditAttributeEditor,
 ]
-
-class SettingAttributeHolder(proceadural_displays.AttributeHolder):
-    # def __new__(cls, *args, **kwargs):
-    #     if not hasattr(cls, 'instance'):
-    #         cls.instance = super().__new__(cls)
-    #     return cls.instance
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
 class SettingsEditor(base_windows.Main_Window):
 
@@ -57,8 +52,17 @@ class SettingsEditor(base_windows.Main_Window):
         self.setMenuBar(menuBar)
 
     def addSettings(self, settingsDictionary):
+        """
+        Populates a SettingAttributeHolder and adds it to the scroll area
+
+        Parameters
+        ----------
+        settingsDictionary: dict
+            The setting dictionary to populate
+
+        """
         self.scrollArea.clear_layout()
-        self._attribute_mapper = SettingAttributeHolder(
+        self._attribute_mapper = proceadural_displays.AttributeHolder(
             attribute_dictionary=settingsDictionary,
             attribute_mapper=attrs,
             map_by_identity=True,
@@ -83,7 +87,7 @@ class SettingsEditor(base_windows.Main_Window):
         return _button
 
     def saveButtonClicked(self):
-        # print('saved', self._attribute_mapper.attribute_dictionary())
+        logger.debug(f"Save button clicked")
         self.settingsChanged.emit(self._attribute_mapper.attribute_dictionary())
         self.close()
 
@@ -93,6 +97,16 @@ class SettingsEditor(base_windows.Main_Window):
         return _button
 
     def build_menu_bar(self):
+        """
+        Builds and populated the menubar
+
+        Returns
+        -------
+        base_widgets.MenuBar
+            The newly made menubar
+
+        """
+        logger.debug(f"Creating and populating menubar for settings window")
         _menu_bar = base_widgets.MenuBar()
         _menu_bar.setStyleSheet(styles.maya_menu_bar)
 
@@ -113,10 +127,15 @@ class SettingsEditor(base_windows.Main_Window):
         _file_menu.addAction(_settings_action)
         _file_menu.addAction(_hiddenSettingsAction)
         _file_menu.addAction(_emptyCache)
+        logger.debug(f"Menubar successfully created. returning)")
 
         return _menu_bar
 
     def emptyCacheEvent(self):
+        """
+        Opens a confirmation dialog. A call is made to clear the cache
+
+        """
         self._confirm = dialogs.ConfirmDialogue(
             display_text=f"Clearing disk cache is undoable. Are you sure?\n\n\rCache Size: {cache.cacheSize()}\n",
             parent=self
@@ -125,6 +144,15 @@ class SettingsEditor(base_windows.Main_Window):
         self._confirm.show()
 
     def visibilityEvent(self, action):
+        """
+        Sets the visibility of the hidden attributes for the attribute mapper
+
+        Parameters
+        ----------
+        action: QAction
+            The action representing the menu selection to toggle the hidden attribute visibility
+
+        """
         self._attribute_mapper.setHiddenAttributeVisibility(action.isChecked())
         _hideSettingEntry = self._attribute_mapper.get_attribute_entry(userSettings.showHiddenSettingsKey)
         if _hideSettingEntry is None:

@@ -8,6 +8,30 @@ from PySideWrapper import (constants, styles, line_edits, base_layouts, base_wid
 
 from PySide2 import QtCore, QtWidgets
 
+class QueueStatus(base_layouts.HorizontalLayout):
+
+    def __init__(self):
+        super().__init__()
+        self.build_widget()
+
+
+    def build_widget(self):
+        statusLabel = base_widgets.Label(text="Queue Status: ")
+        self.statusLine = self.buildStatusLine()
+        self.addWidget(statusLabel, alignment=QtCore.Qt.AlignLeft)
+        self.addWidget(self.statusLine)
+        self.addStretch(1)
+        return
+
+    def buildStatusLine(self):
+        label = base_widgets.Label("No current export item.")
+        return label
+
+    def setCompletedStatus(self):
+        self.statusLine.setText(f'Export completed!')
+
+    def setInProgressStatus(self, itemName):
+        self.statusLine.setText(f'Export for queue item: [{itemName}] in progress')
 
 class ExporterFooter(base_layouts.HorizontalLayout):
     ExportButtonClicked = QtCore.Signal(str)
@@ -25,7 +49,11 @@ class ExporterFooter(base_layouts.HorizontalLayout):
         _export_path_holder = self.build_folder_selection_holder()
 
         self.output_location_selection = self.build_output_location_selector()
-        self.addWidget(_version_footer, alignment=constants.align_left)
+
+        self.queueStatusLine = QueueStatus()
+
+        self.addWidget(self.queueStatusLine)
+        self.addWidget(_version_footer, alignment=constants.align_right)
         # self.addWidget(_button_holder, alignment=constants.align_right)
         self.setStyleSheet(styles.maya_tab_widget)
 
@@ -91,6 +119,12 @@ class ExporterFooter(base_layouts.HorizontalLayout):
         if not os.path.exists(text):
             # display that it needs to be a path
             return
+
+    def setCompletedStatus(self):
+        self.queueStatusLine.setCompletedStatus()
+
+    def setInProgressStatus(self, itemName):
+        self.queueStatusLine.setInProgressStatus(itemName)
 
 
 if __name__ == "__main__":

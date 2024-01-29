@@ -1,6 +1,11 @@
 import os, json
 from functools import partial
-from src import file_management
+import sys, os
+
+sys.path.append((os.path.dirname(os.path.dirname(__file__))))
+
+
+import file_management
 import logging
 
 logger = logging.getLogger(__name__)

@@ -5,7 +5,7 @@ logger = logging.getLogger(__name__)
 # endregion
 
 # region 3rd Party Imports
-from PySide2 import QtCore, QtGui
+from PySide2 import QtCore, QtGui, QtWidgets
 #endregion
 
 # region Local Imports

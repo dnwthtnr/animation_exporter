@@ -11,7 +11,7 @@ This file holds a data mode class specialized for the organization of catalog co
 from PySide2 import QtCore
 from . import icons
 
-from logviewer import logcontroller
+# from logviewer import logcontroller
 
 
 def getDataFromSelectionModelSelection(selectionModelIndexes, dataModel, role, column):
