@@ -2,12 +2,11 @@
 # include <Windows.h>
 
 int main(){
-	std::cout << "Hellow World";
 	MessageBoxW(
 		NULL,
-		L"Hello World",
-		L"Hello box",
+		L"Select Maya Install Location",
+		L"Anim Exporter Setup",
 		MB_OK
 	);
-	return 0;
+	return 0
 };
