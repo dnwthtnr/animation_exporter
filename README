@@ -1,0 +1,4 @@
+# SETUP
+This tool is not currently finished but to run it in it’s current 
+state you just need to execute the __main_.py in the root directory 
+using the mayapy interpreter file in your Maya devkit.
